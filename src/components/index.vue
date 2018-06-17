@@ -8,6 +8,7 @@
       <p class="word">愿健康成为您一生的伴侣。</p>
     </div>
     <button @click="Tome">To me</button>
+    <button @click="ToContent">To Content</button>
     <div class="content">
       <div class="text" v-if ="key%4 <= 4 && key<=8" v-for ="key in itemText" :key ="key.id">{{key}}</div>
       <div>
@@ -71,6 +72,9 @@ export default {
     },
     Tome () {
       this.$router.push('/me')
+    },
+    ToContent(){
+      this.$router.push('/communicate')
     }
   }
 }

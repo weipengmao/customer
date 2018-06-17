@@ -29,6 +29,17 @@ app.get('/',function(req,res){
   })
 })
 
+app.get('/communicate',function(req,res){
+  fs.readFile('E:/Customer service/git专用/customer/src/mock/communicate.json','utf8',function(err,data){
+    if(err){
+      console.log(err)
+    }else{
+      console.log(data)
+    }
+    res.send(data);
+  })
+})
+
 var server = app.listen('8081',function(){
   var host = server.address().address
   var port = server.address().address
