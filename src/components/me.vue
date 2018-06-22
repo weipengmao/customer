@@ -151,9 +151,9 @@ export default{
       data.then(function(val){
         //请求成功时返回的数据
         console.log(val)
-      },function(val){
+      },function(err){
         //请求失败时返回的数据
-        console.log(val)
+        console.log(err)
       })
     }
   }

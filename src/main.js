@@ -7,6 +7,7 @@ import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './common/stylus/index.styl'
 import './common/stylus/ele-ui.styl'
+import './common/stylus/swiper.styl'
 import axios from 'axios'
 
 Vue.config.productionTip = false
