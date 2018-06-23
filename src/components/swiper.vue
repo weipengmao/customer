@@ -13,9 +13,28 @@
     <ul id="nav" >
         <li v-for="item in items">{{item}}</li>
     </ul>
-    <div class="brief">
+    <div class="brief clearfix">
+      <router-link to='/detail'>
+          <div class="box clearfix">
+              <img src="../assets/pork.jpg" alt="">
+              <div class='inbox'>
+                  <p class="title">猪肉的功效</p>
+                  <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
+              </div>
+          </div>
+      </router-link>
 
+      <router-link to='/detail'>
+          <div class="box clearfix">
+              <img src="../assets/pork.jpg" alt="">
+              <div class='inbox'>
+                  <p class="title">猪肉的功效</p>
+                  <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
+              </div>
+          </div>
+      </router-link>
     </div>
+    
 </div>
 </div>
 </template>
@@ -30,14 +49,21 @@ export default {
   mounted(){
       var nav=document.querySelector('#nav');
       var lis=nav.querySelectorAll('li');
-      lis[0].className='active';
+      lis[0].classList.add('active');
       var num=0;
       for(let i=0;i<lis.length;i++){
         this.num=lis[i];
         lis[i].ontouchend=function(){
+          if(!this.classList.contains('active')){
+            
             for(let j=0;j<lis.length;j++){
-
+               lis[j].classList.remove('active');
+               this.classList.add('active');
             }
+          }else{
+
+          }
+
         }
       }
   },
@@ -58,7 +84,9 @@ export default {
           }
         },
         swiperSlides: [1, 2, 3, 4],
-        items:['人部','草部','木部']
+        items:['人部','草部','木部','人部','草部',
+        // '木部','人部','草部','木部','人部','草部','木部'
+        ]
     }
   },
       components:{
@@ -77,56 +105,80 @@ export default {
 *{
     margin:0;padding:0;box-sizing: border-box;
     list-style-type: none;
+    text-decoration: none;
 }
-#swiper{ height: 30vh;
+a{
+  color:#000;
+}
+#swiper{ height: 30vh;position:relative;
   width:100%;}
 
   .fd_slide{    height: 30vh;
     width: 100%;
-    background: red;}
+    }
 
 
-  .fd_slide1{    background: yellow;}
   .fd_slide img{
-    width:100%;height:200px;
+    width:100%;height:30vh;
   }
-
-  .fd_slide2{  background: red;}
   
-
-  .fd_slide3{
-    background: yellowgreen;
-  }
-
-
-  .fd_slide4{
-    background: orange;
-  }
-
+.swiper-pagination{
+  position:absolute;bottom:0.5rem;
+}
 
 .midddle{
   width:100%;box-sizing: border-box;
 }
 .middle #nav{
   display:inline-block;
-  width:30%;float:left;
+  width:22%;float:left;
   background:#F4F4F4;
   height:70vh;
 }
 .middle #nav li{
-  width:100%;height:1.3rem;font-size:0.5rem;
-  line-height: 1.3rem;
+  width:100%;height:1.4rem;font-size:0.45rem;
+  background:#F4F4F4;
+  line-height: 1.4rem;
   float:left;
 }
 .middle .brief{
-  width:70%;
+  width:78%;
   height:70vh;
   float:left;
-  /* background:black; */
 }
 
-.active{
-  background:#fff;
+.middle .brief .box{
+  width:100%;padding:0.2rem;
+  padding-right:0;
+}
+.middle .brief .box img{
+  width:2.5rem;
+  float:left;
+}
+.middle .brief .box .inbox{
+  width:4.5rem;font-size: 0.45rem;float:left;
+  margin-left:0.2rem;
+  letter-spacing: 0;
+}
+
+.inbox .title{
+  width:100%;height:0.7rem;line-height: 0.7rem;
+  text-align: left;
   font-weight: bold;
+  font-size:0.55rem !important;
+}
+.inbox .content{
+  width:100%;
+                  word-break: break-all;
+                    text-overflow: ellipsis;
+                    display: -webkit-box; /** 将对象作为伸缩盒子模型显示 **/
+                    -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+                    -webkit-line-clamp: 3; /** 显示的行数 **/
+                    overflow: hidden;  /** 隐藏超出的内容 **/
+}
+.active{
+  background:#fff !important;
+  font-weight: bold;
+  font-size: 0.5rem !important;
 }
 </style>

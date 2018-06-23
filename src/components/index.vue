@@ -97,7 +97,7 @@ export default {
     width:100%;margin:0 auto;margin-left:0.5rem;
   }
 .button{
-  width:2.22rem;height:1rem;text-align: center;line-height: 1rem;color:white;
+  width:2.255rem;height:1rem;text-align: center;line-height: 1rem;color:white;
   font-size:0.42rem;border:2px solid #fff;
   display:inline-block;float:left;margin:0.1rem 0;
   margin-right:0.21rem;
