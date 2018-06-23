@@ -66,21 +66,21 @@ export default {
 
 #body{
   width:100%;
-  height:96vh;
+  height:100vh;
   box-sizing: border-box;
     background:url(../assets/bgimg.png) center center no-repeat;
-  background-size:100% 96vh;
+  background-size:100% 100vh;
 }
 .top{
   width:9rem;height:9rem;
-  margin:0.5rem auto;margin-top:0.45rem;margin-bottom:0;
+  margin:0 auto;margin-bottom:0;
   padding-top:2rem;
   background:url(../assets/timg.png) center no-repeat;
   background-size:100%;
   position:relative;
 }
 .top .word{
-  font-size:0.43rem;color:white;padding:0.05rem 0;
+  font-size:0.5rem;color:white;padding:0.25rem 0;
   font-weight: bold;
   letter-spacing: 0.025rem;
   transition:all 0.5s;
@@ -94,10 +94,10 @@ export default {
   width:10rem;
   }
   .nav .box{
-    width:9.5rem;margin:0 auto;
+    width:100%;margin:0 auto;margin-left:0.5rem;
   }
 .button{
-  width:2.2333rem;height:1rem;text-align: center;line-height: 1rem;color:white;
+  width:2.22rem;height:1rem;text-align: center;line-height: 1rem;color:white;
   font-size:0.42rem;border:2px solid #fff;
   display:inline-block;float:left;margin:0.1rem 0;
   margin-right:0.21rem;
@@ -113,6 +113,6 @@ export default {
   width:100%;height:1rem;position:fixed;bottom:0;
 }
 .bottom img{
-  width:9.5rem;height:1rem;margin-right:0.4rem;
+  width:9.5rem;height:1rem;
 }
 </style>
