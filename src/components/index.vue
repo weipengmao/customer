@@ -1,111 +1,118 @@
 <template>
-  <div class="container">
-    <div class="children" v-show="chilTxt">
-      <p class="word">我是机器人康康，</p>
-      <p class="word">来自健康世界，</p>
-      <p class="word">很高兴在这里遇见您，</p>
-      <p class="word">希望能成为您的朋友，</p>
-      <p class="word">愿健康成为您一生的伴侣。</p>
+<div id="body">
+    <header>
+            <!-- 进入首页，文字淡入 -->
+    <div class="top">
+          <p class="word" v-for="word in words" v-show="hideWords">{{word}}</p>
+
+          <router-link to="/account">
+                    <div class="toAccount"></div>
+          </router-link>
+
     </div>
-    <button @click="Tome">To me</button>
-    <button @click="ToContent">To Content</button>
-    <div class="content">
-      <div class="text" v-if ="key%4 <= 4 && key<=8" v-for ="key in itemText" :key ="key.id">{{key}}</div>
-      <div>
-        <div @click="allItem" v-show="hide === true">展开全部</div>
-        <div class="text" v-show ="key%4 < 4 && key>8 && flag === true" v-for ="key in itemText" :key ="key.id">{{key}}</div>
+
+    <!--导航栏 -->
+    <div class="nav">
+      <div class="box">
+        <router-link to='/swiper'>
+            <p class="button" v-for="item in items">
+                    {{item}}  
+            </p>
+        </router-link>
+
       </div>
+
+      
     </div>
+
+  <!-- 底部上划 -->
+  <div class="bottom">
+      <img src="../assets/pullup.png" alt="">
   </div>
+    </header>
+
+</div>
 </template>
 
 <script>
 export default {
   name: 'index',
-  mounted () {
-    const that = this
-    const story = document.querySelectorAll('.word')
-    const timer = setInterval(() => {
-      story[this.num].style.opacity = 1
-      this.num++
-      if (this.num === 5) {
-        clearInterval(timer)
+  mounted(){
+    var words=document.querySelectorAll('.word');
+    var timer=setInterval(
+      ()=>{
+        words[this.num].style.opacity=1;
+        this.num++;
+        if(this.num===5){
+          clearInterval(timer)
+        }
       }
-    }, 500)
-    const text = document.querySelectorAll('.content')[0]
-    // 上滑改变
-    text.addEventListener('touchstart', function (e) {
-      this.pointY = e.targetTouches[0].pageY
-    })
-    text.addEventListener('touchmove', function (e) {
-      this.point = e.targetTouches[0].pageY - this.pointY
-    })
-    text.addEventListener('touchend', function (e) {
-      if (this.point < 0) {
-        this.style.top = -10 + '%'
-        that.flag = true
-        that.hide = false
-        that.chilTxt = false
-      } else {
-        document.querySelector('.content').removeAttribute('style')
-        that.flag = false
-        that.hide = true
-        that.chilTxt = true
-      }
-    })
+    ,1000)
   },
-  data () {
-    return {
-      num: 0,
-      itemText: [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
-      ],
-      flag: false,
-      hide: true,
-      chilTxt: true
+  data(){
+    return{
+    words:['我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+    items:['本草纲目','食物营养','健康知识','本草纲目','食物营养','健康知识'],
+    hideWords:true,
+    num:0,
     }
-  },
-  methods: {
-    allItem () {
-      this.flag = true
-      this.hide = false
-    },
-    Tome () {
-      this.$router.push('/me')
-    },
-    ToContent(){
-      this.$router.push('/communicate')
-    }
+
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="stylus">
-  .container
-    position:relative;
-    height:500px;
-    width:100%;
-    margin-top:100px;
-    .children
-      text-align: center;
-      .word
-        opacity:0;
-        transition:all 0.5s;
-    .content
-      top:135px;
-      transition:all 0.5s;
-      position:absolute;
-      width:300px;
-      left:50%;
-      -ms-transform: translate(-50%);
-      -webkit-transform: translate(-50%);
-      -o-transform: translate(-50%);
-      -moz-transform: translate(-50%);
-      .text
-        display: inline-block;
-        background:red;
-        width:50px;
-        height:25px;
-        margin:10px 10px;
+<style scoped>
+
+#body{
+  width:100%;
+  height:96vh;
+  box-sizing: border-box;
+    background:url(../assets/bgimg.png) center center no-repeat;
+  background-size:100% 96vh;
+}
+.top{
+  width:9rem;height:9rem;
+  margin:0.5rem auto;margin-top:0.45rem;margin-bottom:0;
+  padding-top:2rem;
+  background:url(../assets/timg.png) center no-repeat;
+  background-size:100%;
+  position:relative;
+}
+.top .word{
+  font-size:0.43rem;color:white;padding:0.05rem 0;
+  font-weight: bold;
+  letter-spacing: 0.025rem;
+  transition:all 0.5s;
+  opacity:0;
+}
+.toAccount{
+  width:4rem;height:1.4rem;position:absolute;bottom:1.2rem;left:2.3rem;
+}
+
+.nav{
+  width:10rem;
+  }
+  .nav .box{
+    width:9.5rem;margin:0 auto;
+  }
+.button{
+  width:2.2333rem;height:1rem;text-align: center;line-height: 1rem;color:white;
+  font-size:0.42rem;border:2px solid #fff;
+  display:inline-block;float:left;margin:0.1rem 0;
+  margin-right:0.21rem;
+  margin-top:0.15rem;
+  border-radius: 10%;
+  padding:0.45rem 0.25rem;font-weight: bold;
+  letter-spacing: 0.035rem;
+  background: url('../assets/button.png') center no-repeat;
+}
+
+
+.bottom{
+  width:100%;height:1rem;position:fixed;bottom:0;
+}
+.bottom img{
+  width:9.5rem;height:1rem;margin-right:0.4rem;
+}
 </style>
