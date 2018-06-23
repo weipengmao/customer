@@ -1,5 +1,7 @@
 <template>
 <div id="swiper">
+  <div style="position:absolute;right:0;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" >
+  </div>
   <!-- 轮播图 -->
     <swiper  :options="swiperOption" ref="mySwiper">
       <swiper-slide><div class="fd_slide fd_slide1"><img src="../assets/img1.jpg" alt=""></div></swiper-slide>
@@ -9,7 +11,7 @@
       <!-- <img class="shut" src="../assets/close.png" alt=""> -->
     </swiper>
   <!-- 左边导航栏及右边的功能简介 -->
-<div class="middle clearfix">
+  <div class="middle clearfix">
     <ul id="nav" >
         <li v-for="item in items">{{item}}</li>
     </ul>
@@ -17,24 +19,23 @@
       <router-link to='/detail'>
           <div class="box clearfix">
               <img src="../assets/pork.jpg" alt="">
-              <div class='inbox'>
+              <div class='inbox clearfix'>
                   <p class="title">猪肉的功效</p>
                   <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
               </div>
           </div>
       </router-link>
 
-      <router-link to='/detail'>
+      <router-link to='/detail' >
           <div class="box clearfix">
               <img src="../assets/pork.jpg" alt="">
-              <div class='inbox'>
-                  <p class="title">猪肉的功效</p>
+              <div class='inbox clearfix'>
+                  <p class="title">鱼肉的功效</p>
                   <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
               </div>
           </div>
       </router-link>
     </div>
-    
 </div>
 </div>
 </template>
@@ -55,7 +56,7 @@ export default {
         this.num=lis[i];
         lis[i].ontouchend=function(){
           if(!this.classList.contains('active')){
-            
+
             for(let j=0;j<lis.length;j++){
                lis[j].classList.remove('active');
                this.classList.add('active');
@@ -94,8 +95,9 @@ export default {
       swiperSlide
     },
   methods:{
-    
-
+    toIndex(){
+      this.$router.go(-1)
+    }
   }
 }
 </script>
@@ -110,6 +112,11 @@ export default {
 a{
   color:#000;
 }
+
+.clearfix:after{
+  content:'';clear:both;display:block;
+}
+
 #swiper{ height: 30vh;position:relative;
   width:100%;}
 
@@ -121,7 +128,7 @@ a{
   .fd_slide img{
     width:100%;height:30vh;
   }
-  
+
 .swiper-pagination{
   position:absolute;bottom:0.5rem;
 }

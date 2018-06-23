@@ -21,7 +21,5 @@ html{
   font-size:10vw;
   box-sizing: border-box;
 }
-.clearfix:after{
-  content:'';clear:both;display:block;
-}
+
 </style>

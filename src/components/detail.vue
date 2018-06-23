@@ -1,5 +1,7 @@
 <template>
 <div id="swiper">
+  <div style="position:absolute;right:0;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" class="closeImg">
+  </div>
   <!-- 轮播图 -->
     <swiper  :options="swiperOption" ref="mySwiper">
       <swiper-slide><div class="fd_slide fd_slide1"><img src="../assets/img1.jpg" alt=""></div></swiper-slide>
@@ -8,23 +10,25 @@
       <div class="swiper-pagination "  slot="pagination"></div>
       <!-- <img class="shut" src="../assets/close.png" alt=""> -->
     </swiper>
-    <!-- 功能详情 -->
-    <div class="box clearfix">
+    <div class="contentBoxAuto">
+      <!-- 功能详情 -->
+      <div class="box clearfix">
         <p class="title">猪肉的功效</p>
         <p class="inbox" @click="toggle()">
-            <img v-show="hide" class="img1" src="../assets/dislike.png" alt="">
-            <img v-show="show" class="img2" src="../assets/like.png" alt="">
+          <img v-show="hide" class="img1" src="../assets/dislike.png" alt="">
+          <img v-show="show" class="img2" src="../assets/like.png" alt="">
         </p>
-    </div>
-    <!-- 文章 -->
-    <div class="content clearfix">
-猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的蛋白质及脂肪、碳水化合物、钙、铁、磷等营养成分。猪肉是日常生活的主要副食品，具有补虚强身，滋阴润燥、丰肌泽肤的作用。凡病后体弱、产后血虚、面黄赢瘦者，皆可用之作营养滋补之品。
-猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少，肌肉组织中含有较多的肌间脂肪，因此，经过烹调加工后肉味特别鲜美。
-    </div>
-    <!-- 附件 -->
-    <div class="bottom clearfix">
-            <p class="clearfix"> <span>附件1：《猪肉的营养价值》</span>    <img src="../assets/arrow.jpg" alt=""></p>
-            <p class="clearfix"> <span>附件2：《猪肉怎么吃最健康？》</span>    <img src="../assets/arrow.jpg" alt=""></p>
+      </div>
+      <!-- 文章 -->
+      <div class="content clearfix">
+        猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的蛋白质及脂肪、碳水化合物、钙、铁、磷等营养成分。<br>&nbsp&nbsp&nbsp&nbsp&nbsp猪肉是日常生活的主要副食品，具有补虚强身，滋阴润燥、丰肌泽肤的作用。凡病后体弱、产后血虚、面黄赢瘦者，皆可用之作营养滋补之品。
+        猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少，肌肉组织中含有较多的肌间脂肪，因此，经过烹调加工后肉味特别鲜美。
+      </div>
+      <!-- 附件 -->
+      <div class="bottom clearfix">
+        <p class="clearfix"> <span>附件1：《猪肉的营养价值》</span>    <img src="../assets/arrow.jpg" alt=""></p>
+        <p class="clearfix"> <span>附件2：《猪肉怎么吃最健康？》</span>    <img src="../assets/arrow.jpg" alt=""></p>
+      </div>
     </div>
 </div>
 </template>
@@ -70,6 +74,9 @@ export default {
       swiperSlide
     },
   methods:{
+    toIndex(){
+      this.$router.go(-1)
+    },
     toggle:function(){
         if(this.hide===true){
 
@@ -100,8 +107,18 @@ export default {
 a{
   color:#000;
 }
-#swiper{ height: 30vh;position:relative;
-  width:100%;}
+
+.contentBoxAuto{
+  height:13rem;
+  overflow-y: auto;
+}
+
+#swiper{
+  height: 100vh;
+  position:relative;
+  width:100%;
+  overflow-y: hidden;
+}
 
   .fd_slide{    height: 30vh;
     width: 100%;
@@ -111,7 +128,7 @@ a{
   .fd_slide img{
     width:100%;height:30vh;
   }
-  
+
 .swiper-pagination{
   position:absolute;bottom:0.5rem;
 }
@@ -168,7 +185,7 @@ a{
     width:100%;
     height:1.5rem;
     line-height:1.5rem;
-    font-size:0.46rem;
+    font-size:0.4rem;
     border-bottom:1px solid #EBEBEB;
 }
 .bottom p span{
@@ -180,4 +197,5 @@ a{
     margin-top:0.5rem;
     float:right;
 }
+
 </style>
