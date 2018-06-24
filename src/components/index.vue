@@ -1,8 +1,9 @@
 <template>
 <div id="body">
-    <header>
+  <!--遮罩 -->
+  <div class="pop" v-show="flag"></div>
             <!-- 进入首页，文字淡入 -->
-    <div class="top">
+    <div class="top" v-show="hide">
           <p class="word" v-for="word in words" v-show="hideWords">{{word}}</p>
 
           <router-link to="/account">
@@ -15,21 +16,24 @@
     <div class="nav">
       <div class="box">
         <router-link to='/swiper'>
-            <p class="button" v-for="item in items">
-                    {{item}}  
+            <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6">
+              {{item}}
+            </p>
+            <p class="button" v-for="(item,key) in items" v-if="(key+1)>6 && hide == false">
+              {{item}}
             </p>
         </router-link>
 
       </div>
 
-      
+
     </div>
 
   <!-- 底部上划 -->
-  <div class="bottom">
+  <div class="bottom" v-show="bottomTxt">
       <img src="../assets/pullup.png" alt="">
   </div>
-    </header>
+
 
 </div>
 </template>
@@ -38,7 +42,49 @@
 export default {
   name: 'index',
   mounted(){
+    var that = this;
     var words=document.querySelectorAll('.word');
+    var text = document.querySelectorAll('.bottom')[0];
+    var nav = document.querySelector('.nav')
+    text.addEventListener('touchstart', function (e) {
+      this.pointY = e.targetTouches[0].pageY
+    })
+    text.addEventListener('touchmove', function (e) {
+      this.point = e.targetTouches[0].pageY - this.pointY
+    })
+    text.addEventListener('touchend', function (e) {
+      if (this.point < 0) {
+        nav.style.top = 18 + '%'
+        that.flag = true
+        that.hide = false
+        that.bottomTxt = false
+      } else {
+        document.querySelector('.nav').removeAttribute('style')
+        that.flag = false
+        that.hide = true
+        that.bottomTxt = true
+      }
+    })
+
+    nav.addEventListener('touchstart', function (e) {
+      this.pointY = e.targetTouches[0].pageY
+    })
+    nav.addEventListener('touchmove', function (e) {
+      this.point = e.targetTouches[0].pageY - this.pointY
+    })
+    nav.addEventListener('touchend', function (e) {
+      if (this.point < 0) {
+        nav.style.top = 18 + '%'
+        that.flag = true
+        that.hide = false
+        that.bottomTxt = false
+      } else {
+        document.querySelector('.nav').removeAttribute('style')
+        that.flag = false
+        that.hide = true
+        that.bottomTxt = true
+      }
+    })
     var timer=setInterval(
       ()=>{
         words[this.num].style.opacity=1;
@@ -51,12 +97,15 @@ export default {
   },
   data(){
     return{
-    words:['我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-    items:['本草纲目','食物营养','健康知识','本草纲目','食物营养','健康知识'],
-    hideWords:true,
-    num:0,
+      words:['我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+      items:['本草纲目','食物营养','健康知识','本草纲目','食物营养','健康知识',
+        '本草纲目','食物营养','健康知识','本草纲目','食物营养','健康知识'],
+      hideWords:true,
+      num:0,
+      flag: false,
+      hide: true,
+      bottomTxt:true
     }
-
   }
 }
 </script>
@@ -68,8 +117,16 @@ export default {
   width:100%;
   height:100vh;
   box-sizing: border-box;
-    background:url(../assets/bgimg.png) center center no-repeat;
+  background:url(../assets/bgimg.png) center center no-repeat;
   background-size:100% 100vh;
+  position:relative;
+}
+.pop{
+  position:fixed;
+  height:100%;
+  width:100%;
+  background: black;
+  opacity:0.4;
 }
 .top{
   width:9rem;height:9rem;
@@ -91,7 +148,10 @@ export default {
 }
 
 .nav{
+  top:62%;
   width:10rem;
+  position:absolute;
+  transition:all 1s;
   }
   .nav .box{
     width:100%;margin:0 auto;margin-left:0.5rem;
@@ -110,6 +170,7 @@ export default {
 
 
 .bottom{
+  transition:all 0.5s;
   width:100%;height:1rem;position:fixed;bottom:0;
 }
 .bottom img{

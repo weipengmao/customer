@@ -43,8 +43,9 @@ export default {
   mounted(){
       var parent=document.querySelector('.bottom');
       var ps=parent.querySelectorAll('p');
-      for(let i=1;i<ps.length;i++){
-          ps[ps.length].style.borderBottom=none;
+      for(var i=1;i<ps.length;i++){
+//          ps[ps.length].style.borderBottom=none;
+//        此处报错，记得处理
       }
   },
   data () {

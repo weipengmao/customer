@@ -7,7 +7,7 @@
       </div>
 
       <div class="center">
-        <div class="content">
+        <div class="content" v-if="firstQues">
           <img src="../common/image/robot_profile.png" class="contentImg">
           <div class="contentBox">
             <p align="left">您可以这样向我咨询问题，如：<br>1、猪肉有什么功效?<br>2、花生有什么营养?
@@ -15,14 +15,14 @@
           </div>
         </div>
 
-        <div class="contentRight">
-          <div class="rightContent">
-            <p align="left">猪肉有什么功效?
+        <div class="contentRight" style="width:100%" v-if="firstQuest" v-for="key in firstQuestTxt">
+          <div class="rightContent" style="float:right">
+            <p align="left">{{key}}
             </p>
           </div>
         </div>
 
-        <div class="content" >
+        <div class="content" v-if="answerTxt" >
           <img src="../common/image/robot_profile.png" class="contentImg" >
           <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
             <p align="left">猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少。
@@ -30,33 +30,34 @@
             <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
             <img :src="heart" alt="" style="float:left" @click="changeStyle">
             <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;">更多</p>
+            line-height:0.5rem;" @click="moreAnswer">更多</p>
           </div>
         </div>
 
-        <div class="content" style="width:100%">
+        <div class="content" style="width:100%" v-if="flagTxt">
           <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
           <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-            <div>
-              <p align="left">1.猪肉营养价值在哪里?
+            <div v-for="(item,key) in answer">
+              <p align="left">{{item}}
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
             </div>
-            <p align="left">2.猪肉怎样吃最健康？
-            </p>
-            <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-            <p align="left">3.猪肉对我们的身体会产生害处吗？
-            </p>
-            <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-            <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="changeStyle"><span
+            <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
           style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem">转人工客服</span>
+            float:left;line-height:1.10rem" @click="serviceDetail">转人工客服</span>
             <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;">更多</p>
+            line-height:0.5rem;" @click="addText">更多</p>
           </div>
         </div>
 
-        <div class="contentService">
+        <div class="contentRight" style="width:100%" v-if="quest" v-for="key in questTxt">
+          <div class="rightContent" style="float:right">
+            <p align="left">{{key}}
+            </p>
+          </div>
+        </div>
+
+        <div class="contentService" v-if="service">
           <div class="service">
             <hr style="width:28%;position:absolute;left:0.5rem;top:0.12rem;opacity:0.2">
             <hr style="width:28%;position:absolute;right:0.5rem;top:0.12rem;opacity:0.2">
@@ -76,8 +77,8 @@
 
       <div class="bottom">
         <div class="bottomLeft"><p>{{text}}</p></div>
-        <el-input class="input" clearable placeholder="请输入您的问题"></el-input>
-        <div class="bottomRight"><p>发送</p></div>
+        <el-input class="input" clearable placeholder="请输入您的问题" v-model="questDetail"></el-input>
+        <div class="bottomRight" @click="setQuest"><p>发送</p></div>
       </div>
     </div>
 </div>
@@ -86,25 +87,117 @@
 <script>
 export default {
   name: 'account',
-  data () {
-    return {
-      text:'检索',
-      heart:require('../common/image/heart_before.png'),
-      flag:true
+  mounted() {
+    for (var i = 0; i < 5; i++) {
+      this.answer.push(this.answerArr[i])
     }
   },
-  methods:{
+  data () {
+    return {
+      text: '检索',
+      heart: require('../common/image/heart_before.png'),
+      flag: true,
+      answerArr: ['1.猪肉营养价值在哪里?', '2.猪肉怎么吃最健康', '3.猪肉对我们有什么害处',
+        '4.猪肉营养价值在哪里?', '5.猪肉怎么吃最健康', '6.猪肉营养价值在哪里?', '7.猪肉怎么吃最健康',
+        '8.猪肉营养价值在哪里?', '9.猪肉怎么吃最健康', '10.猪肉怎么吃最健康', '11.猪肉怎么吃最健康',
+        '12.猪肉怎么吃最健康',
+        '13.猪肉营养价值在哪里?', '14.猪肉怎么吃最健康',
+        '15.猪肉怎么吃最健康',
+        '16.猪肉营养价值在哪里?','17.猪肉营养价值在哪里?', '18.猪肉怎么吃最健康',
+        '19.猪肉怎么吃最健康'],
+      addItem: false,
+      answer:[],
+      flagTxt:false,
+      firstQues:true,
+      quest:false,
+      questTxt:[],
+      firstQuestTxt:[],
+      questDetail:'',
+      answerTxt:false,
+      service:false,
+      firstQuest:false,
+      Time:1
+    }
+  },
+  methods: {
     toIndex(){
       this.$router.go(-1)
     },
     changeStyle(){
-      if(this.flag){
+      if (this.flag) {
         this.heart = require('../common/image/heart_after.png')
         this.flag = false
-      }else{
+      } else {
         this.heart = require('../common/image/heart_before.png')
         this.flag = true
       }
+    },
+    addText(){
+      this.addItem = true
+      var len = this.answerArr.length
+      var sum = Math.round(len/5)
+      var differ = len - this.answer.length
+
+      if (len >= 5 && this.addItem == true) {
+          if (differ <= 5 && differ !=0) {
+            for (var i = 5; i < len; i++) {
+              if (i <= 10 && len<=10) {
+                this.answer.push(this.answerArr[i])
+              }
+            }
+            if(sum>=2 && len>10 && len<=15){
+              for (var i = 5*2; i < len; i++) {
+                if (i <= len) {
+                  this.answer.push(this.answerArr[i])
+                }
+              }
+            }
+            if(sum>=2 && len>15 && len<=20){
+              for (var i = 5*3; i < len; i++) {
+                if (i <= len) {
+                  this.answer.push(this.answerArr[i])
+                }
+              }
+            }
+          }
+
+          if(differ > 5){
+              if(differ >10){
+                for (var i = 5; i < 10; i++) {
+                  if (i <= 10) {
+                    this.answer.push(this.answerArr[i])
+                  }
+                }
+              }
+
+              if(differ <=10){
+                for (var i = 10; i < 15; i++) {
+                  if (i <= 15) {
+                    this.answer.push(this.answerArr[i])
+                  }
+                }
+              }
+          }
+      }
+    },
+    moreAnswer(){
+      this.flagTxt = true
+    },
+    setQuest(){
+      if(this.Time == 1){
+        this.firstQuestTxt.push(this.questDetail)
+        this.firstQuest = true
+        this.answerTxt = true
+        this.Time =2
+      }else{
+        this.questTxt = []
+        this.questTxt.push(this.questDetail)
+        this.quest = true
+        this.answerTxt = true
+      }
+    },
+    serviceDetail(){
+      this.service = true
     }
   }
 }
@@ -142,6 +235,7 @@ export default {
     width:5rem;
     display:inline-block;
     margin-top:0.65rem;
+    transition:all 0.3s;
     p
       font-size:0.1rem;
       font-family:SourceHanSansCN-Normal;
