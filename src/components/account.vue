@@ -47,7 +47,7 @@
               style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             float:left;line-height:1.10rem" @click="serviceDetail">转人工客服</span>
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @click="addText">更多</p>
+            line-height:0.5rem;" @click="addText(item)">更多</p>
             </div>
             <div class="service">
               <hr style="width:28%;position:absolute;left:0.5rem;top:0.12rem;opacity:0.2">
@@ -65,7 +65,7 @@
             </div>
           </div>
 
-          <div class="content" v-if="answerTxt" >
+          <div class="content" v-if="answerTxt" ref="item" >
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
               <p align="left">猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少。
@@ -77,10 +77,10 @@
             </div>
           </div>
 
-          <div class="content" style="width:100%" v-show="flagTxt" ref="item">
+          <div class="content" style="width:100%" v-show="flagTxt" ref="itemContent" :id = "item">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div v-for="(item,key) in answer">
+              <div v-for="(item,key) in randomAnswer[item]">
                 <p align="left">{{item}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
@@ -89,7 +89,7 @@
               style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             float:left;line-height:1.10rem" @click="serviceDetail">转人工客服</span>
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @click="addText">更多</p>
+            line-height:0.5rem;" @click="addText(item)">更多</p>
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@
             </div>
           </div>
 
-          <div class="content" v-if="answerTxt" >
+          <div class="content" v-if="answerTxt" ref="itemTwo">
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
               <p align="left">猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少。
@@ -131,7 +131,7 @@
             </div>
           </div>
 
-          <div class="content" style="width:100%" v-show="flagTxt" ref="itemTwo">
+          <div class="content" style="width:100%" v-show="flagTxt" ref="itemTwoContent">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
               <div v-for="(item,key) in answer">
@@ -143,7 +143,7 @@
               style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             float:left;line-height:1.10rem" @click="serviceDetail">转人工客服</span>
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @click="addText">更多</p>
+            line-height:0.5rem;" @click="addText(item)">更多</p>
             </div>
           </div>
         </div>
@@ -167,6 +167,10 @@ export default {
     for (var i = 0; i < 5; i++) {
       this.answer.push(this.answerArr[i])
     }
+    for (var i = 0; i < 5; i++) {
+      for(var j = 0;j<this.randomAnswer.length;j++)
+      this.randomAnswer[j].push(this.answerArr[i])
+    }
       this.beforeflag = true
       this.beforeQuest = true
   },
@@ -181,12 +185,10 @@ export default {
         '4.猪肉营养价值在哪里?', '5.猪肉怎么吃最健康', '6.猪肉营养价值在哪里?', '7.猪肉怎么吃最健康',
         '8.猪肉营养价值在哪里?', '9.猪肉怎么吃最健康', '10.猪肉怎么吃最健康', '11.猪肉怎么吃最健康',
         '12.猪肉怎么吃最健康',
-        '13.猪肉营养价值在哪里?', '14.猪肉怎么吃最健康',
-        '15.猪肉怎么吃最健康',
-        '16.猪肉营养价值在哪里?','17.猪肉营养价值在哪里?', '18.猪肉怎么吃最健康',
-        '19.猪肉怎么吃最健康'],
+        '13.猪肉营养价值在哪里?', '14.猪肉怎么吃最健康'],
       addItem: false,
       answer:[],
+      randomAnswer:[[],[],[],[],[],[],[],[]],
       flagTxt:false,
       firstQues:true,
       quest:false,
@@ -199,7 +201,8 @@ export default {
       Time:1,
       beforeTxt:['猪肉什么功效'],
       beforeflag:false,
-      beforeQuest:false
+      beforeQuest:false,
+      num:[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5]
     }
   },
   methods: {
@@ -224,61 +227,28 @@ export default {
         this.flagBeat = true
       }
     },
-    addText(){
-      this.addItem = true
-      var len = this.answerArr.length
-      var sum = Math.round(len/5)
-      var differ = len - this.answer.length
-
-      if (len >= 5 && this.addItem == true) {
-          if (differ <= 5 && differ !=0) {
-            for (var i = 5; i < len; i++) {
-              if (i <= 10 && len<=10) {
-                this.answer.push(this.answerArr[i])
-              }
-            }
-            if(sum>=2 && len>10 && len<=15){
-              for (var i = 5*2; i < len; i++) {
-                if (i <= len) {
-                  this.answer.push(this.answerArr[i])
-                }
-              }
-            }
-            if(sum>=2 && len>15 && len<=20){
-              for (var i = 5*3; i < len; i++) {
-                if (i <= len) {
-                  this.answer.push(this.answerArr[i])
-                }
-              }
-            }
-          }
-
-          if(differ > 5){
-              if(differ >10){
-                for (var i = 5; i < 10; i++) {
-                  if (i <= 10) {
-                    this.answer.push(this.answerArr[i])
-                  }
-                }
-              }
-
-              if(differ <=10){
-                for (var i = 10; i < 15; i++) {
-                  if (i <= 15) {
-                    this.answer.push(this.answerArr[i])
-                  }
-                }
-              }
-          }
+    addText(a){
+      console.log(this.randomAnswer)
+      //加载指定数量
+      this.num[a] += 5
+      var abs =(this.answerArr.length -  this.randomAnswer[a].length)/5
+      if(abs >=1){
+        for(var i = 0;i<5;i++ ){
+          this.randomAnswer[a].push(this.answerArr[(this.num[a] - 5)+ i])
+        }
+      }else{
+        for(var i = 0;i<abs*5;i++ ){
+          this.randomAnswer[a].push(this.answerArr[(this.num[a] - 5)+ i])
+        }
       }
     },
     moreAnswer(a){
-      console.log(this.$refs.item[a])
       this.$refs.item[a].style.display = 'block'
+      this.$refs.itemContent[a].style.display = 'block'
     },
     moreAnswerTwo(a){
-      console.log(this.$refs.item[a])
       this.$refs.itemTwo[a].style.display = 'block'
+      this.$refs.itemTwoContent[a].style.display = 'block'
     },
     setQuest(){
       if(this.service == false){
