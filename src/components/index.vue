@@ -34,14 +34,15 @@
       <img src="../assets/pullup.png" alt="">
   </div>
 
-
 </div>
 </template>
 
 <script>
+  import {CustomerHttp} from '../common/js/http'
 export default {
   name: 'index',
   mounted(){
+    CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"faq.q","page_cnt":10,"ver":1})
     //随机函数
     var num = 10;
     var randomNum = parseInt(Math.random()*num)
@@ -100,6 +101,8 @@ export default {
         }
       }
     ,1000)
+  },
+  methods:{
   },
   data(){
     return{

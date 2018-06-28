@@ -7,6 +7,7 @@
       </div>
 
       <div class="center">
+        <!--问题模拟 -->
         <div class="content" v-if="firstQues">
           <img src="../common/image/robot_profile.png" class="contentImg">
           <div class="contentBox">
@@ -14,7 +15,7 @@
             </p>
           </div>
         </div>
-
+        <!--历史问题 -->
         <div class="cpBefore" v-for="(key,item) in beforeTxt">
           <div class="contentRight" style="width:100%" v-if="beforeQuest" >
             <div class="rightContent" style="float:right">
@@ -45,9 +46,9 @@
               </div>
               <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
               style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem" @click="serviceDetail">转人工客服</span>
+            float:left;line-height:1.10rem" >转人工客服</span>
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @click="addText(item)">更多</p>
+            line-height:0.5rem;" >更多</p>
             </div>
             <div class="service">
               <hr style="width:28%;position:absolute;left:0.5rem;top:0.12rem;opacity:0.2">
@@ -56,7 +57,7 @@
             </div>
           </div>
         </div>
-
+        <!--当前问题 -->
         <div class="cpOne" v-for="(key,item) in firstQuestTxt">
           <div class="contentRight" style="width:100%" v-if="firstQuest" >
             <div class="rightContent" style="float:right">
@@ -93,7 +94,7 @@
             </div>
           </div>
         </div>
-
+        <!--人工服务 -->
         <div class="contentService" v-if="service" v-for="(key,item) in firstQuestTxt">
           <div class="service">
             <hr style="width:28%;position:absolute;left:0.5rem;top:0.12rem;opacity:0.2">
@@ -110,7 +111,7 @@
             </div>
           </div>
         </div>
-
+        <!--人工服务后问题 -->
         <div class="cpTwo" v-for="(key,item) in questTxt">
           <div class="contentRight" style="width:100%" v-if="quest" >
             <div class="rightContent" style="float:right">
@@ -161,6 +162,7 @@
 </template>
 
 <script>
+  import {CustomerHttp} from '../common/js/http'
 export default {
   name: 'account',
   mounted() {
@@ -228,7 +230,6 @@ export default {
       }
     },
     addText(a){
-      console.log(this.randomAnswer)
       //加载指定数量
       this.num[a] += 5
       var abs =(this.answerArr.length -  this.randomAnswer[a].length)/5
