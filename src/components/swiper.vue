@@ -41,32 +41,28 @@
 </template>
 
 <script>
-
+  import {CustomerHttp} from '../common/js/http'
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
 
   name: 'account',
   mounted(){
-      var nav=document.querySelector('#nav');
-      var lis=nav.querySelectorAll('li');
-      lis[0].classList.add('active');
-      var num=0;
-      for(let i=0;i<lis.length;i++){
-        this.num=lis[i];
-        lis[i].ontouchend=function(){
-          if(!this.classList.contains('active')){
-
-            for(let j=0;j<lis.length;j++){
-               lis[j].classList.remove('active');
-               this.classList.add('active');
-            }
-          }else{
-
-          }
-
+    var that = this
+    CustomerHttp.httpPost('/api/qx',{"faq_id":"c2320b6999500986","cmd":"faqspc.r","ver":1})
+    CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
+      function(val){
+        const Data = val.data.rows
+        for(var i =2 ;i<7;i++){
+          that.items.push(Data[i][1])
         }
+        setTimeout(()=>{
+          that._req()
+        },10)
+      },function(err){
+        console.log(err)
       }
+    )
   },
   data () {
     return {
@@ -85,9 +81,7 @@ export default {
           }
         },
         swiperSlides: [1, 2, 3, 4],
-        items:['人部','草部','木部','人部','草部',
-        // '木部','人部','草部','木部','人部','草部','木部'
-        ]
+        items:[]
     }
   },
       components:{
@@ -97,6 +91,25 @@ export default {
   methods:{
     toIndex(){
       this.$router.go(-1)
+    },
+    _req(){
+      var nav=document.querySelector('#nav');
+      var lis=nav.querySelectorAll('li');
+      lis[0].classList.add('active');
+      var num=0;
+      for(let i=0;i<lis.length;i++){
+        this.num=lis[i];
+        lis[i].ontouchend=function(){
+          if(!this.classList.contains('active')){
+
+            for(let j=0;j<lis.length;j++){
+              lis[j].classList.remove('active');
+              this.classList.add('active');
+            }
+          }else{
+          }
+        }
+      }
     }
   }
 }
