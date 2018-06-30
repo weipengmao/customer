@@ -104,6 +104,8 @@ export default {
       var that = this
       var nav=document.querySelector('#nav');
       var lis=nav.querySelectorAll('li');
+      var lisId = lis[0].id;
+      var arrOne = [];
       lis[0].classList.add('active');
       var num=0;
       for(let i=0;i<lis.length;i++){
@@ -117,35 +119,30 @@ export default {
 
             var id = lis[i].id
             var arr = [];
-            var arrOne = [];
             CustomerHttp.httpPost('/api/qx',{"kind_id":id,"cmd":"faq.q","ver":1,"page_cnt":"20",
               "page_num":0,"url":"qx"}).then(function(val){
               for(var z=0;z<val.data.rows.length;z++){
                 arr.push(val.data.rows[z])
               }
               that.titleIndex = distinct(arr)
-              arrOne.push(val.data.rows[0][1])
-              that.Index = distinct(arrOne)
             },function(err){console.log(err)})
-
-
-//            for(var f = 0;f<idIndex.length;f++){
-//              CustomerHttp.httpPost('/api/qx',{"faq_id":idIndex[f].id,"cmd":"faqspc.r","ver":1}).then(
-//                function(val){
-//                  console.log(val)
-//                },function(err){console.log(err)}
-//              )
-//            }
-
           }else{
           }
         }
       }
-//      var id = lis[0].id
-//      CustomerHttp.httpPost('/api/qx',{"kind_id":id,"cmd":"faq.q","ver":1,"page_cnt":"20",
-//        "page_num":0,"url":"qx"}).then(function(val){
-//        console.log(val)
-//      },function(err){console.log(err)})
+      if(num == 0){
+        CustomerHttp.httpPost('/api/qx',{"kind_id":lisId,"cmd":"faq.q","ver":1,"page_cnt":"20",
+          "page_num":0,"url":"qx"}).then(
+          function(val){
+            arrOne.push(val.data.rows[0][1])
+            that.Index = distinct(arrOne)
+            for(var h =0;h<val.data.rows.length;h++){
+              that.titleIndex.push(val.data.rows[h])
+            }
+          },function(err){console.log(err)}
+        )
+        num++
+      }
     }
   }
 }
