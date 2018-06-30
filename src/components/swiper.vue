@@ -124,6 +124,10 @@ export default {
               for(var z=0;z<val.data.rows.length;z++){
                 arr.push(val.data.rows[z])
               }
+              if(val.data.rows.length>0){
+                arrOne.push(val.data.rows[0][1])
+                that.Index = distinct(arrOne)
+              }
               that.titleIndex = distinct(arr)
             },function(err){console.log(err)})
           }else{
@@ -134,10 +138,12 @@ export default {
         CustomerHttp.httpPost('/api/qx',{"kind_id":lisId,"cmd":"faq.q","ver":1,"page_cnt":"20",
           "page_num":0,"url":"qx"}).then(
           function(val){
-            arrOne.push(val.data.rows[0][1])
-            that.Index = distinct(arrOne)
-            for(var h =0;h<val.data.rows.length;h++){
-              that.titleIndex.push(val.data.rows[h])
+            if(val.data.rows.length>0){
+              arrOne.push(val.data.rows[0][1])
+              that.Index = distinct(arrOne)
+              for(var h =0;h<val.data.rows.length;h++){
+                that.titleIndex.push(val.data.rows[h])
+              }
             }
           },function(err){console.log(err)}
         )
