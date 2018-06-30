@@ -13,28 +13,21 @@
   <!-- 左边导航栏及右边的功能简介 -->
   <div class="middle clearfix">
     <ul id="nav" >
-        <li v-for="item in items">{{item}}</li>
+        <li v-for="item in items" :id="item[0]">{{item[1]}}</li>
     </ul>
     <div class="brief clearfix">
       <router-link to='/detail'>
-          <div class="box clearfix">
-              <img src="../assets/pork.jpg" alt="">
-              <div class='inbox clearfix'>
-                  <p class="title">猪肉的功效</p>
-                  <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
-              </div>
+        <div v-for="key in Index" :id="key">
+          <div class="box clearfix info" v-for="key in titleIndex" :id="key[0]">
+            <img src="../assets/pork.jpg" alt="">
+            <div class='inbox clearfix'>
+              <p class="title">{{key[2]}}</p>
+              <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
+            </div>
           </div>
+        </div>
       </router-link>
 
-      <router-link to='/detail' >
-          <div class="box clearfix">
-              <img src="../assets/pork.jpg" alt="">
-              <div class='inbox clearfix'>
-                  <p class="title">鱼肉的功效</p>
-                  <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
-              </div>
-          </div>
-      </router-link>
     </div>
 </div>
 </div>
@@ -42,6 +35,7 @@
 
 <script>
   import {CustomerHttp} from '../common/js/http'
+  import {distinct} from '../common/js/distinct'
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
@@ -49,12 +43,24 @@ export default {
   name: 'account',
   mounted(){
     var that = this
-    CustomerHttp.httpPost('/api/qx',{"faq_id":"c2320b6999500986","cmd":"faqspc.r","ver":1})
+
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
         const Data = val.data.rows
-        for(var i =2 ;i<7;i++){
-          that.items.push(Data[i][1])
+        if(that.$route.query.id == '营养汤'){
+          for(var i =2 ;i<7;i++){
+            that.items.push(Data[i])
+          }
+        }else if(that.$route.query.id == '食物营养成份'){
+          for(var i =8 ;i<29;i++){
+            that.items.push(Data[i])
+          }
+        }else if(that.$route.query.id == '本草纲目'){
+          for(var i =30 ;i<45;i++){
+            that.items.push(Data[i])
+          }
+        }else if(that.$route.query.id == '现代百科'){
+            that.items.push(Data[46])
         }
         setTimeout(()=>{
           that._req()
@@ -81,7 +87,9 @@ export default {
           }
         },
         swiperSlides: [1, 2, 3, 4],
-        items:[]
+        items:[],
+        titleIndex:[],
+        Index:[]
     }
   },
       components:{
@@ -93,6 +101,7 @@ export default {
       this.$router.go(-1)
     },
     _req(){
+      var that = this
       var nav=document.querySelector('#nav');
       var lis=nav.querySelectorAll('li');
       lis[0].classList.add('active');
@@ -101,15 +110,42 @@ export default {
         this.num=lis[i];
         lis[i].ontouchend=function(){
           if(!this.classList.contains('active')){
-
             for(let j=0;j<lis.length;j++){
               lis[j].classList.remove('active');
               this.classList.add('active');
             }
+
+            var id = lis[i].id
+            var arr = [];
+            var arrOne = [];
+            CustomerHttp.httpPost('/api/qx',{"kind_id":id,"cmd":"faq.q","ver":1,"page_cnt":"20",
+              "page_num":0,"url":"qx"}).then(function(val){
+              for(var z=0;z<val.data.rows.length;z++){
+                arr.push(val.data.rows[z])
+              }
+              that.titleIndex = distinct(arr)
+              arrOne.push(val.data.rows[0][1])
+              that.Index = distinct(arrOne)
+            },function(err){console.log(err)})
+
+
+//            for(var f = 0;f<idIndex.length;f++){
+//              CustomerHttp.httpPost('/api/qx',{"faq_id":idIndex[f].id,"cmd":"faqspc.r","ver":1}).then(
+//                function(val){
+//                  console.log(val)
+//                },function(err){console.log(err)}
+//              )
+//            }
+
           }else{
           }
         }
       }
+//      var id = lis[0].id
+//      CustomerHttp.httpPost('/api/qx',{"kind_id":id,"cmd":"faq.q","ver":1,"page_cnt":"20",
+//        "page_num":0,"url":"qx"}).then(function(val){
+//        console.log(val)
+//      },function(err){console.log(err)})
     }
   }
 }
@@ -149,22 +185,31 @@ a{
 .midddle{
   width:100%;box-sizing: border-box;
 }
+.middle{
+  overflow-y:auto;
+}
 .middle #nav{
   display:inline-block;
   width:22%;float:left;
   background:#F4F4F4;
   height:70vh;
+  overflow-y:auto;
 }
 .middle #nav li{
-  width:100%;height:1.4rem;font-size:0.45rem;
+  width:100%;font-size:0.45rem;
   background:#F4F4F4;
   line-height: 1.4rem;
   float:left;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  -o-text-overflow:ellipsis;
+  -webkit-text-overflow:ellipsis;
+  -moz-text-overflow:ellipsis;
 }
 .middle .brief{
   width:78%;
   height:70vh;
-  float:left;
+  overflow-y:auto;
 }
 
 .middle .brief .box{
@@ -182,7 +227,7 @@ a{
 }
 
 .inbox .title{
-  width:100%;height:0.7rem;line-height: 0.7rem;
+  width:100%;line-height: 0.7rem;
   text-align: left;
   font-weight: bold;
   font-size:0.55rem !important;

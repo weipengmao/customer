@@ -15,14 +15,13 @@
     <!--导航栏 -->
     <div class="nav">
       <div class="box">
-        <router-link to='/swiper'>
-            <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6">
+
+            <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6" @click="toSwiper(item)" :id="item">
               {{item}}
             </p>
-            <p class="button" v-for="(item,key) in items" v-if="(key+1)>6 && hide == false">
+            <p class="button" v-for="(item,key) in items" v-if="(key+1)>6 && hide == false" @click="toSwiper(item)" :id="item">
               {{item}}
             </p>
-        </router-link>
 
       </div>
 
@@ -132,13 +131,17 @@ export default {
       CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
         function(val){
           const Data = val.data.rows
-          for(var i = 0;i<Data.length-1;i++){
-            arr.push(Data[i+1][1])
-          }
+            arr.push(Data[1][1])
+            arr.push(Data[7][1])
+            arr.push(Data[29][1])
+            arr.push(Data[45][1])
         },function(err){
           console.log(err)
         }
       )
+    },
+    toSwiper(text){
+      this.$router.push({path:'/swiper',query:{id:text}})
     }
   },
 }
