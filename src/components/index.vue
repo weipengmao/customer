@@ -132,8 +132,8 @@ export default {
         function(val){
           const Data = val.data.rows
             arr.push(Data[1][1])
-            arr.push(Data[7][1])
-            arr.push(Data[29][1])
+            arr.push("食物营养成份")
+            arr.push("本草纲目")
             arr.push(Data[45][1])
         },function(err){
           console.log(err)
