@@ -12,7 +12,7 @@ import axios from 'axios'
 
 Vue.config.productionTip = false
 Vue.use(ElementUi)
-Vue.prototype.$axios = axios
+Vue.prototype.corp_id= "9c3b580d264111e793920242ac110005"
 
 /* eslint-disable no-new */
 new Vue({
