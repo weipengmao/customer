@@ -15,14 +15,13 @@
     <!--导航栏 -->
     <div class="nav">
       <div class="box">
-        <router-link to='/swiper'>
-            <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6">
+
+            <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6" @click="toSwiper(item)" :id="item">
               {{item}}
             </p>
-            <p class="button" v-for="(item,key) in items" v-if="(key+1)>6 && hide == false">
+            <p class="button" v-for="(item,key) in items" v-if="(key+1)>6 && hide == false" @click="toSwiper(item)" :id="item">
               {{item}}
             </p>
-        </router-link>
 
       </div>
 
@@ -34,14 +33,22 @@
       <img src="../assets/pullup.png" alt="">
   </div>
 
-
 </div>
 </template>
 
 <script>
+import {CustomerHttp} from '../common/js/http'
 export default {
   name: 'index',
   mounted(){
+    CustomerHttp.httpPost('/api/qx',{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
+    this._req(this.items)
+    //随机函数
+    var num = 10;
+    var randomNum = parseInt(Math.random()*num)
+    this.words = this.randomWord[randomNum]
+
+    //一行一行淡出
     var that = this;
     var words=document.querySelectorAll('.word');
     var text = document.querySelectorAll('.bottom')[0];
@@ -53,6 +60,7 @@ export default {
       this.point = e.targetTouches[0].pageY - this.pointY
     })
     text.addEventListener('touchend', function (e) {
+      console.log(this.point)
       if (this.point < 0) {
         nav.style.top = 18 + '%'
         that.flag = true
@@ -78,7 +86,7 @@ export default {
         that.flag = true
         that.hide = false
         that.bottomTxt = false
-      } else {
+      } else if(this.point > 200){
         document.querySelector('.nav').removeAttribute('style')
         that.flag = false
         that.hide = true
@@ -98,15 +106,44 @@ export default {
   data(){
     return{
       words:['我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-      items:['本草纲目','食物营养','健康知识','本草纲目','食物营养','健康知识',
-        '本草纲目','食物营养','健康知识','本草纲目','食物营养','健康知识'],
+      //随机配置
+      randomWord:[['1我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['2我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['3我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['4我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['5我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['6我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['7我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['8我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['9我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+        ['10我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。']
+      ],
+      items:[],
       hideWords:true,
       num:0,
       flag: false,
       hide: true,
       bottomTxt:true
     }
-  }
+  },
+  methods:{
+    _req(arr){
+      CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
+        function(val){
+          const Data = val.data.rows
+            arr.push(Data[1][1])
+            arr.push(Data[7][1])
+            arr.push(Data[27][1])
+            arr.push(Data[45][1])
+        },function(err){
+          console.log(err)
+        }
+      )
+    },
+    toSwiper(text){
+      this.$router.push({path:'/swiper',query:{id:text}})
+    }
+  },
 }
 </script>
 
@@ -120,6 +157,7 @@ export default {
   background:url(../assets/bgimg.png) center center no-repeat;
   background-size:100% 100vh;
   position:relative;
+  overflow-y:auto;
 }
 .pop{
   position:fixed;
@@ -158,7 +196,7 @@ export default {
   }
 .button{
   width:2.255rem;height:1rem;text-align: center;line-height: 1rem;color:white;
-  font-size:0.42rem;border:2px solid #fff;
+  font-size:0.32rem;border:2px solid #fff;
   display:inline-block;float:left;margin:0.1rem 0;
   margin-right:0.21rem;
   margin-top:0.15rem;
@@ -166,6 +204,11 @@ export default {
   padding:0.45rem 0.25rem;font-weight: bold;
   letter-spacing: 0.035rem;
   background: url('../assets/button.png') center no-repeat;
+  text-overflow:ellipsis;
+  -o-text-overflow:ellipsis;
+  -webkit-text-overflow:ellipsis;
+  -moz-text-overflow:ellipsis;
+  overflow:hidden;
 }
 
 
