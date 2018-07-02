@@ -16,10 +16,10 @@
           </div>
         </div>
         <!--历史问题 -->
-        <div class="cpBefore" v-for="(key,item) in beforeTxt">
+        <div class="cpBefore" >
           <div class="contentRight" style="width:100%" v-if="beforeQuest" >
             <div class="rightContent" style="float:right">
-              <p align="left">{{key}}
+              <p align="left">{{beforeTxt}}
               </p>
             </div>
           </div>
@@ -27,7 +27,7 @@
           <div class="content" v-if="beforeflag" >
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
-              <p align="left">猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少。
+              <p align="left">{{history}}
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               <img :src="heart" alt="" style="float:left" >
@@ -36,20 +36,20 @@
             </div>
           </div>
 
-          <div class="content" style="width:100%" v-show="beforeTxt" ref="beforeItem">
-            <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
-            <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div v-for="(item,key) in answer">
-                <p align="left">{{item}}
-                </p>
-                <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-              </div>
-              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
-              style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem" >转人工客服</span>
-              <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" >更多</p>
+          <div class="content" style="width:100%"  ref="beforeItem">
+            <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;" v-show="false">
+            <div class="contentBox" style="width:70%;margin-right:0.9rem;" v-show="false">
+            <div v-for="(item,key) in answer">
+              <p align="left">{{item}}
+              </p>
+              <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
             </div>
+            <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
+            style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            float:left;line-height:1.10rem" >转人工客服</span>
+            <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            line-height:0.5rem;" >更多</p>
+          </div>
             <div class="service">
               <hr style="width:28%;position:absolute;left:0.5rem;top:0.12rem;opacity:0.2">
               <hr style="width:28%;position:absolute;right:0.5rem;top:0.12rem;opacity:0.2">
@@ -65,7 +65,7 @@
               </p>
             </div>
           </div>
-
+          <!--<div style="float:left;margin:0rem auto;width:100%;">loading</div>-->
           <div class="content" v-if="answerTxt" ref="item" >
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
@@ -177,19 +177,17 @@ export default {
       }
     )
 
-
-//    for (var i = 0; i < 5; i++) {
-//      this.answer.push(this.answerArr[i])
-//    }
-//    for (var i = 0; i < 5; i++) {
-//      for(var j = 0;j<this.randomAnswer.length;j++)
-//      this.randomAnswer[j].push(this.answerArr[i])
-//    }
+    if(localStorage.getItem('answer')){
       this.beforeflag = true
       this.beforeQuest = true
+      console.log(localStorage.getItem('quest'))
+      this.beforeTxt = localStorage.getItem('quest')
+      this.history = localStorage.getItem('answer')
+    }
   },
   data () {
     return {
+      history:'',
       inputContent:true,
       text:[],
       searchText:'',
@@ -218,7 +216,7 @@ export default {
       service:false,
       firstQuest:false,
       Time:1,
-      beforeTxt:['猪肉什么功效'],
+      beforeTxt:'',
       beforeflag:false,
       beforeQuest:false,
       num:[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
@@ -283,28 +281,44 @@ export default {
       var _that = this
       var arr =[];
       this.text = ''
-      if(this.service == false){
+      localStorage.setItem('quest',this.questDetail)
+      if(this.service == false ){
         this.firstQuestTxt.push(this.questDetail)
         this.firstQuest = true
         CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
             var reg = new RegExp(_that.questDetail,"i")
-            for(var i = 0;i < val.data.rows.length;i++){
-              arr.push(val.data.rows[i][0])
-              _that.answerArr = arr
-              if(reg.test(val.data.rows[i][0])){
+            console.log(val)
+            if(val.data.flag==0){
+              for(var i = 0;i < val.data.rows.length;i++){
+                arr.push(val.data.rows[i][0])
+                _that.answerArr = arr
+                if(reg.test(val.data.rows[i][0])){
 //                _that.robotAnswer = val.data.rows[i][1].replace(/[a-zA-Z\<\>\&\;]+/,'')
-                _that.robotAnswer = val.data.rows[i][1]
-                _that.answerTxt = true
-                _that.id = val.data.rows[i][5]
-                //玫瑰花茶有什么功效
+                  _that.robotAnswer = val.data.rows[i][1]
+                  localStorage.setItem('answer',_that.robotAnswer)
+                  _that.answerTxt = true
+                  _that.id = val.data.rows[i][5]
+                  //玫瑰花茶有什么功效
+                }
               }
-            }
-            _that.$nextTick(() => {
-              _that.$refs.testIndex[_that.idNum].innerHTML = `${_that.robotAnswer}`
+              _that.$nextTick(() => {console.log(!_that.questDetail)
+                _that.$refs.testIndex[_that.idNum].innerHTML = `${_that.robotAnswer}`
               _that.idNum++
             })
+            }else if(!val.data.rows || !_that.questDetail){
+              _that.answerTxt = true
+              _that.$nextTick(() => {
+              _that.$refs.testIndex[_that.idNum].parentNode.parentNode.style.width = '100%'
+              if(!_that.questDetail){
+                _that.$refs.testIndex[_that.idNum].innerHTML = "没能理解您的意思哦，换一种问法试试"
+              }else{
+                _that.$refs.testIndex[_that.idNum].innerHTML = val.data.msg
+              }
+              _that.idNum++
+            })
+            }
           },function(err){
             console.log(err)
           }
@@ -326,6 +340,7 @@ export default {
               if(reg.test(val.data.rows[i][0])){
 //                _that.robotAnswer = val.data.rows[i][1].replace(/[a-zA-Z\<\>\&\;]+/,'')
                 _that.robotAnswer = val.data.rows[i][1]
+                localStorage.setItem('answer',_that.robotAnswer)
                 _that.answerTxt = true
                 _that.id = val.data.rows[i][5]
                 //玫瑰花茶有什么功效
@@ -345,6 +360,7 @@ export default {
       this.service = true
     },
     info(a,key){
+      localStorage.setItem('quest',a)
       var _that = this
       this.firstQuestTxt.push(a)
       this.firstQuest = true
@@ -357,6 +373,7 @@ export default {
               if(reg.test(val.data.rows[i][0])){
                 console.log('ok')
                 _that.robotAnswer = val.data.rows[i][1]
+                localStorage.setItem('answer',_that.robotAnswer)
                 _that.answerTxt = true
                 _that.id = val.data.rows[i][5]+key
                 //玫瑰花茶有什么功效
@@ -373,6 +390,7 @@ export default {
       )
     },
     infoTwo(a,key){
+      localStorage.setItem('quest',a)
       var _that = this
       this.questTxt.push(a)
       this.quest = true
@@ -384,6 +402,7 @@ export default {
             for(var i = 0;i < val.data.rows.length;i++){
               if(reg.test(val.data.rows[i][0])){
                 _that.robotAnswer = val.data.rows[i][1]
+                localStorage.setItem('answer',_that.robotAnswer)
                 _that.answerTxt = true
                 _that.id = val.data.rows[i][5]+key
                 //玫瑰花茶有什么功效
