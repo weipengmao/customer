@@ -17,11 +17,11 @@
     </ul>
     <div class="brief clearfix">
       <router-link to='/detail'>
-        <div v-for="key in Index" :id="key">
-          <div class="box clearfix info" v-for="key in titleIndex" :id="key[0]">
+        <div  :id="Index" name="text">
+          <div class="box clearfix info" v-for="key in titleIndex" :id="key">
             <img src="../assets/pork.jpg" alt="">
             <div class='inbox clearfix'>
-              <p class="title">{{key[2]}}</p>
+              <p class="title">{{key}}</p>
               <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
             </div>
           </div>
@@ -43,24 +43,86 @@ export default {
   name: 'account',
   mounted(){
     var that = this
-
+    var arrOne =[]
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
-        const Data = val.data.rows
+        var Data = val.data.rows
         if(that.$route.query.id == '营养汤'){
-          for(var i =2 ;i<7;i++){
+          for(var i =2 ;i<7;i++) {
             that.items.push(Data[i])
+            CustomerHttp.httpPost('/api/qx', {
+              "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+              "page_num": 0, "url": "qx"
+            }).then(function (val) {
+              var placeData = []
+              for (var z = 0; z < val.data.rows.length; z++) {
+                var placeName = val.data.rows[z][1]
+                placeData.push(val.data.rows[z][2])
+                arrOne.push(placeName)
+                if(placeName){
+                  localStorage.setItem(placeName,placeData)
+                }
+                  that.Index = distinct(arrOne)
+              }
+            })
           }
         }else if(that.$route.query.id == '食物营养成份'){
+          console.log('ok')
           for(var i =8 ;i<29;i++){
             that.items.push(Data[i])
+            CustomerHttp.httpPost('/api/qx', {
+              "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+              "page_num": 0, "url": "qx"
+            }).then(function (val) {
+              var placeData = []
+              for (var z = 0; z < val.data.rows.length; z++) {
+                var placeName = val.data.rows[z][1]
+                placeData.push(val.data.rows[z][2])
+                arrOne.push(placeName)
+                if(placeName){
+                  localStorage.setItem(placeName,placeData)
+                }
+                that.Index = distinct(arrOne)
+              }
+            })
           }
+
         }else if(that.$route.query.id == '本草纲目'){
           for(var i =28 ;i<45;i++){
             that.items.push(Data[i])
+            CustomerHttp.httpPost('/api/qx', {
+              "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+              "page_num": 0, "url": "qx"
+            }).then(function (val) {
+              var placeData = []
+              for (var z = 0; z < val.data.rows.length; z++) {
+                var placeName = val.data.rows[z][1]
+                placeData.push(val.data.rows[z][2])
+                arrOne.push(placeName)
+                if(placeName){
+                  localStorage.setItem(placeName,placeData)
+                }
+                that.Index = distinct(arrOne)
+              }
+            })
           }
         }else if(that.$route.query.id == '现代百科'){
             that.items.push(Data[46])
+            CustomerHttp.httpPost('/api/qx', {
+              "kind_id": Data[46][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+              "page_num": 0, "url": "qx"
+            }).then(function (val) {
+              var placeData = []
+              for (var z = 0; z < val.data.rows.length; z++) {
+                var placeName = val.data.rows[z][1]
+                placeData.push(val.data.rows[z][2])
+                arrOne.push(placeName)
+                if(placeName){
+                  localStorage.setItem(placeName,placeData)
+                }
+                that.Index = distinct(arrOne)
+              }
+            })
         }
         setTimeout(()=>{
           that._req()
@@ -102,10 +164,10 @@ export default {
     },
     _req(){
       var that = this
+      var arr =[]
       var nav=document.querySelector('#nav');
       var lis=nav.querySelectorAll('li');
       var lisId = lis[0].id;
-      var arrOne = [];
       lis[0].classList.add('active');
       var num=0;
       for(let i=0;i<lis.length;i++){
@@ -116,39 +178,27 @@ export default {
               lis[j].classList.remove('active');
               this.classList.add('active');
             }
-
-            var id = lis[i].id
-            var arr = [];
-            CustomerHttp.httpPost('/api/qx',{"kind_id":id,"cmd":"faq.q","ver":1,"page_cnt":"20",
-              "page_num":0,"url":"qx"}).then(function(val){
-              for(var z=0;z<val.data.rows.length;z++){
-                arr.push(val.data.rows[z])
-              }
-              // if(val.data.rows.length>0){
-              //   arrOne.push(val.data.rows[0][1])
-              //   that.Index = distinct(arrOne)
-              // }
-              // that.titleIndex = distinct(arr)
-            },function(err){console.log(err)})
+//            arr.push(this.id)
+            that.Index = this.id
+            var f = document.querySelector('[name=text]');
+//            对有无数据进行判断，此处可以做交互
+            if(!(localStorage.getItem(this.id))){
+              //移除所有节点
+              f.style.display = 'none'
+            }else{
+              that.titleIndex = localStorage.getItem(this.id).split(',')
+              f.style.display = 'block'
+            }
           }else{
           }
         }
       }
-      if(num == 0){
-        CustomerHttp.httpPost('/api/qx',{"kind_id":lisId,"cmd":"faq.q","ver":1,"page_cnt":"20",
-          "page_num":0,"url":"qx"}).then(
-          function(val){
-            if(val.data.rows.length>0){
-              arrOne.push(val.data.rows[0][1])
-              that.Index = distinct(arrOne)
-              for(var h =0;h<val.data.rows.length;h++){
-                that.titleIndex.push(val.data.rows[h])
-              }
-            }
-          },function(err){console.log(err)}
-        )
+
+        if(num == 0 &&(localStorage.getItem(lis[0].id))){
+        that.titleIndex = localStorage.getItem(lis[0].id).split(',')
         num++
-      }
+       }
+
     }
   }
 }
@@ -199,7 +249,7 @@ a{
   overflow-y:auto;
 }
 .middle #nav li{
-  width:100%;font-size:0.4rem;
+  width:100%;font-size:0.45rem;
   background:#F4F4F4;
   line-height: 1rem;
   float:left;
@@ -208,7 +258,6 @@ a{
   -o-text-overflow:ellipsis;
   -webkit-text-overflow:ellipsis;
   -moz-text-overflow:ellipsis;
-    padding:0.2rem;
 }
 .middle .brief{
   width:78%;

@@ -11,15 +11,15 @@
         <div class="content" v-if="firstQues">
           <img src="../common/image/robot_profile.png" class="contentImg">
           <div class="contentBox">
-            <p align="left">您可以这样向我咨询问题，如：<br>1、猪肉有什么功效?<br>2、花生有什么营养?
+            <p align="left">{{welcome}}
             </p>
           </div>
         </div>
         <!--历史问题 -->
-        <div class="cpBefore" v-for="(key,item) in beforeTxt">
+        <div class="cpBefore" >
           <div class="contentRight" style="width:100%" v-if="beforeQuest" >
             <div class="rightContent" style="float:right">
-              <p align="left">{{key}}
+              <p align="left">{{beforeTxt}}
               </p>
             </div>
           </div>
@@ -27,7 +27,7 @@
           <div class="content" v-if="beforeflag" >
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
-              <p align="left">猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少。
+              <p align="left">{{history}}
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               <img :src="heart" alt="" style="float:left" >
@@ -36,20 +36,20 @@
             </div>
           </div>
 
-          <div class="content" style="width:100%" v-show="beforeTxt" ref="beforeItem">
-            <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
-            <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div v-for="(item,key) in answer">
-                <p align="left">{{item}}
-                </p>
-                <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-              </div>
-              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
-              style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem" >转人工客服</span>
-              <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" >更多</p>
+          <div class="content" style="width:100%"  ref="beforeItem">
+            <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;" v-show="false">
+            <div class="contentBox" style="width:70%;margin-right:0.9rem;" v-show="false">
+            <div v-for="(item,key) in answer">
+              <p align="left">{{item}}
+              </p>
+              <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
             </div>
+            <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
+            style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            float:left;line-height:1.10rem" >转人工客服</span>
+            <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            line-height:0.5rem;" >更多</p>
+          </div>
             <div class="service">
               <hr style="width:28%;position:absolute;left:0.5rem;top:0.12rem;opacity:0.2">
               <hr style="width:28%;position:absolute;right:0.5rem;top:0.12rem;opacity:0.2">
@@ -58,18 +58,18 @@
           </div>
         </div>
         <!--当前问题 -->
-        <div class="cpOne" v-for="(key,item) in firstQuestTxt">
+        <div class="cpOne" v-for="(key,item) in firstQuestTxt" :id="item">
           <div class="contentRight" style="width:100%" v-if="firstQuest" >
             <div class="rightContent" style="float:right">
               <p align="left">{{key}}
               </p>
             </div>
           </div>
-
+          <!--<div style="float:left;margin:0rem auto;width:100%;">loading</div>-->
           <div class="content" v-if="answerTxt" ref="item" >
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
-              <p align="left">猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少。
+              <p align="left" :id="id" ref="testIndex">
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               <img :src="heart" alt="" style="float:left" @click="changeStyle(item)" ref="changeSty">
@@ -81,8 +81,8 @@
           <div class="content" style="width:100%" v-show="flagTxt" ref="itemContent" :id = "item">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div v-for="(item,key) in randomAnswer[item]">
-                <p align="left">{{item}}
+              <div v-for="(items,key) in randomAnswer[item]" :id="items" @click="info(items,key)">
+                <p align="left" >{{items}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               </div>
@@ -123,7 +123,7 @@
           <div class="content" v-if="answerTxt" ref="itemTwo">
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
-              <p align="left">猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少。
+              <p align="left" ref="testIndexTwo">
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               <img :src="heart" alt="" style="float:left" @click="changeStyle">
@@ -135,14 +135,11 @@
           <div class="content" style="width:100%" v-show="flagTxt" ref="itemTwoContent">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div v-for="(item,key) in answer">
-                <p align="left">{{item}}
+              <div v-for="(items,key) in answer" @click="infoTwo(items,key)">
+                <p align="left">{{items}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               </div>
-              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
-              style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem" @click="serviceDetail">转人工客服</span>
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             line-height:0.5rem;" @click="addText(item)">更多</p>
             </div>
@@ -153,8 +150,12 @@
 
 
       <div class="bottom">
-        <div class="bottomLeft"><p>{{text}}</p></div>
-        <el-input class="input" clearable placeholder="请输入您的问题" v-model="questDetail"></el-input>
+        <div class="bottomLeftTwo" v-show="model" ref="model" @touchend="modelChangeTwo"><p>{{textSearchTwo}}</p></div>
+        <div class="bottomLeft" @touchend="modelChange"><p>{{textSearch}}</p></div>
+          <div class="model">
+            <ul class="text" v-show="inputContent"><li v-if="key" v-show="keyText" v-for="key in text" class="textLi" @touchend="searchLi(key)">{{key}}</li></ul>
+            <el-input class="input" clearable placeholder="请输入您的问题" v-model="questDetail" @change="search()"></el-input>
+          </div>
         <div class="bottomRight" @click="setQuest"><p>发送</p></div>
       </div>
     </div>
@@ -163,34 +164,48 @@
 
 <script>
   import {CustomerHttp} from '../common/js/http'
+  import {distinct} from '../common/js/distinct'
 export default {
   name: 'account',
   mounted() {
-    for (var i = 0; i < 5; i++) {
-      this.answer.push(this.answerArr[i])
-    }
-    for (var i = 0; i < 5; i++) {
-      for(var j = 0;j<this.randomAnswer.length;j++)
-      this.randomAnswer[j].push(this.answerArr[i])
-    }
+    var _that = this
+    CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"corp.pars","ver":1}).then(
+      function(val){
+        _that.welcome = val.data.warm_tip
+      },function(err){
+        console.log(err)
+      }
+    )
+
+    if(localStorage.getItem('answer')){
       this.beforeflag = true
       this.beforeQuest = true
+      console.log(localStorage.getItem('quest'))
+      this.beforeTxt = localStorage.getItem('quest')
+      this.history = localStorage.getItem('answer')
+    }
   },
   data () {
     return {
-      text: '检索',
+      history:'',
+      inputContent:true,
+      text:[],
+      searchText:'',
+      key:true,
+      keyText:true,
+
+      textSearch: '检索',
+      textSearchTwo:'标准',
+      model:true,
       heart: require('../common/image/heart_before.png'),
       heartBeat: require('../common/image/heart_before.png'),
       flag: true,
       flagBeat:true,
-      answerArr: ['1.猪肉营养价值在哪里?', '2.猪肉怎么吃最健康', '3.猪肉对我们有什么害处',
-        '4.猪肉营养价值在哪里?', '5.猪肉怎么吃最健康', '6.猪肉营养价值在哪里?', '7.猪肉怎么吃最健康',
-        '8.猪肉营养价值在哪里?', '9.猪肉怎么吃最健康', '10.猪肉怎么吃最健康', '11.猪肉怎么吃最健康',
-        '12.猪肉怎么吃最健康',
-        '13.猪肉营养价值在哪里?', '14.猪肉怎么吃最健康'],
+      answerArr: [],
       addItem: false,
       answer:[],
       randomAnswer:[[],[],[],[],[],[],[],[]],
+      randomAnswerTwo:[[],[],[],[],[],[],[],[]],
       flagTxt:false,
       firstQues:true,
       quest:false,
@@ -201,10 +216,15 @@ export default {
       service:false,
       firstQuest:false,
       Time:1,
-      beforeTxt:['猪肉什么功效'],
+      beforeTxt:'',
       beforeflag:false,
       beforeQuest:false,
-      num:[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5]
+      num:[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+      welcome:'',
+      robotAnswer:'',
+      id:'',
+      idNum:0,
+      idNumTwo:0
     }
   },
   methods: {
@@ -244,28 +264,200 @@ export default {
       }
     },
     moreAnswer(a){
+      for(var i = 0;i<this.answerArr.length;i++){
+        this.randomAnswer[a].push(this.answerArr[i])
+      }
       this.$refs.item[a].style.display = 'block'
       this.$refs.itemContent[a].style.display = 'block'
     },
     moreAnswerTwo(a){
+      for(var i = 0;i<this.answer.length;i++){
+        this.randomAnswerTwo[a].push(this.answer[i])
+      }
       this.$refs.itemTwo[a].style.display = 'block'
       this.$refs.itemTwoContent[a].style.display = 'block'
     },
     setQuest(){
-      if(this.service == false){
+      var _that = this
+      var arr =[];
+      this.text = ''
+      localStorage.setItem('quest',this.questDetail)
+      if(this.service == false ){
         this.firstQuestTxt.push(this.questDetail)
         this.firstQuest = true
-        this.answerTxt = true
+        CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
+          "size":20,"ver":1}).then(
+          function(val){
+            var reg = new RegExp(_that.questDetail,"i")
+            console.log(val)
+            if(val.data.flag==0){
+              for(var i = 0;i < val.data.rows.length;i++){
+                arr.push(val.data.rows[i][0])
+                _that.answerArr = arr
+                if(reg.test(val.data.rows[i][0])){
+//                _that.robotAnswer = val.data.rows[i][1].replace(/[a-zA-Z\<\>\&\;]+/,'')
+                  _that.robotAnswer = val.data.rows[i][1]
+                  localStorage.setItem('answer',_that.robotAnswer)
+                  _that.answerTxt = true
+                  _that.id = val.data.rows[i][5]
+                  //玫瑰花茶有什么功效
+                }
+              }
+              _that.$nextTick(() => {console.log(!_that.questDetail)
+                _that.$refs.testIndex[_that.idNum].innerHTML = `${_that.robotAnswer}`
+              _that.idNum++
+            })
+            }else if(!val.data.rows || !_that.questDetail){
+              _that.answerTxt = true
+              _that.$nextTick(() => {
+              _that.$refs.testIndex[_that.idNum].parentNode.parentNode.style.width = '100%'
+              if(!_that.questDetail){
+                _that.$refs.testIndex[_that.idNum].innerHTML = "没能理解您的意思哦，换一种问法试试"
+              }else{
+                _that.$refs.testIndex[_that.idNum].innerHTML = val.data.msg
+              }
+              _that.idNum++
+            })
+            }
+          },function(err){
+            console.log(err)
+          }
+        )
       }
       this.Time ++
       if(this.service == true){
         this.questTxt.push(this.questDetail)
         this.quest = true
         this.answerTxt = true
+
+        CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
+          "size":20,"ver":1}).then(
+          function(val){
+            var reg = new RegExp(_that.questDetail,"i")
+            for(var i = 0;i < val.data.rows.length;i++){
+              arr.push(val.data.rows[i][0])
+              _that.answer = arr
+              if(reg.test(val.data.rows[i][0])){
+//                _that.robotAnswer = val.data.rows[i][1].replace(/[a-zA-Z\<\>\&\;]+/,'')
+                _that.robotAnswer = val.data.rows[i][1]
+                localStorage.setItem('answer',_that.robotAnswer)
+                _that.answerTxt = true
+                _that.id = val.data.rows[i][5]
+                //玫瑰花茶有什么功效
+              }
+            }
+            _that.$nextTick(() => {
+              _that.$refs.testIndexTwo[_that.idNumTwo].innerHTML = `${_that.robotAnswer}`
+            _that.idNumTwo++
+          })
+          },function(err){
+            console.log(err)
+          }
+        )
       }
     },
     serviceDetail(){
       this.service = true
+    },
+    info(a,key){
+      localStorage.setItem('quest',a)
+      var _that = this
+      this.firstQuestTxt.push(a)
+      this.firstQuest = true
+      CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":a,
+        "size":20,"ver":1}).then(
+        function(val){
+          var reg = new RegExp(`\^${a}`,"i")
+          if(val.data.rows){
+            for(var i = 0;i < val.data.rows.length;i++){
+              if(reg.test(val.data.rows[i][0])){
+                console.log('ok')
+                _that.robotAnswer = val.data.rows[i][1]
+                localStorage.setItem('answer',_that.robotAnswer)
+                _that.answerTxt = true
+                _that.id = val.data.rows[i][5]+key
+                //玫瑰花茶有什么功效
+              }
+            }
+          }
+          _that.$nextTick(() => {
+            _that.$refs.testIndex[_that.idNum].innerHTML = `${_that.robotAnswer}`
+            _that.idNum++
+        })
+        },function(err){
+          console.log(err)
+        }
+      )
+    },
+    infoTwo(a,key){
+      localStorage.setItem('quest',a)
+      var _that = this
+      this.questTxt.push(a)
+      this.quest = true
+      CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":a,
+        "size":20,"ver":1}).then(
+        function(val){
+          var reg = new RegExp(`\^${a}`,"i")
+          if(val.data.rows){
+            for(var i = 0;i < val.data.rows.length;i++){
+              if(reg.test(val.data.rows[i][0])){
+                _that.robotAnswer = val.data.rows[i][1]
+                localStorage.setItem('answer',_that.robotAnswer)
+                _that.answerTxt = true
+                _that.id = val.data.rows[i][5]+key
+                //玫瑰花茶有什么功效
+              }
+            }
+          }
+          _that.$nextTick(() => {
+            _that.$refs.testIndexTwo[_that.idNumTwo].innerHTML = `${_that.robotAnswer}`
+          _that.idNumTwo++
+        })
+        },function(err){
+          console.log(err)
+        }
+      )
+    },
+    search(){
+      var _that = this
+      const reg = new RegExp('^'+this.searchText+'[\\u4e00-\\u9fa5]*$','g')
+      const that = this
+      var arr =[]
+      var newArr=[]
+
+      CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":_that.questDetail,
+        "size":20,"ver":1}).then(function (val) {
+
+            if(_that.questDetail!=''){
+              for(var j=0;j< val.data.rows.length;j++){
+                arr.push(val.data.rows[j][0])
+              }
+              newArr = distinct(arr)
+              for(var i = 0;i<newArr.length;i++){
+                _that.text.push(newArr[i])
+              }
+            }else{
+              _that.text = ''
+            }
+          }, function (val) {
+            console.log(val)
+          })
+      },
+    searchLi(a){
+      this.questDetail = a
+    },
+    modelChange(){
+      this.$refs.model.style.top = '-53%'
+    },
+    modelChangeTwo(){
+      if(this.textSearchTwo == '标准'){
+        this.textSearchTwo="检索"
+        this.textSearch="标准"
+      }else{
+        this.textSearchTwo="标准"
+        this.textSearch="检索"
+      }
+      this.$refs.model.style.top = '0.2rem'
     }
   }
 }
@@ -378,6 +570,25 @@ export default {
         font-family:SourceHanSansCN-Normal;
         color:rgba(255,255,255,1);
         line-height:0px;
+    .bottomLeftTwo
+      left:0.45rem;
+      top:0.2rem;
+      position:absolute;
+      width:1rem;
+      height:1rem;
+      background:rgba(26,173,25,1);
+      border-radius:50%;
+      transition:all 0.5s;
+      p
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translateX(-50%);
+        font-size:0.2rem;
+        width:10rem;
+        font-family:SourceHanSansCN-Normal;
+        color:rgba(255,255,255,1);
+        line-height:0px;
     .bottomRight
       position:absolute;
       right:0.3rem;
@@ -397,4 +608,18 @@ export default {
         line-height:0px;
     .input
       width:65%;
+  .text
+    position:absolute
+    bottom:85%;
+    left:50%;
+    transform:translate(-50%);
+    width: 65%;
+    border:1px solid #c7c8cb;
+    border-bottom:none;
+    border-radius:10px 10px 0px 0px;
+    background:white;
+  .textLi
+    font-size:0.1rem;
+    line-height:0.6rem;
+    border-bottom:1px solid #c7c8cb;
 </style>
