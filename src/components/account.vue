@@ -598,6 +598,7 @@ export default {
       background:rgba(26,173,25,1);
       border-radius:9px;
       p
+        width:1.5rem;
         position:absolute;
         top:50%;
         left:50%;

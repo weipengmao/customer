@@ -1,12 +1,17 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import {vueLoading} from 'vue-loading-template'
 export default {
-  name: 'App'
+  name: 'App',
+      components: {
+      vueLoading
+    },
 }
 </script>
 

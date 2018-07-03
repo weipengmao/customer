@@ -1,5 +1,6 @@
 <template>
-<div id="body">
+<div id="body" >
+  <div id="box" v-show='!loading'>
   <!--遮罩 -->
   <div class="pop" v-show="flag"></div>
             <!-- 进入首页，文字淡入 -->
@@ -32,17 +33,24 @@
   <div class="bottom" v-show="bottomTxt">
       <img src="../assets/pullup.png" alt="">
   </div>
+  </div>
 
+  <!-- 图片加载中 -->
+  <vue-loading type="spin" color="#5AC1DD" :size="{ width: '2rem', height: '2rem' }" style="position:fixed;left:50%;bottom:7rem;margin-left:-1rem;" v-show="loading"></vue-loading>
 </div>
+
 </template>
 
 <script>
 import {CustomerHttp} from '../common/js/http'
+
 export default {
-  name: 'index',
+  name: 'app',
+
   mounted(){
     CustomerHttp.httpPost('/api/qx',{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
     this._req(this.items)
+
     //随机函数
     var num = 10;
     var randomNum = parseInt(Math.random()*num)
@@ -101,7 +109,8 @@ export default {
           clearInterval(timer)
         }
       }
-    ,1000)
+    ,1000);
+
   },
   data(){
     return{
@@ -123,11 +132,13 @@ export default {
       num:0,
       flag: false,
       hide: true,
-      bottomTxt:true
+      bottomTxt:true,
+      loading:true,
     }
   },
   methods:{
     _req(arr){
+      var that=this;
       CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
         function(val){
           const Data = val.data.rows
@@ -135,6 +146,7 @@ export default {
             arr.push("食物营养成份")
             arr.push("本草纲目")
             arr.push(Data[45][1])
+            that.loading=false;
         },function(err){
           console.log(err)
         }
@@ -150,7 +162,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-#body{
+#box{
   width:100%;
   height:100vh;
   box-sizing: border-box;
@@ -195,8 +207,12 @@ export default {
     width:100%;margin:0 auto;margin-left:0.5rem;
   }
 .button{
-  width:2.255rem;height:1rem;text-align: center;line-height: 1rem;color:white;
-  font-size:0.32rem;border:2px solid #fff;
+  width:2.255rem;
+  height:1rem;
+  text-align: center;
+  line-height: 0.6rem;
+  color:white;
+  font-size:0.42rem;border:2px solid #fff;
   display:inline-block;float:left;margin:0.1rem 0;
   margin-right:0.21rem;
   margin-top:0.15rem;
