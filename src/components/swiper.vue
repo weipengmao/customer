@@ -19,7 +19,7 @@
       <router-link to='/detail'>
         <div  :id="Index" name="text">
           <div class="box clearfix info" v-for="key in titleIndex" :id="key">
-            <img src="../assets/pork.jpg" alt="">
+            <img v-lazy="key.url" alt="">
             <div class='inbox clearfix'>
               <p class="title">{{key}}</p>
               <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
@@ -41,7 +41,11 @@
 export default {
 
   name: 'account',
-  mounted(){
+  mounted(){    
+    this.titleIndex.forEach(function(val,index){
+      val.url=require('../assets/pork.jpg')
+
+    })
     var that = this
     var arrOne =[]
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
@@ -132,6 +136,7 @@ export default {
       }
     )
   },
+
   data () {
     return {
         swiperOption: {
@@ -159,6 +164,7 @@ export default {
       swiperSlide
     },
   methods:{
+
     toIndex(){
       this.$router.go(-1)
     },
@@ -249,9 +255,10 @@ a{
   overflow-y:auto;
 }
 .middle #nav li{
-  width:100%;font-size:0.45rem;
+  width:100%;font-size:0.43rem;
+  padding:0.25rem 0.1rem;
   background:#F4F4F4;
-  line-height: 1rem;
+  line-height: 0.6rem;
   float:left;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -274,19 +281,21 @@ a{
   float:left;
 }
 .middle .brief .box .inbox{
-  width:4.5rem;font-size: 0.45rem;float:left;
+  width:4.5rem;font-size: 0.42rem;float:left;
   margin-left:0.2rem;
   letter-spacing: 0;
 }
 
 .inbox .title{
-  width:100%;line-height: 0.7rem;
+  width:100%;line-height: 0.5rem;
   text-align: left;
   font-weight: bold;
-  font-size:0.45rem !important;
+  font-size:0.43rem !important;
+  padding-bottom:0.2rem;
 }
 .inbox .content{
   width:100%;
+  line-height: 0.5rem;
                   word-break: break-all;
                     text-overflow: ellipsis;
                     display: -webkit-box; /** 将对象作为伸缩盒子模型显示 **/
