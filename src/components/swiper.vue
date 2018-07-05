@@ -18,11 +18,11 @@
     <div class="brief clearfix">
       <router-link to='/detail'>
         <div  :id="Index" name="text">
-          <div class="box clearfix info" v-for="key in titleIndex" :id="key">
+          <div class="box clearfix info" v-for="(item,key) in titleIndex" :id="textPlace[key]+':'+item">
             <img v-lazy="key.url" alt="">
             <div class='inbox clearfix'>
-              <p class="title">{{key}}</p>
-              <p class="content">猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的营养</p>
+              <p class="title">{{item}}</p>
+              <p class="content">{{textData[key]}}</p>
             </div>
           </div>
         </div>
@@ -41,13 +41,14 @@
 export default {
 
   name: 'account',
-  mounted(){    
+  mounted(){
     this.titleIndex.forEach(function(val,index){
       val.url=require('../assets/pork.jpg')
 
     })
     var that = this
     var arrOne =[]
+    var arrTwo
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
         var Data = val.data.rows
@@ -60,6 +61,11 @@ export default {
             }).then(function (val) {
               var placeData = []
               for (var z = 0; z < val.data.rows.length; z++) {
+                var text = val.data.rows[z][0]
+                CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
+                  that.textData.push(val.data.ans)
+                })
+
                 var placeName = val.data.rows[z][1]
                 placeData.push(val.data.rows[z][2])
                 arrOne.push(placeName)
@@ -80,6 +86,14 @@ export default {
             }).then(function (val) {
               var placeData = []
               for (var z = 0; z < val.data.rows.length; z++) {
+                //获取图片
+                var text = val.data.rows[z][0]
+                that.textPlace.push(text)
+                CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
+                  that.textData.push(val.data.ans)
+                })
+
+
                 var placeName = val.data.rows[z][1]
                 placeData.push(val.data.rows[z][2])
                 arrOne.push(placeName)
@@ -100,6 +114,10 @@ export default {
             }).then(function (val) {
               var placeData = []
               for (var z = 0; z < val.data.rows.length; z++) {
+                var text = val.data.rows[z][0]
+                CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
+                  that.textData.push(val.data.ans)
+                })
                 var placeName = val.data.rows[z][1]
                 placeData.push(val.data.rows[z][2])
                 arrOne.push(placeName)
@@ -118,6 +136,10 @@ export default {
             }).then(function (val) {
               var placeData = []
               for (var z = 0; z < val.data.rows.length; z++) {
+                var text = val.data.rows[z][0]
+                CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
+                  that.textData.push(val.data.ans)
+                })
                 var placeName = val.data.rows[z][1]
                 placeData.push(val.data.rows[z][2])
                 arrOne.push(placeName)
@@ -156,7 +178,10 @@ export default {
         swiperSlides: [1, 2, 3, 4],
         items:[],
         titleIndex:[],
-        Index:[]
+        Index:[],
+        textData:[],
+        textIndex:[],
+        textPlace:[]
     }
   },
       components:{
