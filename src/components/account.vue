@@ -7,14 +7,6 @@
       </div>
 
       <div class="center">
-        <!--问题模拟 -->
-        <div class="content" v-if="firstQues">
-          <img src="../common/image/robot_profile.png" class="contentImg">
-          <div class="contentBox">
-            <p align="left">{{welcome}}
-            </p>
-          </div>
-        </div>
         <!--历史问题 -->
         <div class="cpBefore" >
           <div class="contentRight" style="width:100%" v-if="beforeQuest" >
@@ -50,11 +42,19 @@
             <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             line-height:0.5rem;" >更多</p>
           </div>
-            <div class="service">
+            <div class="service" v-if="historyText">
               <hr style="width:28%;position:absolute;left:0.5rem;top:0.12rem;opacity:0.2">
               <hr style="width:28%;position:absolute;right:0.5rem;top:0.12rem;opacity:0.2">
               <p class="serviceText">历史消息</p>
             </div>
+          </div>
+        </div>
+        <!--问题模拟 -->
+        <div class="content" v-if="firstQues">
+          <img src="../common/image/robot_profile.png" class="contentImg">
+          <div class="contentBox">
+            <p align="left">{{welcome}}
+            </p>
           </div>
         </div>
         <!--当前问题 -->
@@ -69,6 +69,7 @@
           <div class="content" v-if="answerTxt" ref="item" >
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
+              <div :id="'moreAnswerLoading'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
               <p align="left" :id="id" ref="testIndex">
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
@@ -81,6 +82,7 @@
           <div class="content" style="width:100%" v-show="flagTxt" ref="itemContent" :id = "item">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
+              <div :id="'moreAnswerLoadingA'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
               <div v-for="(items,key) in randomAnswer[item]" :id="items" @click="info(items,key)">
                 <p align="left" >{{items}}
                 </p>
@@ -95,7 +97,7 @@
           </div>
         </div>
         <!--人工服务 -->
-        <div class="contentService" v-if="service" v-for="(key,item) in firstQuestTxt">
+        <div class="contentService" v-if="service" >
           <div class="service">
             <hr style="width:28%;position:absolute;left:0.5rem;top:0.12rem;opacity:0.2">
             <hr style="width:28%;position:absolute;right:0.5rem;top:0.12rem;opacity:0.2">
@@ -104,10 +106,13 @@
           <div style="float:left">
             <img src="../common/image/service_profile.png" class="contentImgService">
             <div class="contentBoxService" style="width:80%;margin-right:0.22rem;">
-              <p align="left">猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少。
+              <p align="left">亲爱的VIP客户，现在为人工服务模式，请问能帮到您什么？。
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-              <img :src="heartBeat" alt="" style="float:left" @click="changeBeat(item-1)" ref="changeBeat">
+              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
+              style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            float:left;line-height:1.10rem" @click="serviceDetail">人工客服</span>
+              <!--<img :src="heartBeat" alt="" style="float:left" @click="changeBeat(item-1)" ref="changeBeat">-->
             </div>
           </div>
         </div>
@@ -123,6 +128,7 @@
           <div class="content" v-if="answerTxt" ref="itemTwo">
             <img src="../common/image/robot_profile.png" class="contentImg" >
             <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
+              <div :id="'moreAnswerLoadingC'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
               <p align="left" ref="testIndexTwo">
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
@@ -135,6 +141,7 @@
           <div class="content" style="width:100%" v-show="flagTxt" ref="itemTwoContent">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
+              <div :id="'moreAnswerLoadingB'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
               <div v-for="(items,key) in answer" @click="infoTwo(items,key)">
                 <p align="left">{{items}}
                 </p>
@@ -181,8 +188,11 @@ export default {
       this.beforeflag = true
       this.beforeQuest = true
       console.log(localStorage.getItem('quest'))
+      this.historyText = true
       this.beforeTxt = localStorage.getItem('quest')
       this.history = localStorage.getItem('answer')
+    }else{
+      this.historyText = false
     }
   },
   data () {
@@ -193,7 +203,7 @@ export default {
       searchText:'',
       key:true,
       keyText:true,
-
+      historyText:false,
       textSearch: '检索',
       textSearchTwo:'标准',
       model:true,
@@ -204,8 +214,8 @@ export default {
       answerArr: [],
       addItem: false,
       answer:[],
-      randomAnswer:[[],[],[],[],[],[],[],[]],
-      randomAnswerTwo:[[],[],[],[],[],[],[],[]],
+      randomAnswer:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+      randomAnswerTwo:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
       flagTxt:false,
       firstQues:true,
       quest:false,
@@ -219,12 +229,14 @@ export default {
       beforeTxt:'',
       beforeflag:false,
       beforeQuest:false,
-      num:[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+      num:[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
       welcome:'',
       robotAnswer:'',
       id:'',
       idNum:0,
-      idNumTwo:0
+      idNumTwo:0,
+      numId:'random',
+      numIdB:'randomB'
     }
   },
   methods: {
@@ -264,18 +276,34 @@ export default {
       }
     },
     moreAnswer(a){
-      for(var i = 0;i<this.answerArr.length;i++){
-        this.randomAnswer[a].push(this.answerArr[i])
+      if(this.numId != a){
+        this.numId = a
+        for(var i = 0;i<this.answerArr.length;i++){
+          this.randomAnswer[a].push(this.answerArr[i])
+          if(i == this.answerArr.length-1){
+            setTimeout(() =>{
+              document.querySelector('#'+'moreAnswerLoadingA'+a).style.display = 'none'
+            },10)
+          }
+        }
+        this.$refs.item[a].style.display = 'block'
+        this.$refs.itemContent[a].style.display = 'block'
       }
-      this.$refs.item[a].style.display = 'block'
-      this.$refs.itemContent[a].style.display = 'block'
     },
     moreAnswerTwo(a){
-      for(var i = 0;i<this.answer.length;i++){
-        this.randomAnswerTwo[a].push(this.answer[i])
+      if(this.numIdB != a) {
+        this.numIdB = a
+        for (var i = 0; i < this.answer.length; i++) {
+          this.randomAnswerTwo[a].push(this.answer[i])
+          if (i == this.answer.length - 1) {
+            setTimeout(() => {
+              document.querySelector('#' + 'moreAnswerLoadingB' + a).style.display = 'none'
+           },10)
+          }
+        }
+        this.$refs.itemTwo[a].style.display = 'block'
+        this.$refs.itemTwoContent[a].style.display = 'block'
       }
-      this.$refs.itemTwo[a].style.display = 'block'
-      this.$refs.itemTwoContent[a].style.display = 'block'
     },
     setQuest(){
       var _that = this
@@ -288,9 +316,12 @@ export default {
         CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
-            var reg = new RegExp(_that.questDetail,"i")
-            console.log(val)
-            if(val.data.flag==0){
+            var textS = 'moreAnswerLoading' + _that.idNum
+            setTimeout(()=>{
+              document.querySelector("#"+textS).style.display = 'none'
+            },10)
+            var reg = new RegExp('^'+_that.questDetail,"i")
+            if(typeof(val.data.flag)=='number'){
               for(var i = 0;i < val.data.rows.length;i++){
                 arr.push(val.data.rows[i][0])
                 _that.answerArr = arr
@@ -333,6 +364,10 @@ export default {
         CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
+            var textC = 'moreAnswerLoadingC' + _that.idNumTwo
+            setTimeout(()=>{
+              document.querySelector("#"+textC).style.display = 'none'
+          },10)
             var reg = new RegExp(_that.questDetail,"i")
             for(var i = 0;i < val.data.rows.length;i++){
               arr.push(val.data.rows[i][0])
@@ -360,6 +395,11 @@ export default {
       this.service = true
     },
     info(a,key){
+//      var reg = /【---.*---】/
+//      a = a.match(reg)
+//      a = a[0].split('【---')
+//      a = a[1].split('---】')[0]
+//      console.log(a)
       localStorage.setItem('quest',a)
       var _that = this
       this.firstQuestTxt.push(a)
@@ -421,14 +461,14 @@ export default {
     search(){
       var _that = this
       const reg = new RegExp('^'+this.searchText+'[\\u4e00-\\u9fa5]*$','g')
-      const that = this
       var arr =[]
       var newArr=[]
 
       CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":_that.questDetail,
         "size":20,"ver":1}).then(function (val) {
 
-            if(_that.questDetail!=''){
+            if(_that.questDetail!='' && _that.textSearch =='检索'){
+              _that.text=[]
               for(var j=0;j< val.data.rows.length;j++){
                 arr.push(val.data.rows[j][0])
               }
@@ -436,6 +476,9 @@ export default {
               for(var i = 0;i<newArr.length;i++){
                 _that.text.push(newArr[i])
               }
+              setTimeout(()=>{
+                _that.text = ''
+              },3000)
             }else{
               _that.text = ''
             }
