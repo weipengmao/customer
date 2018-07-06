@@ -4,9 +4,9 @@
   </div>
   <!-- 轮播图 -->
     <swiper  :options="swiperOption" ref="mySwiper">
-      <swiper-slide><div class="fd_slide fd_slide1"><img src="../assets/img1.jpg" alt=""></div></swiper-slide>
-      <swiper-slide><div class="fd_slide fd_slide2"><img src="../assets/img1.jpg" alt=""></div></swiper-slide>
-      <swiper-slide><div class="fd_slide fd_slide3"><img src="../assets/img1.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide1"><img src="../common/image/swiper.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide2"><img src="../common/image/swiper.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide3"><img src="../common/image/swiper.jpg" alt=""></div></swiper-slide>
       <div class="swiper-pagination "  slot="pagination"></div>
       <!-- <img class="shut" src="../assets/close.png" alt=""> -->
     </swiper>
@@ -42,10 +42,6 @@ export default {
 
   name: 'account',
   mounted(){    
-    this.titleIndex.forEach(function(val,index){
-      val.url=require('../assets/pork.jpg')
-
-    })
     var that = this
     var arrOne =[]
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
@@ -228,13 +224,14 @@ a{
 #swiper{ height: 30vh;position:relative;
   width:100%;}
 
-  .fd_slide{    height: 30vh;
+  .fd_slide{    height: 40vh;
     width: 100%;
     }
 
 
   .fd_slide img{
-    width:100%;height:30vh;
+    width:100%;
+    height:40vh;
   }
 
 .swiper-pagination{
@@ -251,7 +248,7 @@ a{
   display:inline-block;
   width:22%;float:left;
   background:#F4F4F4;
-  height:70vh;
+  height:60vh;
   overflow-y:auto;
 }
 .middle #nav li{
@@ -268,7 +265,7 @@ a{
 }
 .middle .brief{
   width:78%;
-  height:70vh;
+  height:60vh;
   overflow-y:auto;
 }
 
