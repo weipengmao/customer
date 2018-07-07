@@ -1,12 +1,13 @@
 <template>
 <div id="swiper">
+  <div id="box"  v-show='!loading'>
   <div style="position:absolute;right:0;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" >
   </div>
   <!-- 轮播图 -->
     <swiper  :options="swiperOption" ref="mySwiper">
-      <swiper-slide><div class="fd_slide fd_slide1"><img src="../common/image/swiper.jpg" alt=""></div></swiper-slide>
-      <swiper-slide><div class="fd_slide fd_slide2"><img src="../common/image/swiper.jpg" alt=""></div></swiper-slide>
-      <swiper-slide><div class="fd_slide fd_slide3"><img src="../common/image/swiper.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide1"><img src="../common/image/swiper1.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide2"><img src="../common/image/swiper2.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide3"><img src="../common/image/swiper3.jpg" alt=""></div></swiper-slide>
       <div class="swiper-pagination "  slot="pagination"></div>
       <!-- <img class="shut" src="../assets/close.png" alt=""> -->
     </swiper>
@@ -16,10 +17,10 @@
         <li v-for="item in items" :id="item[0]">{{item[1]}}</li>
     </ul>
     <div class="brief clearfix">
-      <router-link to='/detail'>
+      <!-- <router-link to='/detail'> -->
         <div  :id="Index" name="text">
-          <div class="box clearfix info" v-for="(item,key) in titleIndex" :id="textPlace[key]+':'+item">
-            <img v-lazy="key.url" alt="">
+          <div class="box clearfix info" v-for="(item,key) in titleIndex" :id="textPlace[key]+':'+item" @click="toDetail(textPlace[key],item)">
+            <img  src="../common/image/swiper.jpg" alt="">
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
               <p class="content"> {{textData[key]}}
@@ -28,10 +29,14 @@
             </div>
           </div>
         </div>
-      </router-link>
+
 
     </div>
 </div>
+  </div>
+
+<!-- 图片加载中 -->
+  <vue-loading type="spin" color="#5AC1DD" :size="{ width: '2rem', height: '2rem' }" style="position:fixed;left:50%;bottom:7rem;margin-left:-1rem;" v-show="loading"></vue-loading>
 </div>
 </template>
 
@@ -211,6 +216,7 @@ export default {
         textData:[],
         textIndex:[],
         textPlace:[],
+        loading:true,
         moreAnswerLoading:true
     }
   },
@@ -222,6 +228,11 @@ export default {
 
     toIndex(){
       this.$router.go(-1)
+    },
+    // 进入详情页
+    toDetail(id,title){
+
+      this.$router.push({path:"/detail",query:{id:id,title:title}})
     },
     _req(){
       var that = this
@@ -254,7 +265,8 @@ export default {
           }
         }
       }
-
+      // 懒加载消失
+      this.loading=false
         if(num == 0 &&(localStorage.getItem(lis[0].id))){
         that.titleIndex = localStorage.getItem(lis[0].id).split(',')
         num++
@@ -283,14 +295,14 @@ a{
 #swiper{ height: 30vh;position:relative;
   width:100%;}
 
-  .fd_slide{    height: 40vh;
+  .fd_slide{    height: 30vh;
     width: 100%;
     }
 
 
   .fd_slide img{
     width:100%;
-    height:40vh;
+    height:30vh;
   }
 
 .swiper-pagination{
@@ -307,7 +319,7 @@ a{
   display:inline-block;
   width:22%;float:left;
   background:#F4F4F4;
-  height:60vh;
+  height:70vh;
   overflow-y:auto;
 }
 .middle #nav li{
@@ -324,7 +336,7 @@ a{
 }
 .middle .brief{
   width:78%;
-  height:60vh;
+  height:70vh;
   overflow-y:auto;
 }
 

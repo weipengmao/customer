@@ -4,16 +4,16 @@
   </div>
   <!-- 轮播图 -->
     <swiper  :options="swiperOption" ref="mySwiper">
-      <swiper-slide><div class="fd_slide fd_slide1"><img src="../assets/img1.jpg" alt=""></div></swiper-slide>
-      <swiper-slide><div class="fd_slide fd_slide2"><img src="../assets/img1.jpg" alt=""></div></swiper-slide>
-      <swiper-slide><div class="fd_slide fd_slide3"><img src="../assets/img1.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide1"><img src="../common/image/swiper1.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide2"><img src="../common/image/swiper2.jpg" alt=""></div></swiper-slide>
+      <swiper-slide><div class="fd_slide fd_slide3"><img src="../common/image/swiper3.jpg" alt=""></div></swiper-slide>
       <div class="swiper-pagination "  slot="pagination"></div>
       <!-- <img class="shut" src="../assets/close.png" alt=""> -->
     </swiper>
     <div class="contentBoxAuto">
       <!-- 功能详情 -->
       <div class="box clearfix">
-        <p class="title">猪肉的功效</p>
+        <p class="title">{{title}}</p>
         <p class="inbox" @click="toggle()">
           <img v-show="hide" class="img1" src="../assets/dislike.png" alt="">
           <img v-show="show" class="img2" src="../assets/like.png" alt="">
@@ -21,8 +21,7 @@
       </div>
       <!-- 文章 -->
       <div class="content clearfix">
-        猪肉又名豚肉，是主要家畜之一、猪科动物家猪的肉。其性味甘咸平，含有丰富的蛋白质及脂肪、碳水化合物、钙、铁、磷等营养成分。<br>&nbsp&nbsp&nbsp&nbsp&nbsp猪肉是日常生活的主要副食品，具有补虚强身，滋阴润燥、丰肌泽肤的作用。凡病后体弱、产后血虚、面黄赢瘦者，皆可用之作营养滋补之品。
-        猪肉作为餐桌上重要的动物性食品之一，因为纤维较为细软，结缔组织较少，肌肉组织中含有较多的肌间脂肪，因此，经过烹调加工后肉味特别鲜美。
+          {{answer}}
       </div>
       <!-- 附件 -->
       <div class="bottom clearfix">
@@ -34,19 +33,34 @@
 </template>
 
 <script>
-
+  import {CustomerHttp} from '../common/js/http'
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
 
   name: 'account',
   mounted(){
-      var parent=document.querySelector('.bottom');
-      var ps=parent.querySelectorAll('p');
-      for(var i=1;i<ps.length;i++){
-//          ps[ps.length].style.borderBottom=none;
-//        此处报错，记得处理
+    // 附件接口
+      CustomerHttp.httpPost('/api/qx',{
+      "cmd":"faqspc.r","faq_id":id,"ver":1}).then(
+      function(res){
+        var content=res.data.ans
+        that.answer=content;
       }
+    )
+
+    var that=this
+    // 渲染标题和传入id
+    this.title=this.$route.query.title
+    const id=this.$route.query.id
+    CustomerHttp.httpPost('/api/qx',{
+      // "url":"qx",
+      "cmd":"faqspc.r","faq_id":id,"ver":1}).then(
+      function(res){
+        var content=res.data.ans
+        that.answer=content;
+      }
+    )
   },
   data () {
     return {
@@ -67,6 +81,9 @@ export default {
           }
         },
         swiperSlides: [1, 2, 3, 4],
+        // 标题
+        title:'',
+        answer:''
 
     }
   },
@@ -78,18 +95,29 @@ export default {
     toIndex(){
       this.$router.go(-1)
     },
+    // 收藏功能接口
+    like(val){
+      var  id=this.$route.query.id
+                  CustomerHttp.httpPost('/api/qx',{
+      // "url":"qx",
+      "cmd":"qas.support.w","id":id,"ver":1,tye:val}).then(
+      function(res){
+        console.log(res)
+      }
+    )
+    },
     toggle:function(){
         if(this.hide===true){
 
             this.hide=false;
             this.show=true;
-
+          this.like(2)
 
         }else{
 
             this.show=false;
             this.hide=true;
-
+        this.like(1)
 
         }
     }
