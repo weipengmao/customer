@@ -22,7 +22,9 @@
             <img v-lazy="key.url" alt="">
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
-              <p class="content">{{textData[key]}}</p>
+              <p class="content"> {{textData[key]}}
+              <div v-show="moreAnswerLoading" class="loadingImg"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
+              </p>
             </div>
           </div>
         </div>
@@ -49,102 +51,133 @@ export default {
       function(val){
         var Data = val.data.rows
         if(that.$route.query.id == '营养汤'){
-          for(var i =2 ;i<7;i++) {
-            that.items.push(Data[i])
-            CustomerHttp.httpPost('/api/qx', {
-              "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-              "page_num": 0, "url": "qx"
-            }).then(function (val) {
-              var placeData = []
-              for (var z = 0; z < val.data.rows.length; z++) {
-                var text = val.data.rows[z][0]
-                CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
-                  that.textData.push(val.data.ans)
-                })
-
-                var placeName = val.data.rows[z][1]
-                placeData.push(val.data.rows[z][2])
-                arrOne.push(placeName)
-                if(placeName){
-                  localStorage.setItem(placeName,placeData)
+          for(var i =0 ;i<Data.length;i++) {
+            if(that.$route.query.titleIndex == Data[i][2]){
+              that.items.push(Data[i])
+              CustomerHttp.httpPost('/api/qx', {
+                "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+                "page_num": 0, "url": "qx"
+              }).then(function (val) {
+                if(val.status == 200){
+                  setTimeout(()=>{
+                    that.moreAnswerLoading = false
+                  },800)
                 }
+                var placeData = []
+                for (var z = 0; z < val.data.rows.length; z++) {
+                  var text = val.data.rows[z][0]
+                  that.textPlace.push(text)
+                  CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
+                    that.textData.push(val.data.ans)
+                  })
+
+                  var placeName = val.data.rows[z][1]
+                  placeData.push(val.data.rows[z][2])
+                  arrOne.push(placeName)
+                  if(placeName){
+                    localStorage.setItem(placeName,placeData)
+                  }
                   that.Index = distinct(arrOne)
-              }
-            })
+                }
+              })
+            }
           }
         }else if(that.$route.query.id == '食物营养成份'){
-          console.log('ok')
-          for(var i =8 ;i<29;i++){
-            that.items.push(Data[i])
-            CustomerHttp.httpPost('/api/qx', {
-              "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-              "page_num": 0, "url": "qx"
-            }).then(function (val) {
-              var placeData = []
-              for (var z = 0; z < val.data.rows.length; z++) {
-                //获取图片
-                var text = val.data.rows[z][0]
-                that.textPlace.push(text)
-                CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
-                  that.textData.push(val.data.ans)
+            for (var i = 0; i < Data.length; i++) {
+              if(that.$route.query.titleIndex == Data[i][2]) {
+                that.items.push(Data[i])
+                CustomerHttp.httpPost('/api/qx', {
+                  "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+                  "page_num": 0, "url": "qx"
+                }).then(function (val) {
+                  if(val.status == 200){
+                    setTimeout(()=>{
+                      that.moreAnswerLoading = false
+                    },800)
+                  }
+                  var placeData = []
+                  for (var z = 0; z < val.data.rows.length; z++) {
+                    //获取图片
+                    var text = val.data.rows[z][0]
+                    that.textPlace.push(text)
+                    CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
+                      that.textData.push(val.data.ans)
+                    })
+
+                    var placeName = val.data.rows[z][1]
+                    placeData.push(val.data.rows[z][2])
+                    arrOne.push(placeName)
+                    if (placeName) {
+                      localStorage.setItem(placeName, placeData)
+                    }
+                    that.Index = distinct(arrOne)
+                  }
                 })
-
-
-                var placeName = val.data.rows[z][1]
-                placeData.push(val.data.rows[z][2])
-                arrOne.push(placeName)
-                if(placeName){
-                  localStorage.setItem(placeName,placeData)
-                }
-                that.Index = distinct(arrOne)
-              }
-            })
+            }
           }
-
+//          that.moreAnswerLoading =false
         }else if(that.$route.query.id == '本草纲目'){
-          for(var i =28 ;i<45;i++){
-            that.items.push(Data[i])
-            CustomerHttp.httpPost('/api/qx', {
-              "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-              "page_num": 0, "url": "qx"
-            }).then(function (val) {
-              var placeData = []
-              for (var z = 0; z < val.data.rows.length; z++) {
-                var text = val.data.rows[z][0]
-                CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
-                  that.textData.push(val.data.ans)
+            for (var i = 0; i < Data.length; i++) {
+              if(that.$route.query.titleIndex == Data[i][2]) {
+                that.items.push(Data[i])
+                CustomerHttp.httpPost('/api/qx', {
+                  "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+                  "page_num": 0, "url": "qx"
+                }).then(function (val) {
+                  if(val.status == 200){
+                    setTimeout(()=>{
+                      that.moreAnswerLoading = false
+                  },800)
+                  }
+                  var placeData = []
+                  for (var z = 0; z < val.data.rows.length; z++) {
+                    var text = val.data.rows[z][0]
+                    that.textPlace.push(text)
+                    CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
+                      that.textData.push(val.data.ans)
+                    })
+                    var placeName = val.data.rows[z][1]
+                    placeData.push(val.data.rows[z][2])
+                    arrOne.push(placeName)
+                    if (placeName) {
+                      localStorage.setItem(placeName, placeData)
+                    }
+                    that.Index = distinct(arrOne)
+                  }
                 })
-                var placeName = val.data.rows[z][1]
-                placeData.push(val.data.rows[z][2])
-                arrOne.push(placeName)
-                if(placeName){
-                  localStorage.setItem(placeName,placeData)
-                }
-                that.Index = distinct(arrOne)
-              }
-            })
+            }
           }
         }else if(that.$route.query.id == '现代百科'){
-            that.items.push(Data[46])
-            CustomerHttp.httpPost('/api/qx', {
-              "kind_id": Data[46][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-              "page_num": 0, "url": "qx"
-            }).then(function (val) {
-              var placeData = []
-              for (var z = 0; z < val.data.rows.length; z++) {
-                var text = val.data.rows[z][0]
-                CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
-                  that.textData.push(val.data.ans)
+            for (var i = 0; i < Data.length; i++) {
+              if(that.$route.query.titleIndex == Data[i][2]) {
+                that.items.push(Data[i])
+                CustomerHttp.httpPost('/api/qx', {
+                  "kind_id": Data[46][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+                  "page_num": 0, "url": "qx"
+                }).then(function (val) {
+                  if(val.status == 200){
+                    setTimeout(()=>{
+                      that.moreAnswerLoading = false
+                  },800)
+                  }
+                  var placeData = []
+                  for (var z = 0; z < val.data.rows.length; z++) {
+                    var text = val.data.rows[z][0]
+                    that.textPlace.push(text)
+                    CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
+                      that.textData.push(val.data.ans)
+                    })
+                    var placeName = val.data.rows[z][1]
+                    placeData.push(val.data.rows[z][2])
+                    arrOne.push(placeName)
+                    if (placeName) {
+                      localStorage.setItem(placeName, placeData)
+                    }
+                    that.Index = distinct(arrOne)
+                  }
                 })
-                var placeName = val.data.rows[z][1]
-                placeData.push(val.data.rows[z][2])
-                arrOne.push(placeName)
-                if(placeName){
-                  localStorage.setItem(placeName,placeData)
-                }
-                that.Index = distinct(arrOne)
-              }
-            })
+            }
+          }
         }
         setTimeout(()=>{
           that._req()
@@ -177,7 +210,8 @@ export default {
         Index:[],
         textData:[],
         textIndex:[],
-        textPlace:[]
+        textPlace:[],
+        moreAnswerLoading:true
     }
   },
       components:{
@@ -332,4 +366,14 @@ a{
   font-size: 0.44rem !important;
   padding:0.2rem;
 }
+.loadingImg img{
+  width:20px !important;
+  text-align:center !important;
+  float:none !important;
+}
+.loadingImg{
+  height:20px;
+  width:100%;
+}
 </style>
+

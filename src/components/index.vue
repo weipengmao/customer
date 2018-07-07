@@ -17,10 +17,10 @@
     <div class="nav">
       <div class="box">
 
-            <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6" @click="toSwiper(item)" :id="item">
+            <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6" @click="toSwiper(item,titleIndex[key])" :id="titleIndex[key]">
               {{item}}
             </p>
-            <p class="button" v-for="(item,key) in items" v-if="(key+1)>6 && hide == false" @click="toSwiper(item)" :id="item">
+            <p class="button" v-for="(item,key) in items" v-if="(key+1)>6 && hide == false" @click="toSwiper(item,titleIndex[key])" :id="titleIndex[key]">
               {{item}}
             </p>
 
@@ -43,7 +43,7 @@
 
 <script>
 import {CustomerHttp} from '../common/js/http'
-
+import {indexArr} from  '../../static/indexWord.js'
 export default {
   name: 'app',
 
@@ -116,17 +116,7 @@ export default {
     return{
       words:['我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
       //随机配置
-      randomWord:[['1我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['2我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['3我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['4我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['5我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['6我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['7我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['8我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['9我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
-        ['10我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。']
-      ],
+      randomWord:indexArr,
       items:[],
       hideWords:true,
       num:0,
@@ -134,6 +124,7 @@ export default {
       hide: true,
       bottomTxt:true,
       loading:true,
+      titleIndex:[]
     }
   },
   methods:{
@@ -142,18 +133,20 @@ export default {
       CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
         function(val){
           const Data = val.data.rows
-            arr.push(Data[1][1])
-            arr.push("食物营养成份")
-            arr.push("本草纲目")
-            arr.push(Data[45][1])
+          for(var i =0;i<Data.length;i++){
+            if(Data[i][2] == '' && i!=0){
+              that.titleIndex.push(Data[i][0])
+              arr.push(Data[i][1])
+            }
+          }
             that.loading=false;
         },function(err){
           console.log(err)
         }
       )
     },
-    toSwiper(text){
-      this.$router.push({path:'/swiper',query:{id:text}})
+    toSwiper(text,titleIndex){
+      this.$router.push({path:'/swiper',query:{id:text,titleIndex:titleIndex}})
     }
   },
 }
