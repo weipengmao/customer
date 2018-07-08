@@ -83,7 +83,7 @@
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
               <div :id="'moreAnswerLoadingA'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
-              <div v-for="(items,key) in randomAnswer[item]" :id="items" @click="info(items,key)">
+              <div v-for="(items,key) in randomAnswer[item]" :id="items" @click="info(items,key,item)">
                 <p align="left" >{{items}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
@@ -142,7 +142,7 @@
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
               <div :id="'moreAnswerLoadingB'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
-              <div v-for="(items,key) in answer" @click="infoTwo(items,key)">
+              <div v-for="(items,key) in answer" @click="infoTwo(items,key,item)">
                 <p align="left">{{items}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
@@ -161,7 +161,7 @@
         <div class="bottomLeft" @touchend="modelChange"><p>{{textSearch}}</p></div>
           <div class="model">
             <ul class="text" v-show="inputContent"><li v-if="key" v-show="keyText" v-for="key in text" class="textLi" @touchend="searchLi(key)">{{key}}</li></ul>
-            <el-input class="input" clearable placeholder="请输入您的问题" v-model="questDetail" @change="search()"></el-input>
+            <el-input class="input" clearable placeholder="请输入您的问题" v-model="questDetail" @input="search()"></el-input>
           </div>
         <div class="bottomRight" @click="setQuest"><p>发送</p></div>
       </div>
@@ -236,7 +236,9 @@ export default {
       idNum:0,
       idNumTwo:0,
       numId:'random',
-      numIdB:'randomB'
+      numIdB:'randomB',
+      serviceNum:0,
+      normalText:0
     }
   },
   methods: {
@@ -291,6 +293,7 @@ export default {
       }
     },
     moreAnswerTwo(a){
+      console.log(a)
       if(this.numIdB != a) {
         this.numIdB = a
         for (var i = 0; i < this.answer.length; i++) {
@@ -316,7 +319,8 @@ export default {
         CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
-            var textS = 'moreAnswerLoading' + _that.idNum
+            var textS = 'moreAnswerLoading' + _that.normalText
+            _that.normalText++
             setTimeout(()=>{
               document.querySelector("#"+textS).style.display = 'none'
             },10)
@@ -364,7 +368,8 @@ export default {
         CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
-            var textC = 'moreAnswerLoadingC' + _that.idNumTwo
+            var textC = 'moreAnswerLoadingC' + _that.serviceNum
+            _that.serviceNum++
             setTimeout(()=>{
               document.querySelector("#"+textC).style.display = 'none'
           },10)
@@ -394,12 +399,13 @@ export default {
     serviceDetail(){
       this.service = true
     },
-    info(a,key){
+    info(a,key,item){
 //      var reg = /【---.*---】/
 //      a = a.match(reg)
 //      a = a[0].split('【---')
 //      a = a[1].split('---】')[0]
 //      console.log(a)
+      console.log(item)
       localStorage.setItem('quest',a)
       var _that = this
       this.firstQuestTxt.push(a)
@@ -407,6 +413,11 @@ export default {
       CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":a,
         "size":20,"ver":1}).then(
         function(val){
+          var textS = 'moreAnswerLoading' + _that.normalText
+          _that.normalText++
+          setTimeout(()=>{
+            document.querySelector("#"+textS).style.display = 'none'
+          },10)
           var reg = new RegExp(`\^${a}`,"i")
           if(val.data.rows){
             for(var i = 0;i < val.data.rows.length;i++){
@@ -429,7 +440,7 @@ export default {
         }
       )
     },
-    infoTwo(a,key){
+    infoTwo(a,key,item){
       localStorage.setItem('quest',a)
       var _that = this
       this.questTxt.push(a)
@@ -437,6 +448,12 @@ export default {
       CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":a,
         "size":20,"ver":1}).then(
         function(val){
+          var textC = 'moreAnswerLoadingC' + _that.serviceNum
+          _that.serviceNum++
+          console.log(textC)
+          setTimeout(()=>{
+            document.querySelector("#"+textC).style.display = 'none'
+          },10)
           var reg = new RegExp(`\^${a}`,"i")
           if(val.data.rows){
             for(var i = 0;i < val.data.rows.length;i++){
@@ -459,32 +476,33 @@ export default {
       )
     },
     search(){
-      var _that = this
-      const reg = new RegExp('^'+this.searchText+'[\\u4e00-\\u9fa5]*$','g')
-      var arr =[]
-      var newArr=[]
+          var _that = this
+          const reg = new RegExp('^'+this.searchText+'[\\u4e00-\\u9fa5]*$','g')
+          var arr =[]
+          var newArr=[]
 
-      CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":_that.questDetail,
-        "size":20,"ver":1}).then(function (val) {
-
-            if(_that.questDetail!='' && _that.textSearch =='检索'){
-              _that.text=[]
-              for(var j=0;j< val.data.rows.length;j++){
-                arr.push(val.data.rows[j][0])
-              }
-              newArr = distinct(arr)
-              for(var i = 0;i<newArr.length;i++){
-                _that.text.push(newArr[i])
-              }
-              setTimeout(()=>{
-                _that.text = ''
-              },3000)
-            }else{
-              _that.text = ''
-            }
-          }, function (val) {
-            console.log(val)
-          })
+          CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":_that.questDetail,
+            "size":20,"ver":1}).then(function (val) {
+              if(_that.questDetail!='' && _that.textSearch =='检索'&& val.data.flag!=90010098){
+                                console.log('ok')
+                  _that.text=[]
+                  for(var j=0;j< val.data.rows.length;j++){
+                    arr.push(val.data.rows[j][0])
+                  }
+                  newArr = distinct(arr)
+                  for(var i = 0;i<newArr.length;i++){
+                    _that.text.push(newArr[i])
+                  }
+                  setTimeout(()=>{
+                    _that.text = ''
+                  },3000)
+                }else{
+                  _that.text = ''
+                }
+              }, function (err) {
+                console.log(err)
+              })
+  
       },
     searchLi(a){
       this.questDetail = a

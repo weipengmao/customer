@@ -19,7 +19,7 @@
     <div class="brief clearfix">
       <!-- <router-link to='/detail'> -->
         <div  :id="Index" name="text">
-          <div class="box clearfix info" v-for="(item,key) in titleIndex" :id="textPlace[key]+':'+item" @click="toDetail(textPlace[key],item)">
+          <div class="box clearfix info" v-for="(item,key) in titleIndex"  @click="toDetail(textPlace[key],item)">
             <img  src="../common/image/swiper.jpg" alt="">
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
@@ -47,8 +47,7 @@
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
 
-  name: 'account',
-  mounted(){    
+  mounted(){
     var that = this
     var arrOne =[]
     var arrTwo
@@ -71,9 +70,9 @@ export default {
                 var placeData = []
                 for (var z = 0; z < val.data.rows.length; z++) {
                   var text = val.data.rows[z][0]
-                  that.textPlace.push(text)
                   CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
                     that.textData.push(val.data.ans)
+                    that.textPlace.push(val.data.ans)
                   })
 
                   var placeName = val.data.rows[z][1]
@@ -104,9 +103,9 @@ export default {
                   for (var z = 0; z < val.data.rows.length; z++) {
                     //获取图片
                     var text = val.data.rows[z][0]
-                    that.textPlace.push(text)
                     CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
                       that.textData.push(val.data.ans)
+                      that.textPlace.push(val.data.ans)
                     })
 
                     var placeName = val.data.rows[z][1]
@@ -137,9 +136,9 @@ export default {
                   var placeData = []
                   for (var z = 0; z < val.data.rows.length; z++) {
                     var text = val.data.rows[z][0]
-                    that.textPlace.push(text)
                     CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
                       that.textData.push(val.data.ans)
+                      that.textPlace.push(val.data.ans)
                     })
                     var placeName = val.data.rows[z][1]
                     placeData.push(val.data.rows[z][2])
@@ -168,9 +167,9 @@ export default {
                   var placeData = []
                   for (var z = 0; z < val.data.rows.length; z++) {
                     var text = val.data.rows[z][0]
-                    that.textPlace.push(text)
                     CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
                       that.textData.push(val.data.ans)
+                      that.textPlace.push(val.data.ans)
                     })
                     var placeName = val.data.rows[z][1]
                     placeData.push(val.data.rows[z][2])
@@ -227,11 +226,10 @@ export default {
   methods:{
 
     toIndex(){
-      this.$router.go(-1)
+      this.$router.push('/')
     },
     // 进入详情页
     toDetail(id,title){
-
       this.$router.push({path:"/detail",query:{id:id,title:title}})
     },
     _req(){
@@ -273,6 +271,15 @@ export default {
        }
 
     }
+  },
+  //缓存路由
+  beforeRouteLeave(to, from, next) {
+    if (to.path == "/") {
+      from.meta.keepAlive = false;
+    } else {
+      from.meta.keepAlive = true;
+    }
+    next();
   }
 }
 </script>

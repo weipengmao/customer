@@ -17,7 +17,10 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: index
+      component: index,
+      meta: {
+        keepAlive: true // true 表示需要使用缓存
+      }
     },
     {
       path: '/account',
@@ -27,7 +30,10 @@ export default new Router({
     {
       path: '/swiper',
       name: 'swiper',
-      component: swiper
+      component: swiper,
+      meta: {
+        keepAlive: true // true 表示需要使用缓存
+      }
     }
   ]
 })

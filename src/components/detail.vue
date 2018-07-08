@@ -38,7 +38,6 @@
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
 
-  name: 'account',
   mounted(){
     // 附件接口
       CustomerHttp.httpPost('/api/qx',{
@@ -52,15 +51,10 @@ export default {
     var that=this
     // 渲染标题和传入id
     this.title=this.$route.query.title
-    const id=this.$route.query.id
-    CustomerHttp.httpPost('/api/qx',{
-      // "url":"qx",
-      "cmd":"faqspc.r","faq_id":id,"ver":1}).then(
-      function(res){
-        var content=res.data.ans
-        that.answer=content;
-      }
-    )
+    this.id=this.$route.query.id
+    localStorage.setItem('content',this.id)
+    that.answer=localStorage.getItem('content');
+
   },
   data () {
     return {
@@ -83,7 +77,8 @@ export default {
         swiperSlides: [1, 2, 3, 4],
         // 标题
         title:'',
-        answer:''
+        answer:'',
+        id:''
 
     }
   },
@@ -93,6 +88,7 @@ export default {
     },
   methods:{
     toIndex(){
+      console.log('ok')
       this.$router.go(-1)
     },
     // 收藏功能接口
@@ -163,16 +159,18 @@ a{
 }
 
 
-
+.clearfix:after{
+  content:'';clear:both;display:block;
+}
 .box{
-    width:100%;height:1.5rem;
+    width:100%;
     line-height: 1.5rem;
     padding:0.3rem 0.5rem;
     padding-bottom:0;
     padding-right:0;
 }
 .box .title{
-    width:7.5rem;height:1.5rem;
+    width:7.5rem;
     line-height: 1.5rem;
     font-size:0.7rem;
     float:left;
