@@ -40,19 +40,19 @@ export default {
 
   mounted(){
     // 附件接口
-      CustomerHttp.httpPost('/api/qx',{
-      "cmd":"faqspc.r","faq_id":id,"ver":1}).then(
-      function(res){
-        var content=res.data.ans
-        that.answer=content;
-      }
-    )
+    //   CustomerHttp.httpPost('/api/qx',{
+    //   "cmd":"faqspc.r","faq_id":id,"ver":1}).then(
+    //   function(res){
+    //     var content=res.data.ans
+    //     that.answer=content;
+    //   }
+    // )
 
     var that=this
     // 渲染标题和传入id
     this.title=this.$route.query.title
-    this.id=this.$route.query.id
-    localStorage.setItem('content',this.id)
+    var id=this.$route.query.id
+    localStorage.setItem('content',id)
     that.answer=localStorage.getItem('content');
 
   },
@@ -93,14 +93,14 @@ export default {
     },
     // 收藏功能接口
     like(val){
-      var  id=this.$route.query.id
-                  CustomerHttp.httpPost('/api/qx',{
-      // "url":"qx",
-      "cmd":"qas.support.w","id":id,"ver":1,tye:val}).then(
-      function(res){
-        console.log(res)
-      }
-    )
+        var  id=this.$route.query.id
+                    CustomerHttp.httpPost('/api/qx',{
+        // "url":"qx",
+        "cmd":"qas.support.w","id":id,"ver":1,tye:val}).then(
+        function(res){
+          console.log(res)
+        }
+      )
     },
     toggle:function(){
         if(this.hide===true){
