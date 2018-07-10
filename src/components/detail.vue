@@ -10,11 +10,13 @@
       <div class="swiper-pagination "  slot="pagination"></div>
       <!-- <img class="shut" src="../assets/close.png" alt=""> -->
     </swiper>
-    <div class="contentBoxAuto">
+    
+    <div class="clearfix">
+    <div class="contentBoxAuto clearfix">
       <!-- 功能详情 -->
       <div class="box clearfix">
-        <p class="title">{{title}}</p>
-        <p class="inbox" @click="toggle()">
+        <p class="title clearfix">{{title}}</p>
+        <p class="inbox clearfix" @click="toggle()">
           <img v-show="hide" class="img1" src="../assets/dislike.png" alt="">
           <img v-show="show" class="img2" src="../assets/like.png" alt="">
         </p>
@@ -29,6 +31,8 @@
         <p class="clearfix"> <span>附件2：《猪肉怎么吃最健康？》</span>    <img src="../assets/arrow.jpg" alt=""></p>
       </div>
     </div>
+    </div>
+
 </div>
 </template>
 
@@ -137,7 +141,12 @@ a{
   color:#000;
 }
 
+.clearfix:after{
+  content:'';clear:both;display:block;
+}
 .contentBoxAuto{
+  width:100%;
+
   height:13rem;
   overflow-y: auto;
 }

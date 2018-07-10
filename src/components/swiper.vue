@@ -265,7 +265,7 @@ export default {
           }
         }
       }
-      // 懒加载消失
+      //loading退去
       this.loading=false
         if(num == 0 &&(localStorage.getItem(lis[0].id))){
         that.titleIndex = localStorage.getItem(lis[0].id).split(',')
