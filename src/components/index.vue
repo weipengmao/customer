@@ -45,7 +45,7 @@
 import {CustomerHttp} from '../common/js/http'
 import {indexArr} from  '../../static/indexWord.js'
 export default {
-  name: 'app',
+
 
   mounted(){
     CustomerHttp.httpPost('/api/qx',{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
