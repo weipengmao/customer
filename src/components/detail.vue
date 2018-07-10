@@ -22,7 +22,7 @@
         </p>
       </div>
       <!-- 文章 -->
-      <div class="content clearfix">
+      <div class="content clearfix" id="box" >
           {{answer}}
       </div>
       <!-- 附件 -->
@@ -58,7 +58,12 @@ export default {
     var id=this.$route.query.id
     localStorage.setItem('content',id)
     that.answer=localStorage.getItem('content');
+    var text=that.answer
 
+function decode(text){
+      return text.replace(/<[^>]+>/g,"");
+}
+    that.answer=decode(text)
   },
   data () {
     return {
@@ -92,7 +97,7 @@ export default {
     },
   methods:{
     toIndex(){
-      console.log('ok')
+      // console.log('ok')
       this.$router.go(-1)
     },
     // 收藏功能接口

@@ -52,10 +52,12 @@ export default {
     var that = this
     var arrOne =[]
     var arrTwo
-    console.log(CustomerHttp)
+    
+ 
+
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
-     
+        // console.log(val.data)
         var Data = val.data.rows
         if(that.$route.query.id == '营养汤'){
           for(var i =0 ;i<Data.length;i++) {
@@ -98,12 +100,12 @@ export default {
             for (var i = 0; i < Data.length; i++) {
               if(that.$route.query.titleIndex == Data[i][2]) {
                 that.items.push(Data[i])
-                   console.log('ok')
+                  //  console.log('ok')
                 CustomerHttp.httpPost('/api/qx', {
                   "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
                   "page_num": 0, "url": "qx"
                 }).then(function (val) {
-                     console.log('http')
+                    //  console.log('http')
                   if(val.status == 200){
                     setTimeout(()=>{
                       that.moreAnswerLoading = false
