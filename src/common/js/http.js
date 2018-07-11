@@ -2,7 +2,18 @@
  * Created by Administrator on 2018/6/16 0016.
  */
 import axios from 'axios'
+import Vue from 'vue'
 import qs from 'qs'
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+//终止请求
+const CancelToken = axios.CancelToken;
+let cancel;
+let cancelAjaxText = '中断成功';
+Vue.prototype.cancelAjax = function(){ //切换页面强行中断请求 router.beforeEach中用到
+  if(cancel){
+    cancel(cancelAjaxText);
+  }
+}
 export const CustomerHttp = {
   //get请求
   httpGet(url,data){
@@ -28,8 +39,11 @@ export const CustomerHttp = {
     //let postData = qs.stringify(data)
     //返回promise对象
     return new Promise((resolve,reject)=>{
-        axios.post(url,data)
-        .then((res)=>{
+        axios({method:'post',url:url,data:data,cancelToken:new CancelToken(c => { 
+          //强行中断请求要用到的
+          cancel = c
+        })
+      }).then((res)=>{
         resolve(res)
       }).catch((err)=>{
       reject(err)

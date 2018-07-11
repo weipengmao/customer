@@ -46,15 +46,15 @@
   import {distinct} from '../common/js/distinct'
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import Vue from 'vue'
 export default {
   created(){
+    
     
     var that = this
     var arrOne =[]
     var arrTwo
     
- 
-
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
         // console.log(val.data)
@@ -298,8 +298,9 @@ export default {
     } else {
       from.meta.keepAlive = true;
     }
+    Vue.prototype.cancelAjax()	
     next();
-  }
+  },
 }
 </script>
 
