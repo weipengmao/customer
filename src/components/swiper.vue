@@ -46,8 +46,10 @@
   import {distinct} from '../common/js/distinct'
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import Vue from 'vue'
 export default {
   created(){
+    
     
     var that = this
     var arrOne =[]
@@ -316,8 +318,9 @@ export default {
     } else {
       from.meta.keepAlive = true;
     }
+    Vue.prototype.cancelAjax()	
     next();
-  }
+  },
 }
 </script>
 
