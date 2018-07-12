@@ -13,6 +13,8 @@ import vueLoading from 'vue-loading-template'
 import lazyLoad from 'vue-lazyload'
 
 Vue.config.productionTip = false
+Vue.prototype.index = []
+Vue.prototype.num = 0
 Vue.use(ElementUi)
 Vue.use(vueLoading)
 Vue.use(lazyLoad,{

@@ -54,25 +54,21 @@ export default {
     var that = this
     var arrOne =[]
     var arrTwo
-    
- function decode(text){
-      return text.replace(/<[^>]+>/g,"");
-}
+    function decode(text){
+          return text.replace(/<[^>]+>/g,"");
+    }
 
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
         // console.log(val.data)
         var Data = val.data.rows
-        if(that.$route.query.id == '营养汤'){
           for(var i =0 ;i<Data.length;i++) {
             if(that.$route.query.titleIndex == Data[i][2]){
               that.items.push(Data[i])
-           
               CustomerHttp.httpPost('/api/qx', {
                 "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
                 "page_num": 0, "url": "qx"
               }).then(function (val) {
-              
                 if(val.status == 200){
                   setTimeout(()=>{
                     that.moreAnswerLoading = false
@@ -89,8 +85,6 @@ export default {
                       that.textPlace.push(text)
                     })
                   }
-        
-
                   var placeName = val.data.rows[z][1]
                   placeData.push(val.data.rows[z][2])
                   arrOne.push(placeName)
@@ -102,126 +96,8 @@ export default {
               })
             }
           }
-        }else if(that.$route.query.id == '食物营养成份'){
-            for (var i = 0; i < Data.length; i++) {
-              if(that.$route.query.titleIndex == Data[i][2]) {
-                that.items.push(Data[i])
-                  //  console.log('ok')
-                CustomerHttp.httpPost('/api/qx', {
-                  "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-                  "page_num": 0, "url": "qx"
-                }).then(function (val) {
-                    //  console.log('http')
-                  if(val.status == 200){
-                    setTimeout(()=>{
-                      that.moreAnswerLoading = false
-                    },800)
-                  }
-                  var placeData = []
-                  for (var z = 0; z < val.data.rows.length; z++) {
-                    //获取图片
-                    var text = val.data.rows[z][0]
-                    if(text!=''){
-                      CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
-                      var text=val.data.ans
-                      text=decode(text)
-                      that.textData.push(text)
-                      that.textPlace.push(text)
-                      })
-                    }
-
-                    var placeName = val.data.rows[z][1]
-                    placeData.push(val.data.rows[z][2])
-                    arrOne.push(placeName)
-                    if (placeName) {
-                      localStorage.setItem(placeName, placeData)
-                    }
-                    that.Index = distinct(arrOne)
-                  }
-                })
-            }
-          }
-//          that.moreAnswerLoading =false
-        }else if(that.$route.query.id == '本草纲目'){
-            for (var i = 0; i < Data.length; i++) {
-              if(that.$route.query.titleIndex == Data[i][2]) {
-                that.items.push(Data[i])
-                CustomerHttp.httpPost('/api/qx', {
-                  "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-                  "page_num": 0, "url": "qx"
-                }).then(function (val) {
-                  if(val.status == 200){
-                    setTimeout(()=>{
-                      that.moreAnswerLoading = false
-                  },800)
-                  }
-                  var placeData = []
-                  for (var z = 0; z < val.data.rows.length; z++) {
-                    var text = val.data.rows[z][0]
-                    if(text!=''){
-                      CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
-                      var text=val.data.ans
-                      text=decode(text)
-                      that.textData.push(text)
-                      that.textPlace.push(text)
-                      })
-                    }
-
-                    var placeName = val.data.rows[z][1]
-                    placeData.push(val.data.rows[z][2])
-                    arrOne.push(placeName)
-                    if (placeName) {
-                      localStorage.setItem(placeName, placeData)
-                    }
-                    that.Index = distinct(arrOne)
-                  }
-                })
-            }
-          }
-        }else if(that.$route.query.id == '现代百科'){
-            for (var i = 0; i < Data.length; i++) {
-              if(that.$route.query.titleIndex == Data[i][2]) {
-                that.items.push(Data[i])
-                CustomerHttp.httpPost('/api/qx', {
-                  "kind_id": Data[46][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-                  "page_num": 0, "url": "qx"
-                }).then(function (val) {
-                  if(val.status == 200){
-                    setTimeout(()=>{
-                      that.moreAnswerLoading = false
-                  },800)
-                  }
-                  var placeData = []
-                  for (var z = 0; z < val.data.rows.length; z++) {
-                    var text = val.data.rows[z][0]
-                    if(text!=''){
-                      CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
-                       var text=val.data.ans
-                      var newA=[]
-      var str=decode(text).split('&nbsp;');
  
-    for(let i=0;i<str.length;i++){
-      if(str[i]){
-        newA.push(str[i])
-      }
-    }
-    var newA=newA.join().trim('')
-                      that.textData.push(newA)
-                      that.textPlace.push(newA)
-                      })
-                    }
-                    var placeName = val.data.rows[z][1]
-                    placeData.push(val.data.rows[z][2])
-                    arrOne.push(placeName)
-                    if (placeName) {
-                      localStorage.setItem(placeName, placeData)
-                    }
-                    that.Index = distinct(arrOne)
-                  }
-                })
-            }
-          }
-        }
+
         setTimeout(()=>{
           that._req()
         },10)

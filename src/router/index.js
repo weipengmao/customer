@@ -17,10 +17,7 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: resolve => require.ensure([], () => resolve(require('@/components/index')), 'detail'),
-      meta: {
-        keepAlive: true // true 表示需要使用缓存
-      }
+      component: resolve => require.ensure([], () => resolve(require('@/components/index')), 'detail')
     },
     {
       path: '/account',
@@ -30,10 +27,7 @@ export default new Router({
     {
       path: '/swiper',
       name: 'swiper',
-      component: resolve => require.ensure([], () => resolve(require('@/components/swiper')), 'detail'),
-      meta: {
-        keepAlive: true // true 表示需要使用缓存
-      }
+      component: resolve => require.ensure([], () => resolve(require('@/components/swiper')), 'detail')
     }
   ]
 })

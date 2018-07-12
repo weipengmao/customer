@@ -7,11 +7,14 @@ import qs from 'qs'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 //终止请求
 const CancelToken = axios.CancelToken;
-let cancel;
 let cancelAjaxText = '中断成功';
 Vue.prototype.cancelAjax = function(){ //切换页面强行中断请求 router.beforeEach中用到
-  if(cancel){
-    cancel(cancelAjaxText);
+  if(Vue.prototype.index){
+    for(var i = 0;i<Vue.prototype.index.length;i++){
+      if(typeof Vue.prototype.index[i] == 'function'){
+        Vue.prototype.index[i](cancelAjaxText)
+      }
+    }
   }
 }
 export const CustomerHttp = {
@@ -33,6 +36,7 @@ export const CustomerHttp = {
   },
   //post请求
   httpPost(url,data){
+    Vue.prototype.num++
     //对url进行处理
     //url += param(url)
     //data = Object.assign(data,param(url))
@@ -41,7 +45,7 @@ export const CustomerHttp = {
     return new Promise((resolve,reject)=>{
         axios({method:'post',url:url,data:data,cancelToken:new CancelToken(c => { 
           //强行中断请求要用到的
-          cancel = c
+          Vue.prototype.index[Vue.prototype.num] = c
         })
       }).then((res)=>{
         resolve(res)
