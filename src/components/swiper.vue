@@ -53,7 +53,9 @@ export default {
     var arrOne =[]
     var arrTwo
     
- 
+ function decode(text){
+      return text.replace(/<[^>]+>/g,"");
+}
 
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
@@ -79,8 +81,10 @@ export default {
                   var text = val.data.rows[z][0]
                   if(text!=''){
                     CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
-                      that.textData.push(val.data.ans)
-                      that.textPlace.push(val.data.ans)
+                      var text=val.data.ans
+                      text=decode(text)
+                      that.textData.push(text)
+                      that.textPlace.push(text)
                     })
                   }
         
@@ -117,8 +121,10 @@ export default {
                     var text = val.data.rows[z][0]
                     if(text!=''){
                       CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
-                        that.textData.push(val.data.ans)
-                        that.textPlace.push(val.data.ans)
+                      var text=val.data.ans
+                      text=decode(text)
+                      that.textData.push(text)
+                      that.textPlace.push(text)
                       })
                     }
 
@@ -152,8 +158,10 @@ export default {
                     var text = val.data.rows[z][0]
                     if(text!=''){
                       CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
-                        that.textData.push(val.data.ans)
-                        that.textPlace.push(val.data.ans)
+                      var text=val.data.ans
+                      text=decode(text)
+                      that.textData.push(text)
+                      that.textPlace.push(text)
                       })
                     }
 
@@ -186,8 +194,18 @@ export default {
                     var text = val.data.rows[z][0]
                     if(text!=''){
                       CustomerHttp.httpPost('/api/qx', {"cmd": "faqspc.r", "ver": 1, "faq_id": text}).then(function (val) {
-                        that.textData.push(val.data.ans)
-                        that.textPlace.push(val.data.ans)
+                       var text=val.data.ans
+                      var newA=[]
+      var str=decode(text).split('&nbsp;');
+ 
+    for(let i=0;i<str.length;i++){
+      if(str[i]){
+        newA.push(str[i])
+      }
+    }
+    var newA=newA.join().trim('')
+                      that.textData.push(newA)
+                      that.textPlace.push(newA)
                       })
                     }
                     var placeName = val.data.rows[z][1]
