@@ -16,22 +16,23 @@
     <ul id="nav" >
         <li v-for="item in items" :id="item[0]">{{item[1]}}</li>
     </ul>
-    <div class="brief clearfix">
+    <div class="brief clearfix" >
       <!-- <router-link to='/detail'> -->
-        <div  :id="Index" name="text">
+        <div  :id="Index" name="text" >
           <div class="box clearfix info" v-for="(item,key) in titleIndex"  @click="toDetail(textPlace[key],item)">
             <img  src="../common/image/swiper.jpg" alt="">
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
-              <p class="content"> {{textData[key]}}
+              <p class="content" > {{textData[key]}}
               <div v-show="moreAnswerLoading" class="loadingImg"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
               </p>
+
             </div>
           </div>
         </div>
 
-
     </div>
+
 </div>
   </div>
 
@@ -54,8 +55,9 @@ export default {
     var that = this
     var arrOne =[]
     var arrTwo
+    var text1
     function decode(text){
-          return text.replace(/<[^>]+>/g,"");
+          return text.replace(/<[^>]+>/g,"").replace(/&nbsp;/g,"");
     }
 
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
@@ -77,13 +79,20 @@ export default {
                 var placeData = []
                 for (var z = 0; z < val.data.rows.length; z++) {
                   var text = val.data.rows[z][0]
+                  // console.log(text)
                   if(text!=''){
                     CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
-                      var text=val.data.ans
-                      text=decode(text)
-                      that.textData.push(text)
-                      that.textPlace.push(text)
+                      if(val.data){
+                      // console.log(val.data) 
+                      text1=val.data.ans
+                      text1=decode(text1)
+                      that.textData.push(text1)
+                      that.textPlace.push(text1) 
+                      }
+
                     })
+                  }else{
+                    that.own=true
                   }
                   var placeName = val.data.rows[z][1]
                   placeData.push(val.data.rows[z][2])
@@ -131,7 +140,8 @@ export default {
         textIndex:[],
         textPlace:[],
         loading:true,
-        moreAnswerLoading:true
+        moreAnswerLoading:true,
+        own:false
     }
   },
       components:{

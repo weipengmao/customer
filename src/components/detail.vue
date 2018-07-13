@@ -58,25 +58,7 @@ export default {
     var id=this.$route.query.id
     localStorage.setItem('content',id)
     that.answer=localStorage.getItem('content');
-    // var text=that.answer
-    // console.log(text)
-// function decode(text){
-//       return text.replace(/<[^>]+>/g,"");
-// }  
-// var newA=[]
-//  var str=decode(text).split('&nbsp;');
- 
-//     for(let i=0;i<str.length;i++){
-//       if(str[i]){
-//         newA.push(str[i])
-//       }
-//     }
-//     var newA=newA.join().trim('')
-//     console.log(newA)
-//     that.answer=newA
-    // that.answer=decode(text).trim('&nbsp;').join('');
-    // that.answer=decode(text)
-    // console.log(that.answer)
+
   },
   data () {
     return {
