@@ -43,10 +43,8 @@
 
 <script>
 import {CustomerHttp} from '../common/js/http'
-import {indexArr} from  '../../static/indexWord.js'
+import indexArr from  '../../common.json'
 export default {
-
-
   mounted(){
     CustomerHttp.httpPost('/api/qx',{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
     this._req(this.items)
@@ -116,7 +114,7 @@ export default {
     return{
       words:['我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
       //随机配置
-      randomWord:indexArr,
+      randomWord:indexArr.indexArr,
       items:[],
       hideWords:true,
       num:0,

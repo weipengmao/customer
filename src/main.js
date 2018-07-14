@@ -22,9 +22,6 @@ Vue.use(lazyLoad,{
 })
 
 
-Vue.prototype.corp_id= "9c3b580d264111e793920242ac110005"
-
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

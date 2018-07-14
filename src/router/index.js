@@ -27,7 +27,7 @@ export default new Router({
     {
       path: '/swiper',
       name: 'swiper',
-      component: resolve => require.ensure([], () => resolve(require('@/components/swiper')), 'detail')
+      component: resolve => require.ensure([], () => resolve(require('@/components/swiper')), 'detail'),
     }
   ]
 })

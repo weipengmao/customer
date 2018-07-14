@@ -1,11 +1,13 @@
 <template>
 <div id="body">
     <div class="container">
+      <div class="pop" v-show="popFlag">
+        <div></div>
+      </div>
       <div class="header">
         <span class="headerText">聊天</span>
-        <img class="headerImg" src="../common/image/close.png" @click="toIndex">
+        <img class="headerImg" src="../common/image/close.png" @touchend="toIndex">
       </div>
-
       <div class="center">
         <!--历史问题 -->
         <div class="cpBefore" >
@@ -36,7 +38,7 @@
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
             </div>
-            <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
+            <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @touchend="serviceDetail"><span
             style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             float:left;line-height:1.10rem" >转人工客服</span>
             <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
@@ -73,26 +75,26 @@
               <p align="left" :id="id" ref="testIndex">
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-              <img :src="heart" alt="" style="float:left" @click="changeStyle(item)" ref="changeSty">
+              <img :src="heart" alt="" style="float:left" @touchend="changeStyle(item)" ref="changeSty">
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @click="moreAnswer(item)" >更多</p>
+            line-height:0.5rem;" @touchend="moreAnswer(item)" >更多</p>
             </div>
           </div>
 
           <div class="content" style="width:100%" v-show="flagTxt" ref="itemContent" :id = "item">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
+            <div :id="'moreAnswerLoadingA'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div :id="'moreAnswerLoadingA'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
-              <div v-for="(items,key) in randomAnswer[item]" :id="items" @click="info(items,key,item)">
+              <div v-for="(items,key) in randomAnswer[item]" :id="items" @touchend="info(items,key,item)">
                 <p align="left" >{{items}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               </div>
-              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
+              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @touchend="serviceDetail"><span
               style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem" @click="serviceDetail">转人工客服</span>
+            float:left;line-height:1.10rem" @touchend="serviceDetail">转人工客服</span>
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @click="addText(item)">更多</p>
+            line-height:0.5rem;" @touchend="addText(item)">更多</p>
             </div>
           </div>
         </div>
@@ -109,10 +111,10 @@
               <p align="left">亲爱的VIP客户，现在为人工服务模式，请问能帮到您什么？。
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
+              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @touchend="serviceDetail"><span
               style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem" @click="serviceDetail">人工客服</span>
-              <!--<img :src="heartBeat" alt="" style="float:left" @click="changeBeat(item-1)" ref="changeBeat">-->
+            float:left;line-height:1.10rem" @touchend="serviceDetail">人工客服</span>
+              <!--<img :src="heartBeat" alt="" style="float:left" @touchend="changeBeat(item-1)" ref="changeBeat">-->
             </div>
           </div>
         </div>
@@ -132,30 +134,27 @@
               <p align="left" ref="testIndexTwo">
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-              <img :src="heart" alt="" style="float:left" @click="changeStyle">
+              <img :src="heart" alt="" style="float:left" @touchend="changeStyle">
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @click="moreAnswerTwo(item)" >更多</p>
+            line-height:0.5rem;" @touchend="moreAnswerTwo(item)" >更多</p>
             </div>
           </div>
 
           <div class="content" style="width:100%" v-show="flagTxt" ref="itemTwoContent">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
+            <div :id="'moreAnswerLoadingB'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div :id="'moreAnswerLoadingB'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
-              <div v-for="(items,key) in answer" @click="infoTwo(items,key,item)">
+              <div v-for="(items,key) in answer" @touchend="infoTwo(items,key,item)">
                 <p align="left">{{items}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               </div>
               <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @click="addText(item)">更多</p>
+            line-height:0.5rem;" @touchend="addText(item)">更多</p>
             </div>
           </div>
         </div>
       </div>
-
-
-
       <div class="bottom">
         <div class="bottomLeftTwo" v-show="model" ref="model" @touchend="modelChangeTwo"><p>{{textSearchTwo}}</p></div>
         <div class="bottomLeft" @touchend="modelChange"><p>{{textSearch}}</p></div>
@@ -163,7 +162,7 @@
             <ul class="text" v-show="inputContent"><li v-if="key" v-show="keyText" v-for="key in text" class="textLi" @touchend="searchLi(key)">{{key}}</li></ul>
             <el-input class="input" clearable placeholder="请输入您的问题" v-model="questDetail" @input="search()"></el-input>
           </div>
-        <div class="bottomRight" @click="setQuest"><p>发送</p></div>
+        <div class="bottomRight" @touchend="setQuest"><p>发送</p></div>
       </div>
     </div>
 </div>
@@ -172,11 +171,12 @@
 <script>
   import {CustomerHttp} from '../common/js/http'
   import {distinct} from '../common/js/distinct'
+  import corp from '../../common.json'
 export default {
   name: 'account',
   mounted() {
     var _that = this
-    CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"corp.pars","ver":1}).then(
+    CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"corp.pars","ver":1}).then(
       function(val){
         _that.welcome = val.data.warm_tip
       },function(err){
@@ -214,8 +214,8 @@ export default {
       answerArr: [],
       addItem: false,
       answer:[],
-      randomAnswer:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
-      randomAnswerTwo:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
+      randomAnswer:corp.randomAnswer,
+      randomAnswerTwo:corp.randomAnswer,
       flagTxt:false,
       firstQues:true,
       quest:false,
@@ -229,7 +229,7 @@ export default {
       beforeTxt:'',
       beforeflag:false,
       beforeQuest:false,
-      num:[5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+      num:corp.randomNumber,
       welcome:'',
       robotAnswer:'',
       id:'',
@@ -238,7 +238,8 @@ export default {
       numId:'random',
       numIdB:'randomB',
       serviceNum:0,
-      normalText:0
+      normalText:0,
+      popFlag:false
     }
   },
   methods: {
@@ -281,7 +282,9 @@ export default {
       if(this.numId != a){
         this.numId = a
         for(var i = 0;i<this.answerArr.length;i++){
-          this.randomAnswer[a].push(this.answerArr[i])
+          if(this.randomAnswer[a].length < this.answerArr.length){
+            this.randomAnswer[a].push(this.answerArr[i])
+          }
           if(i == this.answerArr.length-1){
             setTimeout(() =>{
               document.querySelector('#'+'moreAnswerLoadingA'+a).style.display = 'none'
@@ -297,7 +300,9 @@ export default {
       if(this.numIdB != a) {
         this.numIdB = a
         for (var i = 0; i < this.answer.length; i++) {
-          this.randomAnswerTwo[a].push(this.answer[i])
+          if(this.randomAnswerTwo[a].length < this.answerArr.length){
+            this.randomAnswerTwo[a].push(this.answer[i])
+          }
           if (i == this.answer.length - 1) {
             setTimeout(() => {
               document.querySelector('#' + 'moreAnswerLoadingB' + a).style.display = 'none'
@@ -312,11 +317,10 @@ export default {
       var _that = this
       var arr =[];
       this.text = ''
-      localStorage.setItem('quest',this.questDetail)
       if(this.service == false ){
         this.firstQuestTxt.push(this.questDetail)
         this.firstQuest = true
-        CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
+        CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
             var textS = 'moreAnswerLoading' + _that.normalText
@@ -325,30 +329,40 @@ export default {
               document.querySelector("#"+textS).style.display = 'none'
             },10)
             var reg = new RegExp('^'+_that.questDetail,"i")
-            if(typeof(val.data.flag)=='number'){
+            if(val.data.flag!=90010098){
               for(var i = 0;i < val.data.rows.length;i++){
                 arr.push(val.data.rows[i][0])
                 _that.answerArr = arr
                 if(reg.test(val.data.rows[i][0])){
 //                _that.robotAnswer = val.data.rows[i][1].replace(/[a-zA-Z\<\>\&\;]+/,'')
                   _that.robotAnswer = val.data.rows[i][1]
-                  localStorage.setItem('answer',_that.robotAnswer)
+                  if(_that.questDetail!= ''){
+                    localStorage.setItem('quest',_that.questDetail)
+                    localStorage.setItem('answer',_that.robotAnswer)
+                  }
                   _that.answerTxt = true
                   _that.id = val.data.rows[i][5]
                   //玫瑰花茶有什么功效
                 }
               }
-              _that.$nextTick(() => {console.log(!_that.questDetail)
-                _that.$refs.testIndex[_that.idNum].innerHTML = `${_that.robotAnswer}`
+              _that.$nextTick(() => {
+                if(_that.questDetail == ''){
+                  _that.$refs.testIndex[_that.idNum].parentNode.parentNode.style.width = '100%'
+                  _that.$refs.testIndex[_that.idNum].parentNode.lastChild.innerHTML = ''
+                  _that.$refs.testIndex[_that.idNum].innerHTML = "没能理解您的意思哦，换一种问法试试"
+                }else{
+                  _that.$refs.testIndex[_that.idNum].innerHTML = `${_that.robotAnswer}`
+                }
               _that.idNum++
             })
             }else if(!val.data.rows || !_that.questDetail){
               _that.answerTxt = true
               _that.$nextTick(() => {
               _that.$refs.testIndex[_that.idNum].parentNode.parentNode.style.width = '100%'
-              if(!_that.questDetail){
+              if(val.data.rows){
                 _that.$refs.testIndex[_that.idNum].innerHTML = "没能理解您的意思哦，换一种问法试试"
               }else{
+                 _that.$refs.testIndex[_that.idNum].parentNode.lastChild.innerHTML = ''
                 _that.$refs.testIndex[_that.idNum].innerHTML = val.data.msg
               }
               _that.idNum++
@@ -365,7 +379,7 @@ export default {
         this.quest = true
         this.answerTxt = true
 
-        CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
+        CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
             var textC = 'moreAnswerLoadingC' + _that.serviceNum
@@ -374,20 +388,50 @@ export default {
               document.querySelector("#"+textC).style.display = 'none'
           },10)
             var reg = new RegExp(_that.questDetail,"i")
-            for(var i = 0;i < val.data.rows.length;i++){
-              arr.push(val.data.rows[i][0])
-              _that.answer = arr
-              if(reg.test(val.data.rows[i][0])){
-//                _that.robotAnswer = val.data.rows[i][1].replace(/[a-zA-Z\<\>\&\;]+/,'')
-                _that.robotAnswer = val.data.rows[i][1]
-                localStorage.setItem('answer',_that.robotAnswer)
-                _that.answerTxt = true
-                _that.id = val.data.rows[i][5]
-                //玫瑰花茶有什么功效
+            if(val.data.flag!=90010098){
+              for(var i = 0;i < val.data.rows.length;i++){
+                arr.push(val.data.rows[i][0])
+                _that.answer = arr
+                if(reg.test(val.data.rows[i][0])){
+  //                _that.robotAnswer = val.data.rows[i][1].replace(/[a-zA-Z\<\>\&\;]+/,'')
+                  _that.robotAnswer = val.data.rows[i][1]
+                  if(_that.questDetail!= ''){
+                    localStorage.setItem('quest',_that.questDetail)
+                    localStorage.setItem('answer',_that.robotAnswer)
+                  }
+                  _that.answerTxt = true
+                  _that.id = val.data.rows[i][5]
+                  //玫瑰花茶有什么功效
+                }
               }
+            }else if(!val.data.rows || !_that.questDetail){
+              _that.answerTxt = true
+              _that.$nextTick(() => {
+              _that.$refs.testIndexTwo[_that.idNumTwo].parentNode.parentNode.style.width = '100%'
+              if(val.data.rows){
+                _that.$refs.testIndexTwo[_that.idNumTwo].innerHTML = "没能理解您的意思哦，换一种问法试试"
+              }else{
+                if(_that.$refs.testIndexTwo[_that.idNumTwo].parentNode.lastChild.innerHTML){
+                  _that.$refs.testIndexTwo[_that.idNumTwo].parentNode.lastChild.innerHTML = ''
+                }
+                _that.$refs.testIndexTwo[_that.idNumTwo].innerHTML = val.data.msg
+              }
+              _that.idNumTwo++
+            })
             }
             _that.$nextTick(() => {
-              _that.$refs.testIndexTwo[_that.idNumTwo].innerHTML = `${_that.robotAnswer}`
+              if(_that.questDetail == ''){
+                _that.$refs.testIndexTwo[_that.idNumTwo].parentNode.parentNode.style.width = '100%'
+                if(_that.$refs.testIndexTwo[_that.idNumTwo].parentNode.lastChild.innerHTML){
+                  _that.$refs.testIndexTwo[_that.idNumTwo].parentNode.lastChild.innerHTML = ''
+                }
+                _that.$refs.testIndexTwo[_that.idNumTwo].innerHTML = "没能理解您的意思哦，换一种问法试试"
+              }else{
+                console.log(typeof _that.questDetail)
+                if(typeof _that.questDetail != 'number'){
+                  _that.$refs.testIndexTwo[_that.idNumTwo].innerHTML = `${_that.robotAnswer}`
+                }
+              }
             _that.idNumTwo++
           })
           },function(err){
@@ -410,7 +454,7 @@ export default {
       var _that = this
       this.firstQuestTxt.push(a)
       this.firstQuest = true
-      CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":a,
+      CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":a,
         "size":20,"ver":1}).then(
         function(val){
           var textS = 'moreAnswerLoading' + _that.normalText
@@ -445,7 +489,7 @@ export default {
       var _that = this
       this.questTxt.push(a)
       this.quest = true
-      CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":a,
+      CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":a,
         "size":20,"ver":1}).then(
         function(val){
           var textC = 'moreAnswerLoadingC' + _that.serviceNum
@@ -481,7 +525,7 @@ export default {
           var arr =[]
           var newArr=[]
 
-          CustomerHttp.httpPost('/api/qx',{"corp_id":this.corp_id,"cmd":"robot.smart.answer","ask":_that.questDetail,
+          CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":_that.questDetail,
             "size":20,"ver":1}).then(function (val) {
               if(_that.questDetail!='' && _that.textSearch =='检索'&& val.data.flag!=90010098){
                                 console.log('ok')
@@ -506,6 +550,8 @@ export default {
       },
     searchLi(a){
       this.questDetail = a
+      this.inputContent = false
+
     },
     modelChange(){
       this.$refs.model.style.top = '-53%'
@@ -684,4 +730,11 @@ export default {
     font-size:0.1rem;
     line-height:0.6rem;
     border-bottom:1px solid #c7c8cb;
+.pop
+  position:fixed;
+  height:100%;
+  width:100%;
+  background: black;
+  opacity:0.4;
+  z-index:10
 </style>

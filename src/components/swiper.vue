@@ -18,6 +18,7 @@
     </ul>
     <div class="brief clearfix" >
       <!-- <router-link to='/detail'> -->
+        <div class="noneText" v-show="noneText">暂无更多内容，请看其他栏目</div>
         <div  :id="Index" name="text" >
           <div class="box clearfix info" v-for="(item,key) in titleIndex"  @click="toDetail(textPlace[key],item)">
             <img  src="../common/image/swiper.jpg" alt="">
@@ -141,7 +142,8 @@ export default {
         textPlace:[],
         loading:true,
         moreAnswerLoading:true,
-        own:false
+        own:false,
+        noneText:false
     }
   },
       components:{
@@ -179,8 +181,10 @@ export default {
 //            对有无数据进行判断，此处可以做交互
             if(!(localStorage.getItem(this.id))){
               //移除所有节点
+              that.noneText = true
               f.style.display = 'none'
             }else{
+              that.noneText = false
               that.titleIndex = localStorage.getItem(this.id).split(',')
               f.style.display = 'block'
             }
@@ -190,10 +194,12 @@ export default {
       }
       //loading退去
       this.loading=false
-        if(num == 0 &&(localStorage.getItem(lis[0].id))){
+      if(num == 0 &&(localStorage.getItem(lis[0].id))){
         that.titleIndex = localStorage.getItem(lis[0].id).split(',')
         num++
-       }
+      }else if(!(localStorage.getItem(lis[0].id))){
+        that.noneText = true
+      }
 
     }
   },
@@ -268,6 +274,7 @@ a{
   -moz-text-overflow:ellipsis;
 }
 .middle .brief{
+  position: relative;
   width:78%;
   height:70vh;
   overflow-y:auto;
@@ -319,6 +326,15 @@ a{
 .loadingImg{
   height:20px;
   width:100%;
+}
+.noneText{
+  position: absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  width:100%;
+  font-size: 16px;
+
 }
 </style>
 
