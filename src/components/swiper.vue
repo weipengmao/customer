@@ -21,10 +21,13 @@
         <div class="noneText" v-show="noneText">暂无更多内容，请看其他栏目</div>
         <div  :id="Index" name="text" >
           <div class="box clearfix info" v-for="(item,key) in titleIndex"  @click="toDetail(textPlace[key],item)">
-            <img  src="../common/image/swiper.jpg" alt="">
+            <div>
+                <div v-show="moreAnswerLoadingA" class="loadingImgA"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
+                <img  :src="imgIndex[key]=='none'?backgroundImg:imgIndex[key]" alt="">
+            </div>
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
-              <p class="content" > {{textData[key]}}
+              <p class="content" > {{titleContent[key]}}
               <div v-show="moreAnswerLoading" class="loadingImg"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
               </p>
 
@@ -51,11 +54,9 @@
   import Vue from 'vue'
 export default {
   created(){
-    
-    
+    const localPath = 'http://www.health-vi.com'
     var that = this
     var arrOne =[]
-    var arrTwo
     var text1
     function decode(text){
           return text.replace(/<[^>]+>/g,"").replace(/&nbsp;/g,"");
@@ -63,7 +64,6 @@ export default {
 
     CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
-        // console.log(val.data)
         var Data = val.data.rows
           for(var i =0 ;i<Data.length;i++) {
             if(that.$route.query.titleIndex == Data[i][2]){
@@ -72,41 +72,51 @@ export default {
                 "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
                 "page_num": 0, "url": "qx"
               }).then(function (val) {
-                if(val.status == 200){
-                  setTimeout(()=>{
-                    that.moreAnswerLoading = false
-                  },800)
-                }
                 var placeData = []
+                var arrTwo =[]
+                var imgIndex =[]
                 for (var z = 0; z < val.data.rows.length; z++) {
                   var text = val.data.rows[z][0]
-                  // console.log(text)
+                  var placeName = val.data.rows[z][1]
+                  var placeNameA = placeName+'a'
+                  var placeNameB = placeName+'b'
                   if(text!=''){
-                    CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then(function(val){
+                    CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then((val)=>{
+                      if(val.status == 200){
+                        that.moreAnswerLoading = false
+                      }
+                      if(val.data.att.match(/\/.+g/)){
+                        imgIndex.push(localPath + val.data.att.match(/\/.+g/)[0])
+                      }else{
+                        imgIndex.push('none')
+                      }
+                      localStorage.setItem(placeNameB,imgIndex) 
                       if(val.data){
-                      // console.log(val.data) 
-                      text1=val.data.ans
-                      text1=decode(text1)
-                      that.textData.push(text1)
-                      that.textPlace.push(text1) 
+                        text1=val.data.ans
+                        text1=decode(text1)
+                        that.textData.push(text1)
+                        that.textPlace.push(text1)
+                        arrTwo.push(text1)
+                        localStorage.setItem(placeNameA,arrTwo) 
                       }
 
                     })
                   }else{
                     that.own=true
                   }
-                  var placeName = val.data.rows[z][1]
+
                   placeData.push(val.data.rows[z][2])
                   arrOne.push(placeName)
+                  arrOne = distinct(arrOne)
                   if(placeName){
                     localStorage.setItem(placeName,placeData)
                   }
                   that.Index = distinct(arrOne)
+            
                 }
               })
             }
           }
- 
 
         setTimeout(()=>{
           that._req()
@@ -136,12 +146,16 @@ export default {
         swiperSlides: [1, 2, 3, 4],
         items:[],
         titleIndex:[],
+        titleContent:[],
         Index:[],
         textData:[],
         textIndex:[],
         textPlace:[],
+        imgIndex:[],
+        backgroundImg:require('../common/image/swiper.jpg'),
         loading:true,
         moreAnswerLoading:true,
+        moreAnswerLoadingA:true,
         own:false,
         noneText:false
     }
@@ -156,8 +170,10 @@ export default {
       this.$router.push('/')
     },
     // 进入详情页
-    toDetail(id,title){
-      this.$router.push({path:"/detail",query:{id:id,title:title}})
+    toDetail(id,title){ 
+      if(this.moreAnswerLoading == false){
+        this.$router.push({path:"/detail",query:{id:id,title:title}})
+      }
     },
     _req(){
       var that = this
@@ -186,6 +202,9 @@ export default {
             }else{
               that.noneText = false
               that.titleIndex = localStorage.getItem(this.id).split(',')
+              that.titleContent = localStorage.getItem(this.id+'a').split(',')
+              that.imgIndex = localStorage.getItem(this.id+'b').split(',')
+              that.moreAnswerLoadingA = false
               f.style.display = 'block'
             }
           }else{
@@ -196,6 +215,9 @@ export default {
       this.loading=false
       if(num == 0 &&(localStorage.getItem(lis[0].id))){
         that.titleIndex = localStorage.getItem(lis[0].id).split(',')
+        that.titleContent = localStorage.getItem(lis[0].id+'a').split(',')
+        that.imgIndex = localStorage.getItem(lis[0].id+'b').split(',')
+        that.moreAnswerLoadingA = false
         num++
       }else if(!(localStorage.getItem(lis[0].id))){
         that.noneText = true
@@ -292,6 +314,7 @@ a{
   width:4.5rem;font-size: 0.42rem;float:left;
   margin-left:0.2rem;
   letter-spacing: 0;
+  position: relative;
 }
 
 .inbox .title{
@@ -304,12 +327,12 @@ a{
 .inbox .content{
   width:100%;
   line-height: 0.5rem;
-                  word-break: break-all;
-                    text-overflow: ellipsis;
-                    display: -webkit-box; /** 将对象作为伸缩盒子模型显示 **/
-                    -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
-                    -webkit-line-clamp: 3; /** 显示的行数 **/
-                    overflow: hidden;  /** 隐藏超出的内容 **/
+  word-break: break-all;
+  text-overflow: ellipsis;
+  display: -webkit-box; /** 将对象作为伸缩盒子模型显示 **/
+  -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+  -webkit-line-clamp: 3; /** 显示的行数 **/
+  overflow: hidden;  /** 隐藏超出的内容 **/
 }
 .active{
   background:#fff !important;
@@ -322,10 +345,23 @@ a{
   width:20px !important;
   text-align:center !important;
   float:none !important;
+  position: absolute;
+    /* right: 50%; */
+  top: 50%;
+}
+.loadingImgA img{
+  width:20px !important;
+  text-align:center !important;
+  top: 50%;
+  margin-top: 36%;
+  margin-left: 36%;
 }
 .loadingImg{
-  height:20px;
   width:100%;
+}
+.loadingImgA{
+  width: 2.5rem;
+  float: left;
 }
 .noneText{
   position: absolute;

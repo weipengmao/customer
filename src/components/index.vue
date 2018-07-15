@@ -44,11 +44,24 @@
 <script>
 import {CustomerHttp} from '../common/js/http'
 import indexArr from  '../../common.json'
+import jsonp from '../common/js/jsonp'
+import Vue from 'vue'
 export default {
   mounted(){
+    const appid = 'wx7e88240ec21db9f6'
+    const code = CustomerHttp.getUrlParam('code')
+    const local = window.location.href
     CustomerHttp.httpPost('/api/qx',{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
+    if(code == null || code == ''){
+        location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&
+        redirect_uri=${encodeURIComponent(local)}&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect`
+    }else{
+        jsonp('https://api.weixin.qq.com/sns/oauth2/component/access_token',{"appid":appid,"code":code,"grant_type":"authorization_code","component_appid":"COMPONENT_APPID",
+        "component_access_token":"COMPONENT_ACCESS_TOKEN"}).then(function(val){
+            Vue.prototype.oppenId = val.data.openid
+        })
+    }
     this._req(this.items)
-
     //随机函数
     var num = 10;
     var randomNum = parseInt(Math.random()*num)

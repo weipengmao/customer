@@ -111,9 +111,9 @@
               <p align="left">亲爱的VIP客户，现在为人工服务模式，请问能帮到您什么？。
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @touchend="serviceDetail"><span
+              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" ><span
               style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem" @touchend="serviceDetail">人工客服</span>
+            float:left;line-height:1.10rem">人工客服</span>
               <!--<img :src="heartBeat" alt="" style="float:left" @touchend="changeBeat(item-1)" ref="changeBeat">-->
             </div>
           </div>
@@ -172,6 +172,7 @@
   import {CustomerHttp} from '../common/js/http'
   import {distinct} from '../common/js/distinct'
   import corp from '../../common.json'
+  import Vue from 'vue'
 export default {
   name: 'account',
   mounted() {
@@ -441,7 +442,11 @@ export default {
       }
     },
     serviceDetail(){
-      this.service = true
+      if(Vue.prototype.oppenId){
+        this.service = true
+      }else{
+        //openid不存在的时候交互
+      }
     },
     info(a,key,item){
 //      var reg = /【---.*---】/

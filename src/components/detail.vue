@@ -27,8 +27,8 @@
       </div>
       <!-- 附件 -->
       <div class="bottom clearfix">
-        <p class="clearfix"> <span>附件1：《猪肉的营养价值》</span>    <img src="../assets/arrow.jpg" alt=""></p>
-        <p class="clearfix"> <span>附件2：《猪肉怎么吃最健康？》</span>    <img src="../assets/arrow.jpg" alt=""></p>
+        <p class="clearfix"> <span>附件：{{title}}</span>    <img src="../assets/arrow.jpg" alt=""></p>
+        <!-- <p class="clearfix"> <span>附件2：《猪肉怎么吃最健康？》</span>    <img src="../assets/arrow.jpg" alt=""></p> -->
       </div>
     </div>
     </div>
