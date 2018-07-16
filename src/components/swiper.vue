@@ -23,7 +23,7 @@
           <div class="box clearfix info" v-for="(item,key) in titleIndex"  @click="toDetail(textPlace[key],item)">
             <div>
                 <div v-show="moreAnswerLoadingA" class="loadingImgA"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
-                <img  :src="imgIndex[key]=='none'?backgroundImg:imgIndex[key]" alt="">
+                <img  v-lazy="imgIndex[key]=='none'?backgroundImg:imgIndex[key]" alt="">
             </div>
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
