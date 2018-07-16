@@ -40,11 +40,12 @@
   import {CustomerHttp} from '../common/js/http'
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  const root = process.env.API_HOST
 export default {
 
   mounted(){
     // 附件接口
-    //   CustomerHttp.httpPost('/api/qx',{
+    //   CustomerHttp.httpPost(`${root}qx`,{
     //   "cmd":"faqspc.r","faq_id":id,"ver":1}).then(
     //   function(res){
     //     var content=res.data.ans
@@ -98,7 +99,7 @@ export default {
     // 收藏功能接口
     like(val){
         var  id=this.$route.query.id
-                    CustomerHttp.httpPost('/api/qx',{
+                    CustomerHttp.httpPost(`${root}qx`,{
         // "url":"qx",
         "cmd":"qas.support.w","id":id,"ver":1,tye:val}).then(
         function(res){
@@ -142,7 +143,6 @@ a{
 }
 .contentBoxAuto{
   width:100%;
-
   height:13rem;
   overflow-y: auto;
 }

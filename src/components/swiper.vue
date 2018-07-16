@@ -52,6 +52,7 @@
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import Vue from 'vue'
+  const root = process.env.API_HOST
 export default {
   created(){
     const localPath = 'http://www.health-vi.com'
@@ -62,13 +63,13 @@ export default {
           return text.replace(/<[^>]+>/g,"").replace(/&nbsp;/g,"");
     }
 
-    CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
+    CustomerHttp.httpPost(`${root}qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
         var Data = val.data.rows
           for(var i =0 ;i<Data.length;i++) {
             if(that.$route.query.titleIndex == Data[i][2]){
               that.items.push(Data[i])
-              CustomerHttp.httpPost('/api/qx', {
+              CustomerHttp.httpPost(`${root}qx`, {
                 "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
                 "page_num": 0, "url": "qx"
               }).then(function (val) {
@@ -81,7 +82,7 @@ export default {
                   var placeNameA = placeName+'a'
                   var placeNameB = placeName+'b'
                   if(text!=''){
-                    CustomerHttp.httpPost('/api/qx',{"cmd":"faqspc.r","ver":1,"faq_id":text}).then((val)=>{
+                    CustomerHttp.httpPost(`${root}qx`,{"cmd":"faqspc.r","ver":1,"faq_id":text}).then((val)=>{
                       if(val.status == 200){
                         that.moreAnswerLoading = false
                       }
@@ -98,6 +99,11 @@ export default {
                         that.textPlace.push(text1)
                         arrTwo.push(text1)
                         localStorage.setItem(placeNameA,arrTwo) 
+
+                        placeData.push(val.data.ask)
+                        if(placeName){
+                          localStorage.setItem(placeName,placeData)
+                        }
                       }
 
                     })
@@ -105,14 +111,10 @@ export default {
                     that.own=true
                   }
 
-                  placeData.push(val.data.rows[z][2])
                   arrOne.push(placeName)
                   arrOne = distinct(arrOne)
-                  if(placeName){
-                    localStorage.setItem(placeName,placeData)
-                  }
                   that.Index = distinct(arrOne)
-            
+
                 }
               })
             }
@@ -186,6 +188,7 @@ export default {
       for(let i=0;i<lis.length;i++){
         this.num=lis[i];
         lis[i].ontouchend=function(){
+          console.log('click')
           if(!this.classList.contains('active')){
             for(let j=0;j<lis.length;j++){
               lis[j].classList.remove('active');
@@ -305,6 +308,8 @@ a{
 .middle .brief .box{
   width:100%;padding:0.2rem;
   padding-right:0;
+  height: 2.8rem;
+  overflow: hidden;
 }
 .middle .brief .box img{
   width:2.5rem;
@@ -333,6 +338,7 @@ a{
   -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
   -webkit-line-clamp: 3; /** 显示的行数 **/
   overflow: hidden;  /** 隐藏超出的内容 **/
+  height: 11.5vh;
 }
 .active{
   background:#fff !important;

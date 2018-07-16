@@ -20,28 +20,25 @@
 
           <div class="content" v-if="beforeflag" >
             <img src="../common/image/robot_profile.png" class="contentImg" >
-            <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
+            <div class="contentBox" style="width:80%;margin-right:0.1rem;" >
               <p align="left">{{history}}
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-              <img :src="heart" alt="" style="float:left" >
-              <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" >更多</p>
             </div>
           </div>
 
           <div class="content" style="width:100%"  ref="beforeItem">
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;" v-show="false">
-            <div class="contentBox" style="width:70%;margin-right:0.9rem;" v-show="false">
+            <div class="contentBox" style="width:70%;margin-right:0.1rem;" v-show="false">
             <div v-for="(item,key) in answer">
               <p align="left">{{item}}
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
             </div>
             <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @touchend="serviceDetail"><span
-            style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            style="font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             float:left;line-height:1.10rem" >转人工客服</span>
-            <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            <p style="float:right;font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             line-height:0.5rem;" >更多</p>
           </div>
             <div class="service" v-if="historyText">
@@ -70,13 +67,13 @@
           <!--<div style="float:left;margin:0rem auto;width:100%;">loading</div>-->
           <div class="content" v-if="answerTxt" ref="item" >
             <img src="../common/image/robot_profile.png" class="contentImg" >
-            <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
+            <div class="contentBox" style="width:80%;margin-right:0.1rem;" >
               <div :id="'moreAnswerLoading'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
               <p align="left" :id="id" ref="testIndex">
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               <img :src="heart" alt="" style="float:left" @touchend="changeStyle(item)" ref="changeSty">
-              <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+              <p style="float:right;font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             line-height:0.5rem;" @touchend="moreAnswer(item)" >更多</p>
             </div>
           </div>
@@ -85,16 +82,16 @@
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div :id="'moreAnswerLoadingA'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div v-for="(items,key) in randomAnswer[item]" :id="items" @touchend="info(items,key,item)">
+              <div v-for="(items,key) in randomAnswer[item]" :id="items" @click="info(items,key,item)">
                 <p align="left" >{{items}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               </div>
-              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @touchend="serviceDetail"><span
-              style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            float:left;line-height:1.10rem" @touchend="serviceDetail">转人工客服</span>
-              <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @touchend="addText(item)">更多</p>
+              <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
+              style="font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            float:left;line-height:1.10rem" @click="serviceDetail">转人工客服</span>
+              <p style="float:right;font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            line-height:0.5rem;" @click="addText(item)">更多</p>
             </div>
           </div>
         </div>
@@ -107,12 +104,12 @@
           </div>
           <div style="float:left">
             <img src="../common/image/service_profile.png" class="contentImgService">
-            <div class="contentBoxService" style="width:80%;margin-right:0.22rem;">
+            <div class="contentBoxService" style="width:80%;margin-right:0.1rem;">
               <p align="left">亲爱的VIP客户，现在为人工服务模式，请问能帮到您什么？。
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" ><span
-              style="font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+              style="font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
             float:left;line-height:1.10rem">人工客服</span>
               <!--<img :src="heartBeat" alt="" style="float:left" @touchend="changeBeat(item-1)" ref="changeBeat">-->
             </div>
@@ -129,14 +126,14 @@
 
           <div class="content" v-if="answerTxt" ref="itemTwo">
             <img src="../common/image/robot_profile.png" class="contentImg" >
-            <div class="contentBox" style="width:80%;margin-right:0.22rem;" >
+            <div class="contentBox" style="width:80%;margin-right:0.1rem;" >
               <div :id="'moreAnswerLoadingC'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
               <p align="left" ref="testIndexTwo">
               </p>
               <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               <img :src="heart" alt="" style="float:left" @touchend="changeStyle">
-              <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @touchend="moreAnswerTwo(item)" >更多</p>
+              <p style="float:right;font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            line-height:0.5rem;" @click="moreAnswerTwo(item)" >更多</p>
             </div>
           </div>
 
@@ -144,13 +141,13 @@
             <img src="../common/image/robot_profile.png" class="contentImg" style="margin-left:0;">
             <div :id="'moreAnswerLoadingB'+item"><img src="../../static/loading.gif" width="20px" height="20px" alt=""></div>
             <div class="contentBox" style="width:70%;margin-right:0.9rem;">
-              <div v-for="(items,key) in answer" @touchend="infoTwo(items,key,item)">
+              <div v-for="(items,key) in answer" @click="infoTwo(items,key,item)">
                 <p align="left">{{items}}
                 </p>
                 <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
               </div>
-              <p style="float:right;font-size:0.1rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-            line-height:0.5rem;" @touchend="addText(item)">更多</p>
+              <p style="float:right;font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
+            line-height:0.5rem;" @click="addText(item)">更多</p>
             </div>
           </div>
         </div>
@@ -171,13 +168,13 @@
 <script>
   import {CustomerHttp} from '../common/js/http'
   import {distinct} from '../common/js/distinct'
-  import corp from '../../common.json'
   import Vue from 'vue'
+  const root = process.env.API_HOST
 export default {
   name: 'account',
   mounted() {
     var _that = this
-    CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"corp.pars","ver":1}).then(
+    CustomerHttp.httpPost(`${root}qx`,{"corp_id":CustomerHttp.common.corp_id,"cmd":"corp.pars","ver":1}).then(
       function(val){
         _that.welcome = val.data.warm_tip
       },function(err){
@@ -215,8 +212,8 @@ export default {
       answerArr: [],
       addItem: false,
       answer:[],
-      randomAnswer:corp.randomAnswer,
-      randomAnswerTwo:corp.randomAnswer,
+      randomAnswer:CustomerHttp.common.randomAnswer,
+      randomAnswerTwo:CustomerHttp.common.randomAnswer,
       flagTxt:false,
       firstQues:true,
       quest:false,
@@ -230,7 +227,7 @@ export default {
       beforeTxt:'',
       beforeflag:false,
       beforeQuest:false,
-      num:corp.randomNumber,
+      num:CustomerHttp.common.randomNumber,
       welcome:'',
       robotAnswer:'',
       id:'',
@@ -321,7 +318,7 @@ export default {
       if(this.service == false ){
         this.firstQuestTxt.push(this.questDetail)
         this.firstQuest = true
-        CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
+        CustomerHttp.httpPost(`${root}qx`,{"corp_id":CustomerHttp.common.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
             var textS = 'moreAnswerLoading' + _that.normalText
@@ -380,7 +377,7 @@ export default {
         this.quest = true
         this.answerTxt = true
 
-        CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
+        CustomerHttp.httpPost(`${root}qx`,{"corp_id":CustomerHttp.common.corp_id,"cmd":"robot.smart.answer","ask":this.questDetail,
           "size":20,"ver":1}).then(
           function(val){
             var textC = 'moreAnswerLoadingC' + _that.serviceNum
@@ -459,7 +456,7 @@ export default {
       var _that = this
       this.firstQuestTxt.push(a)
       this.firstQuest = true
-      CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":a,
+      CustomerHttp.httpPost(`${root}qx`,{"corp_id":CustomerHttp.common.corp_id,"cmd":"robot.smart.answer","ask":a,
         "size":20,"ver":1}).then(
         function(val){
           var textS = 'moreAnswerLoading' + _that.normalText
@@ -494,7 +491,7 @@ export default {
       var _that = this
       this.questTxt.push(a)
       this.quest = true
-      CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":a,
+      CustomerHttp.httpPost(`${root}qx`,{"corp_id":CustomerHttp.common.corp_id,"cmd":"robot.smart.answer","ask":a,
         "size":20,"ver":1}).then(
         function(val){
           var textC = 'moreAnswerLoadingC' + _that.serviceNum
@@ -530,10 +527,10 @@ export default {
           var arr =[]
           var newArr=[]
 
-          CustomerHttp.httpPost('/api/qx',{"corp_id":corp.corp_id,"cmd":"robot.smart.answer","ask":_that.questDetail,
+          CustomerHttp.httpPost(`${root}qx`,{"corp_id":CustomerHttp.common.corp_id,"cmd":"robot.smart.answer","ask":_that.questDetail,
             "size":20,"ver":1}).then(function (val) {
               if(_that.questDetail!='' && _that.textSearch =='检索'&& val.data.flag!=90010098){
-                                console.log('ok')
+                  _that.inputContent = true
                   _that.text=[]
                   for(var j=0;j< val.data.rows.length;j++){
                     arr.push(val.data.rows[j][0])
@@ -559,7 +556,15 @@ export default {
 
     },
     modelChange(){
-      this.$refs.model.style.top = '-53%'
+      var _that = this
+      if(this.$refs.model.style.top!='0.2rem'){
+        document.addEventListener('click',function(){
+            _that.$refs.model.style.top = '0.2rem'
+        })
+      }
+      setTimeout(()=>{
+        this.$refs.model.style.top = '-53%'
+      },30)
     },
     modelChangeTwo(){
       if(this.textSearchTwo == '标准'){
@@ -576,170 +581,199 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="stylus">
-.container
+<style scoped >
+.container{
   height:100vh;
   width:100%;
-  .center
-    overflow-y:auto;
-    height:80%;
-  .header
-    height:1.8rem;
-    background:#4D4D4D;
-    .headerText
-      font-size:0.5rem;
-      font-family:SourceHanSansCN-Bold;
-      color:rgba(255,255,255,1);
-      line-height:0px;
-      float:left;
-      display:inline-block;
-      margin:0.99rem 0 0 0.4rem;
-      font-weight:Bold;
-    .headerImg
-      float:right;
-      width:1.1rem;
-      height:1.7rem;
-  .content
-    float:left
-  .contentBox
-    background:rgba(145,237,97,1);
-    border-radius:0px 9px 9px 9px;
-    width:5rem;
-    display:inline-block;
-    margin-top:0.65rem;
-    transition:all 0.3s;
-    p
-      font-size:0.1rem;
-      font-family:SourceHanSansCN-Normal;
-      color:rgba(77,77,77,1);
-      line-height:20px;
-      margin:0.3rem;
-  .contentImg
-    display:inline-block;
-    width:1.2rem;
-    margin:0.6rem 0 0 0.3rem;
-    vertical-align:top;
-  .contentRight
-    float:right;
-    margin:0.65rem 0.22rem 0 0;
-    .rightContent
-      width:4rem;
-      background:rgba(233,233,233,1);
-      border-radius:9px 0px 9px 9px;
-      p
-        display:inline-block;
-        font-size:0.1rem;
-        font-family:SourceHanSansCN-Normal;
-        color:rgba(77,77,77,1);
-        vertical-align:middle;
-        padding:0.3rem;
-  .service
-    width:100%;
-    position:relative
-  .serviceText
-    font-size:0.25rem;
-    font-family:SourceHanSansCN-Normal;
-    color:#cac1c1;
-    margin-top:0.1rem;
-    line-height:1.3rem;
-  .contentService
-    width:100%;
-    float:left
-  .contentBoxService
-    background:rgba(145,237,97,1);
-    border-radius:0px 9px 9px 9px;
-    display:inline-block;
-    margin-top:5px;
-    p
-      font-size:0.1rem;
-      font-family:SourceHanSansCN-Normal;
-      color:rgba(77,77,77,1);
-      line-height:20px;
-      margin:0.3rem;
-  .contentImgService
-    width:1.2rem;
-    display:inline-block;
-    margin:0 0 0.85rem 0.3rem;
-    vertical-align:top;
-  .bottom
-    margin-top:0.2rem;
-    position:relative;
-    .bottomLeft
-      left:0.45rem;
-      top:0.2rem;
-      position:absolute;
-      width:1rem;
-      height:1rem;
-      background:rgba(26,173,25,1);
-      border-radius:50%;
-      p
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translateX(-50%);
-        font-size:0.2rem;
-        width:10rem;
-        font-family:SourceHanSansCN-Normal;
-        color:rgba(255,255,255,1);
-        line-height:0px;
-    .bottomLeftTwo
-      left:0.45rem;
-      top:0.2rem;
-      position:absolute;
-      width:1rem;
-      height:1rem;
-      background:rgba(26,173,25,1);
-      border-radius:50%;
-      transition:all 0.5s;
-      p
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translateX(-50%);
-        font-size:0.2rem;
-        width:10rem;
-        font-family:SourceHanSansCN-Normal;
-        color:rgba(255,255,255,1);
-        line-height:0px;
-    .bottomRight
-      position:absolute;
-      right:0.3rem;
-      top:0.2rem;
-      width:1.3rem;
-      height:1rem;
-      background:rgba(26,173,25,1);
-      border-radius:9px;
-      p
-        width:1.5rem;
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translateX(-50%);
-        font-size:0.2rem;
-        font-family:SourceHanSansCN-Normal;
-        color:rgba(255,255,255,1);
-        line-height:0px;
-    .input
-      width:65%;
-  .text
-    position:absolute
-    bottom:85%;
-    left:50%;
-    transform:translate(-50%);
-    width: 65%;
-    border:1px solid #c7c8cb;
-    border-bottom:none;
-    border-radius:10px 10px 0px 0px;
-    background:white;
-  .textLi
-    font-size:0.1rem;
-    line-height:0.6rem;
-    border-bottom:1px solid #c7c8cb;
-.pop
+}
+.center{
+  overflow-y:auto;
+  height:80%;
+}
+.header{
+  height:1.8rem;
+  background:#4D4D4D;
+}
+.headerText{
+  font-size:0.5rem;
+  font-family:SourceHanSansCN-Bold;
+  color:rgba(255,255,255,1);
+  line-height:0px;
+  float:left;
+  display:inline-block;
+  margin:0.99rem 0 0 0.4rem;
+  font-weight:Bold;
+}
+.headerImg{
+  float:right;
+  width:1.1rem;
+  height:1.7rem;
+}
+.content{
+  float:left
+}
+.contentBox{
+  background:rgba(145,237,97,1);
+  border-radius:0px 9px 9px 9px;
+  width:5rem;
+  display:inline-block;
+  margin-top:0.65rem;
+  transition:all 0.3s;
+}
+.contentBox p{
+  font-size:0.4rem;
+  font-family:SourceHanSansCN-Normal;
+  color:rgba(77,77,77,1);
+  line-height:20px;
+  margin:0.3rem;
+}
+.contentImg{
+  display:inline-block;
+  width:1.2rem;
+  margin:0.6rem 0 0 0.3rem;
+  vertical-align:top;
+}
+.contentRight{
+  float:right;
+  margin:0.65rem 0.22rem 0 0;
+}
+.rightContent{
+  width:4rem;
+  background:rgba(233,233,233,1);
+  border-radius:9px 0px 9px 9px;
+}
+.rightContent p{
+  display:inline-block;
+  font-size:0.4rem;
+  font-family:SourceHanSansCN-Normal;
+  color:rgba(77,77,77,1);
+  vertical-align:middle;
+  padding:0.3rem;
+}  
+.service{
+  width:100%;
+  position:relative
+}
+.serviceText{
+  font-size:0.25rem;
+  font-family:SourceHanSansCN-Normal;
+  color:#cac1c1;
+  margin-top:0.1rem;
+  line-height:1.3rem;
+}
+.contentService{
+  width:100%;
+  float:left
+}
+.contentBoxService{
+  background:rgba(145,237,97,1);
+  border-radius:0px 9px 9px 9px;
+  display:inline-block;
+  margin-top:5px;
+}
+.contentBoxService p{
+  font-size:0.1rem;
+  font-family:SourceHanSansCN-Normal;
+  color:rgba(77,77,77,1);
+  line-height:20px;
+  margin:0.3rem;
+}
+.contentImgService{
+  width:1.2rem;
+  display:inline-block;
+  margin:0 0 0.85rem 0.3rem;
+  vertical-align:top;
+}
+.bottom{
+  margin-top:0.2rem;
+  position:relative;
+}
+.bottomLeft{
+  left:0.45rem;
+  top:0.2rem;
+  position:absolute;
+  width:1rem;
+  height:1rem;
+  background:rgba(26,173,25,1);
+  border-radius:50%;
+}
+.bottomLeft p{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:0.4rem;
+  width:10rem;
+  font-family:SourceHanSansCN-Normal;
+  color:rgba(255,255,255,1);
+  line-height:0px;
+}  
+.bottomLeftTwo{
+  left:0.45rem;
+  top:0.2rem;
+  position:absolute;
+  width:1rem;
+  height:1rem;
+  background:rgba(26,173,25,1);
+  border-radius:50%;
+  transition:all 0.5s;
+}
+.bottomLeftTwo p{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:0.4rem;
+  width:10rem;
+  font-family:SourceHanSansCN-Normal;
+  color:rgba(255,255,255,1);
+  line-height:0px;
+} 
+.bottomRight{
+  position:absolute;
+  right:0.3rem;
+  top:0.2rem;
+  width:1.3rem;
+  height:1rem;
+  background:rgba(26,173,25,1);
+  border-radius:9px;
+}
+.bottomRight p{
+  width:1.5rem;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:0.4rem;
+  font-family:SourceHanSansCN-Normal;
+  color:rgba(255,255,255,1);
+  line-height:0px;
+}
+.input{
+  width:65%;
+}
+.text{
+  position:absolute;
+  bottom:85%;
+  left:50%;
+  transform:translate(-50%);
+  width: 65%;
+  border:1px solid #c7c8cb;
+  border-bottom:none;
+  border-radius:10px 10px 0px 0px;
+  background:white;
+}
+.textLi{
+  font-size:0.4rem;
+  line-height:0.6rem;
+  border-bottom:1px solid #c7c8cb;
+}
+.pop{
   position:fixed;
   height:100%;
   width:100%;
   background: black;
   opacity:0.4;
   z-index:10
+}
 </style>

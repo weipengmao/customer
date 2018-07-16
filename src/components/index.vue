@@ -43,24 +43,25 @@
 
 <script>
 import {CustomerHttp} from '../common/js/http'
-import indexArr from  '../../common.json'
 import jsonp from '../common/js/jsonp'
 import Vue from 'vue'
+var root = process.env.API_HOST
 export default {
   mounted(){
-    const appid = 'wx7e88240ec21db9f6'
-    const code = CustomerHttp.getUrlParam('code')
-    const local = window.location.href
-    CustomerHttp.httpPost('/api/qx',{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
-    if(code == null || code == ''){
-        location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&
-        redirect_uri=${encodeURIComponent(local)}&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect`
-    }else{
-        jsonp('https://api.weixin.qq.com/sns/oauth2/component/access_token',{"appid":appid,"code":code,"grant_type":"authorization_code","component_appid":"COMPONENT_APPID",
-        "component_access_token":"COMPONENT_ACCESS_TOKEN"}).then(function(val){
-            Vue.prototype.oppenId = val.data.openid
-        })
-    }
+    // const appid = 'wx7e88240ec21db9f6'
+    // const code = CustomerHttp.getUrlParam('code')
+    // const local = window.location.href
+    CustomerHttp.httpPost(`${root}/qx`,{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
+    // if(code == null || code == ''){
+    //     location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&
+    //     redirect_uri=${encodeURIComponent('localhost:8080')}&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect`
+    // }else{
+    //     jsonp('https://api.weixin.qq.com/sns/oauth2/component/access_token',{"appid":appid,"code":code,"grant_type":"authorization_code","component_appid":"COMPONENT_APPID",
+    //     "component_access_token":"COMPONENT_ACCESS_TOKEN"}).then(function(val){
+    //       console.log(val)
+    //         Vue.prototype.oppenId = val.data.openid
+    //     })
+    // }
     this._req(this.items)
     //随机函数
     var num = 10;
@@ -79,7 +80,7 @@ export default {
       this.point = e.targetTouches[0].pageY - this.pointY
     })
     text.addEventListener('touchend', function (e) {
-      console.log(this.point)
+
       if (this.point < 0) {
         nav.style.top = 18 + '%'
         that.flag = true
@@ -127,7 +128,7 @@ export default {
     return{
       words:['我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
       //随机配置
-      randomWord:indexArr.indexArr,
+      randomWord:CustomerHttp.common.indexArr,
       items:[],
       hideWords:true,
       num:0,
@@ -141,7 +142,7 @@ export default {
   methods:{
     _req(arr){
       var that=this;
-      CustomerHttp.httpPost('/api/qx',{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
+      CustomerHttp.httpPost(`${root}/qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
         function(val){
           const Data = val.data.rows
           for(var i =0;i<Data.length;i++){
@@ -170,7 +171,7 @@ export default {
   width:100%;
   height:100vh;
   box-sizing: border-box;
-  background:url(../assets/bgimg.png) center center no-repeat;
+  background:url(../common/image/bgimg.png) center center no-repeat;
   background-size:100% 100vh;
   position:relative;
   overflow-y:auto;
@@ -183,15 +184,17 @@ export default {
   opacity:0.4;
 }
 .top{
-  width:9rem;height:9rem;
+  width: 52vh;
+  height: 52vh;
   margin:0 auto;margin-bottom:0;
   padding-top:2rem;
-  background:url(../assets/timg.png) center no-repeat;
+  background:url(../common/image/timg.png) center no-repeat;
   background-size:100%;
   position:relative;
 }
 .top .word{
   font-size:0.5rem;color:white;padding:0.25rem 0;
+  padding-left: 0.5rem;
   font-weight: bold;
   letter-spacing: 0.025rem;
   transition:all 0.5s;
@@ -212,7 +215,7 @@ export default {
   }
 .button{
   width:2.255rem;
-  height:1rem;
+  height: 5.6vh;
   text-align: center;
   line-height: 0.6rem;
   color:white;
