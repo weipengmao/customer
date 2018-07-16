@@ -183,7 +183,8 @@ export default {
   opacity:0.4;
 }
 .top{
-  width:9rem;height:9rem;
+  width:8.5rem;
+  height:8rem;
   margin:0 auto;margin-bottom:0;
   padding-top:2rem;
   background:url(../assets/timg.png) center no-repeat;
