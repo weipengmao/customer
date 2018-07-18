@@ -23,12 +23,12 @@
           <div class="box clearfix info" v-for="(item,key) in titleIndex"  @click="toDetail(textPlace[key],item)">
             <div>
                 <div v-show="moreAnswerLoadingA" class="loadingImgA"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
-                <img  v-lazy="imgIndex[key]=='none'?backgroundImg:imgIndex[key]" alt="">
+                <img  :src="imgIndex[key]=='none'?backgroundImg:imgIndex[key]" alt="">
             </div>
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
               <p class="content" > {{titleContent[key]}}
-              <div v-show="moreAnswerLoading" class="loadingImg"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
+                <div v-show="moreAnswerLoading" class="loadingImg"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
               </p>
 
             </div>
@@ -93,11 +93,11 @@ export default {
                       }
                       localStorage.setItem(placeNameB,imgIndex) 
                       if(val.data){
-                        text1=val.data.ans
+                        text1=val.data.ans+'end'
                         text1=decode(text1)
-                        console.log(text1)
+                        // console.log(text1)
                         that.textData.push(text1)
-                        that.textPlace.push(text1)
+                        that.textPlace.push(val.data.ans)
                         arrTwo.push(text1)
                         localStorage.setItem(placeNameA,arrTwo) 
 
@@ -206,7 +206,7 @@ export default {
             }else{
               that.noneText = false
               that.titleIndex = localStorage.getItem(this.id).split(',')
-              that.titleContent = localStorage.getItem(this.id+'a').split(',')
+              that.titleContent  = localStorage.getItem(this.id+'a').split('end')
               that.imgIndex = localStorage.getItem(this.id+'b').split(',')
               that.moreAnswerLoadingA = false
               f.style.display = 'block'
@@ -219,7 +219,7 @@ export default {
       this.loading=false
       if(num == 0 &&(localStorage.getItem(lis[0].id))){
         that.titleIndex = localStorage.getItem(lis[0].id).split(',')
-        that.titleContent = localStorage.getItem(lis[0].id+'a').split(',')
+        that.titleContent = localStorage.getItem(lis[0].id+'a').split('end')
         that.imgIndex = localStorage.getItem(lis[0].id+'b').split(',')
         that.moreAnswerLoadingA = false
         num++
@@ -335,7 +335,6 @@ a{
   line-height: 0.5rem;
   word-break: break-all;
   text-overflow: ellipsis;
-  display: -webkit-box; /** 将对象作为伸缩盒子模型显示 **/
   -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
   -webkit-line-clamp: 3; /** 显示的行数 **/
   overflow: hidden;  /** 隐藏超出的内容 **/

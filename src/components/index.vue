@@ -144,11 +144,13 @@ export default {
       var that=this;
       CustomerHttp.httpPost(`${root}/qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
         function(val){
-          const Data = val.data.rows
-          for(var i =0;i<Data.length;i++){
-            if(Data[i][2] == '' && i!=0){
-              that.titleIndex.push(Data[i][0])
-              arr.push(Data[i][1])
+          var Data = val.data.rows
+          if(Data){
+            for(var i =0;i<Data.length;i++){
+              if(Data[i][2] == '' && i!=0){
+                that.titleIndex.push(Data[i][0])
+                arr.push(Data[i][1])
+              }
             }
           }
             that.loading=false;
@@ -185,7 +187,7 @@ export default {
 }
 .top{
   width:8.5rem;
-  height:8rem;
+  height:52vh;
   margin:0 auto;margin-bottom:0;
   padding-top:2rem;
   background:url(../common/image/timg.png) center no-repeat;
