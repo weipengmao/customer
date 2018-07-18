@@ -40,7 +40,7 @@
   import {CustomerHttp} from '../common/js/http'
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  const root = process.env.API_HOST
+  var root = process.env.API_HOST
 export default {
 
   mounted(){

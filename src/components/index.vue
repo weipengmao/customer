@@ -15,6 +15,7 @@
 
     <!--导航栏 -->
     <div class="nav">
+      <a name='9004.6' id="9004_6" @click="openId()"/> 
       <div class="box">
 
             <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6" @click="toSwiper(item,titleIndex[key])" :id="titleIndex[key]">
@@ -47,14 +48,17 @@ import jsonp from '../common/js/jsonp'
 import Vue from 'vue'
 var root = process.env.API_HOST
 export default {
+  created(){
+    this._req(this.items)
+  },
   mounted(){
     // const appid = 'wx7e88240ec21db9f6'
     // const code = CustomerHttp.getUrlParam('code')
     // const local = window.location.href
-    CustomerHttp.httpPost(`${root}/qx`,{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
+    CustomerHttp.httpPost(`${root}qx`,{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
     // if(code == null || code == ''){
     //     location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&
-    //     redirect_uri=${encodeURIComponent('localhost:8080')}&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect`
+    //     redirect_uri=${encodeURIComponent(local)}&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect`
     // }else{
     //     jsonp('https://api.weixin.qq.com/sns/oauth2/component/access_token',{"appid":appid,"code":code,"grant_type":"authorization_code","component_appid":"COMPONENT_APPID",
     //     "component_access_token":"COMPONENT_ACCESS_TOKEN"}).then(function(val){
@@ -62,7 +66,6 @@ export default {
     //         Vue.prototype.oppenId = val.data.openid
     //     })
     // }
-    this._req(this.items)
     //随机函数
     var num = 10;
     var randomNum = parseInt(Math.random()*num)
@@ -106,7 +109,7 @@ export default {
         that.flag = true
         that.hide = false
         that.bottomTxt = false
-      } else if(this.point > 200){
+      } else if(this.point > 100){
         document.querySelector('.nav').removeAttribute('style')
         that.flag = false
         that.hide = true
@@ -142,7 +145,7 @@ export default {
   methods:{
     _req(arr){
       var that=this;
-      CustomerHttp.httpPost(`${root}/qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
+      CustomerHttp.httpPost(`${root}qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
         function(val){
           var Data = val.data.rows
           if(Data){
@@ -186,8 +189,8 @@ export default {
   opacity:0.4;
 }
 .top{
-  width:8.5rem;
-  height:52vh;
+  width:8rem;
+  height:49vh;
   margin:0 auto;margin-bottom:0;
   padding-top:2rem;
   background:url(../common/image/timg.png) center no-repeat;

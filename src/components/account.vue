@@ -169,7 +169,7 @@
   import {CustomerHttp} from '../common/js/http'
   import {distinct} from '../common/js/distinct'
   import Vue from 'vue'
-  const root = process.env.API_HOST
+  var root = process.env.API_HOST
 export default {
   name: 'account',
   mounted() {

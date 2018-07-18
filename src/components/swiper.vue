@@ -52,7 +52,7 @@
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import Vue from 'vue'
-  const root = process.env.API_HOST
+  var root = process.env.API_HOST
 export default {
   created(){
     const localPath = 'http://www.health-vi.com'
