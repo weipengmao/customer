@@ -52,13 +52,18 @@ export default {
     //     that.answer=content;
     //   }
     // )
+        function decode(text){
+          return text.replace(/<[^>]+>/g,"").replace(/&nbsp;/g,"");
+    }
 
     var that=this
     // 渲染标题和传入id
     this.title=this.$route.query.title
     var id=this.$route.query.id
     localStorage.setItem('content',id)
-    that.answer=localStorage.getItem('content');
+       var answer =decode(localStorage.getItem('content'))
+    that.answer=answer;
+
 
   },
   data () {
