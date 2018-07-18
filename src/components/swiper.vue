@@ -95,6 +95,7 @@ export default {
                       if(val.data){
                         text1=val.data.ans
                         text1=decode(text1)
+                        console.log(text1)
                         that.textData.push(text1)
                         that.textPlace.push(text1)
                         arrTwo.push(text1)
@@ -338,7 +339,7 @@ a{
   -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
   -webkit-line-clamp: 3; /** 显示的行数 **/
   overflow: hidden;  /** 隐藏超出的内容 **/
-  height: 11.5vh;
+  /* height: 11.5vh; */
 }
 .active{
   background:#fff !important;
