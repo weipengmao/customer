@@ -186,6 +186,19 @@ export default {
       var lisId = lis[0].id;
       lis[0].classList.add('active');
       var num=0;
+
+      //loading退去
+      this.loading=false
+      if(num == 0 &&(localStorage.getItem(lis[0].id))){
+        that.titleIndex = localStorage.getItem(lis[0].id).split(',')
+        that.titleContent = localStorage.getItem(lis[0].id+'a').split('end')
+        that.imgIndex = localStorage.getItem(lis[0].id+'b').split(',')
+        that.moreAnswerLoadingA = false
+        num++
+      }else if(!(localStorage.getItem(lis[0].id))){
+        that.noneText = true
+      }
+
       for(let i=0;i<lis.length;i++){
         this.num=lis[i];
         lis[i].ontouchend=function(){
@@ -206,7 +219,7 @@ export default {
             }else{
               that.noneText = false
               that.titleIndex = localStorage.getItem(this.id).split(',')
-              that.titleContent  = localStorage.getItem(this.id+'a').split('end')
+              that.titleContent  = localStorage.getItem(this.id+'a').split('end').replace(/\\x/g,'')
               that.imgIndex = localStorage.getItem(this.id+'b').split(',')
               that.moreAnswerLoadingA = false
               f.style.display = 'block'
@@ -214,17 +227,6 @@ export default {
           }else{
           }
         }
-      }
-      //loading退去
-      this.loading=false
-      if(num == 0 &&(localStorage.getItem(lis[0].id))){
-        that.titleIndex = localStorage.getItem(lis[0].id).split(',')
-        that.titleContent = localStorage.getItem(lis[0].id+'a').split('end')
-        that.imgIndex = localStorage.getItem(lis[0].id+'b').split(',')
-        that.moreAnswerLoadingA = false
-        num++
-      }else if(!(localStorage.getItem(lis[0].id))){
-        that.noneText = true
       }
 
     }
