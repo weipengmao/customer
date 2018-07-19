@@ -48,9 +48,6 @@ import jsonp from '../common/js/jsonp'
 import Vue from 'vue'
 var root = process.env.API_HOST
 export default {
-  created(){
-    this._req(this.items)
-  },
   mounted(){
     // const appid = 'wx7e88240ec21db9f6'
     // const code = CustomerHttp.getUrlParam('code')
@@ -125,7 +122,7 @@ export default {
         }
       }
     ,1000);
-
+    this._req()
   },
   data(){
     return{
@@ -143,7 +140,8 @@ export default {
     }
   },
   methods:{
-    _req(arr){
+    _req(){
+      var arr =[];
       var that=this;
       CustomerHttp.httpPost(`${root}qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
         function(val){
@@ -155,6 +153,9 @@ export default {
                 arr.push(Data[i][1])
               }
             }
+            setTimeout(()=>{
+              that.items = arr
+            },30)
           }
             that.loading=false;
         },function(err){
