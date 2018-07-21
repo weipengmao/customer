@@ -185,7 +185,6 @@ export default {
     if(localStorage.getItem('answer')){
       this.beforeflag = true
       this.beforeQuest = true
-      console.log(localStorage.getItem('quest'))
       this.historyText = true
       this.beforeTxt = localStorage.getItem('quest')
       this.history = localStorage.getItem('answer')
@@ -294,7 +293,6 @@ export default {
       }
     },
     moreAnswerTwo(a){
-      console.log(a)
       if(this.numIdB != a) {
         this.numIdB = a
         for (var i = 0; i < this.answer.length; i++) {
@@ -439,10 +437,11 @@ export default {
       }
     },
     serviceDetail(){
-      if(Vue.prototype.oppenId){
+      var openID = sessionStorage.getItem("openid");
+      if(openID){
         this.service = true
       }else{
-        //openid不存在的时候交互
+        location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7e88240ec21db9f6&redirect_uri=http://robot.health-vi.com/customer/auth.html?redirect_uri=http://robot.health-vi.com/customer&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect"
       }
     },
     info(a,key,item){
@@ -672,7 +671,7 @@ export default {
   margin-top:5px;
 }
 .contentBoxService p{
-  font-size:0.1rem;
+  font-size:0.4rem;
   font-family:SourceHanSansCN-Normal;
   color:rgba(77,77,77,1);
   line-height:20px;

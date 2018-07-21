@@ -48,13 +48,11 @@ import jsonp from '../common/js/jsonp'
 import Vue from 'vue'
 var root = process.env.API_HOST
 export default {
-  created(){
-    this._req(this.items)
-  },
   mounted(){
     // const appid = 'wx7e88240ec21db9f6'
     // const code = CustomerHttp.getUrlParam('code')
     // const local = window.location.href
+    // location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7e88240ec21db9f6&redirect_uri=http://robot.health-vi.com/customer/auth.html?redirect_uri=http://robot.health-vi.com/customer&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect"
     CustomerHttp.httpPost(`${root}qx`,{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
     // if(code == null || code == ''){
     //     location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&
@@ -125,7 +123,7 @@ export default {
         }
       }
     ,1000);
-
+    this._req()
   },
   data(){
     return{
@@ -143,7 +141,8 @@ export default {
     }
   },
   methods:{
-    _req(arr){
+    _req(){
+      var arr =[];
       var that=this;
       CustomerHttp.httpPost(`${root}qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
         function(val){
@@ -155,6 +154,9 @@ export default {
                 arr.push(Data[i][1])
               }
             }
+            setTimeout(()=>{
+              that.items = arr
+            },30)
           }
             that.loading=false;
         },function(err){

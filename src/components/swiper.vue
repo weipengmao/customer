@@ -94,7 +94,7 @@ export default {
                       }
                       localStorage.setItem(placeNameB,imgIndex) 
                       if(val.data){
-                        text1=val.data.ans+'end'
+                        text1=val.data.ans.replace(/\\x/g,'')+'end'
                         text1=decode(text1)
                         // console.log(text1)
                         that.textData.push(text1)
@@ -191,7 +191,6 @@ export default {
       for(let i=0;i<lis.length;i++){
         this.num=lis[i];
         lis[i].ontouchend=function(){
-          console.log('click')
           if(!this.classList.contains('active')){
             for(let j=0;j<lis.length;j++){
               lis[j].classList.remove('active');
