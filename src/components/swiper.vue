@@ -55,6 +55,7 @@
   var root = process.env.API_HOST
 export default {
   created(){
+
     const localPath = 'http://www.health-vi.com'
     var that = this
     var arrOne =[]
@@ -207,7 +208,7 @@ export default {
             }else{
               that.noneText = false
               that.titleIndex = localStorage.getItem(this.id).split(',')
-              that.titleContent  = localStorage.getItem(this.id+'a').split('end').replace(/\\x/g,'')
+              that.titleContent  = localStorage.getItem(this.id+'a').split('end')
               that.imgIndex = localStorage.getItem(this.id+'b').split(',')
               that.moreAnswerLoadingA = false
               f.style.display = 'block'
