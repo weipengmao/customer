@@ -4,10 +4,10 @@
       <div class="pop" v-show="popFlag">
         <div></div>
       </div>
-      <div class="header">
+      <!-- <div class="header">
         <span class="headerText">聊天</span>
         <img class="headerImg" src="../common/image/close.png" @touchend="toIndex">
-      </div>
+      </div> -->
       <div class="center">
         <!--历史问题 -->
         <div class="cpBefore" >
@@ -169,7 +169,13 @@
   import {CustomerHttp} from '../common/js/http'
   import {distinct} from '../common/js/distinct'
   import Vue from 'vue'
-  var root = process.env.API_HOST
+  var root
+  var reg = /http:\/\/47.104.111.7\//;
+  if(!reg.test(location.href)){
+    root = location.href.match(/.+com\//)[0]
+  }else{
+    root = "http://47.104.111.7/"
+  }
 export default {
   name: 'account',
   mounted() {
@@ -438,11 +444,39 @@ export default {
     },
     serviceDetail(){
       var openID = sessionStorage.getItem("openid");
-      if(openID){
-        this.service = true
-      }else{
-        location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7e88240ec21db9f6&redirect_uri=http://robot.health-vi.com/customer/auth.html?redirect_uri=http://robot.health-vi.com/customer&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect"
-      }
+        this.$confirm('是否确定转到人工客服', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          if(openID){
+            this.service = true
+            this.$message({
+              type: 'success',
+              message: '已转到人工客服!'
+            });
+          }else{
+            this.$message({
+              type: 'info',
+              message: '请于微信端登录,或将于1s后自动登录'
+            });
+            setTimeout(()=>{
+              location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7e88240ec21db9f6&redirect_uri=http://robot.health-vi.com/customer/auth.html?redirect_uri=http://robot.health-vi.com/customer&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect";
+            },1000)
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消转到人工客服'
+          });
+        });
+      
+      // if(openID){
+      //   this.service = true
+      // }else{
+      //   location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7e88240ec21db9f6&redirect_uri=http://robot.health-vi.com/customer/auth.html?redirect_uri=http://robot.health-vi.com/customer&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect"
+      // }
     },
     info(a,key,item){
 //      var reg = /【---.*---】/
@@ -587,7 +621,7 @@ export default {
 }
 .center{
   overflow-y:auto;
-  height:80%;
+  height:89%;
 }
 .header{
   height:1.8rem;

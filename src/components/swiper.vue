@@ -1,7 +1,7 @@
 <template>
 <div id="swiper">
   <div id="box"  v-show='!loading'>
-  <div style="position:absolute;right:0;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" >
+  <div style="position:absolute;right:0;top:-2%;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" >
   </div>
   <!-- 轮播图 -->
     <swiper  :options="swiperOption" ref="mySwiper">
@@ -18,17 +18,17 @@
     </ul>
     <div class="brief clearfix" >
       <!-- <router-link to='/detail'> -->
-        <div class="noneText" v-show="noneText">暂无更多内容，请看其他栏目</div>
+        <div class="noneText" v-show="noneText">暂无更多数据，请看其他栏目</div>
         <div  :id="Index" name="text" >
-          <div class="box clearfix info" v-for="(item,key) in titleIndex"  @click="toDetail(textPlace[key],item)">
-            <div>
-                <div v-show="moreAnswerLoadingA" class="loadingImgA"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
+          <div class="box clearfix info" v-for="(item,key) in titleIndex"  @click="toDetail(titleContent[key],item)">
+            <div style="height:1.8rem;display:inline-block;float:left;position:relative;">
+                <div v-show="moreAnswerLoadings" class="loadingImgA"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
                 <img  :src="imgIndex[key]=='none'?backgroundImg:imgIndex[key]" alt="">
             </div>
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
               <p class="content" > {{titleContent[key]}}
-                <div v-show="moreAnswerLoading" class="loadingImg"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
+                <div v-show="moreAnswerLoadingAs" class="loadingImg"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
               </p>
 
             </div>
@@ -52,7 +52,13 @@
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import Vue from 'vue'
-  var root = process.env.API_HOST
+  var root
+  var reg = /http:\/\/47.104.111.7\//;
+  if(!reg.test(location.href)){
+    root = location.href.match(/.+com\//)[0]
+  }else{
+    root = "http://47.104.111.7/"
+  }
 export default {
   created(){
     const localPath = 'http://www.health-vi.com'
@@ -62,65 +68,64 @@ export default {
     function decode(text){
           return text.replace(/<[^>]+>/g,"").replace(/&nbsp;/g,"");
     }
-
     CustomerHttp.httpPost(`${root}qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
       function(val){
         var Data = val.data.rows
           for(var i =0 ;i<Data.length;i++) {
             if(that.$route.query.titleIndex == Data[i][2]){
               that.items.push(Data[i])
-              CustomerHttp.httpPost(`${root}qx`, {
-                "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-                "page_num": 0, "url": "qx"
-              }).then(function (val) {
-                var placeData = []
-                var arrTwo =[]
-                var imgIndex =[]
-                for (var z = 0; z < val.data.rows.length; z++) {
-                  var text = val.data.rows[z][0]
-                  var placeName = val.data.rows[z][1]
-                  var placeNameA = placeName+'a'
-                  var placeNameB = placeName+'b'
-                  if(text!=''){
-                    CustomerHttp.httpPost(`${root}qx`,{"cmd":"faqspc.r","ver":1,"faq_id":text}).then((val)=>{
-                      if(val.status == 200){
-                        that.moreAnswerLoading = false
-                      }
-                      if(val.data.att.match(/\/.+g/)){
-                        imgIndex.push(localPath + val.data.att.match(/\/.+g/)[0])
-                      }else{
-                        imgIndex.push('none')
-                      }
-                      localStorage.setItem(placeNameB,imgIndex) 
-                      if(val.data){
-                        text1=val.data.ans.replace(/\\x/g,'')+'end'
-                        text1=decode(text1)
-                        // console.log(text1)
-                        that.textData.push(text1)
-                        that.textPlace.push(val.data.ans)
-                        arrTwo.push(text1)
-                        localStorage.setItem(placeNameA,arrTwo) 
+                // console.log(that.items[0])
+            // CustomerHttp.httpPost(`${root}qx`, {
+              //   "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+              //   "page_num": 0, "url": "qx"
+              // }).then(function (val) {
+              //   var placeData = []
+              //   var arrTwo =[]
+              //   var imgIndex =[]
+              //   for (var z = 0; z < val.data.rows.length; z++) {
+              //     var text = val.data.rows[z][0]
+              //     var placeName = val.data.rows[z][1]
+              //     var placeNameA = placeName+'a'
+              //     var placeNameB = placeName+'b'
+              //     if(text!=''){
+              //       CustomerHttp.httpPost(`${root}qx`,{"cmd":"faqspc.r","ver":1,"faq_id":text}).then((val)=>{
+              //         if(val.status == 200){
+              //           that.moreAnswerLoading = false
+              //         }
+              //         if(val.data.att.match(/\/.+g/)){
+              //           imgIndex.push(localPath + val.data.att.match(/\/.+g/)[0])
+              //         }else{
+              //           imgIndex.push('none')
+              //         }
+              //         localStorage.setItem(placeNameB,imgIndex) 
+              //         if(val.data){
+              //           text1=val.data.ans.replace(/\\x/g,'')+'end'
+              //           text1=decode(text1)
+              //           // console.log(text1)
+              //           that.textData.push(text1)
+              //           that.textPlace.push(val.data.ans)
+              //           arrTwo.push(text1)
+              //           localStorage.setItem(placeNameA,arrTwo) 
 
-                        placeData.push(val.data.ask)
-                        if(placeName){
-                          localStorage.setItem(placeName,placeData)
-                        }
-                      }
+              //           placeData.push(val.data.ask)
+              //           if(placeName){
+              //             localStorage.setItem(placeName,placeData)
+              //           }
+              //         }
 
-                    })
-                  }else{
-                    that.own=true
-                  }
+              //       })
+              //     }else{
+              //       that.own=true
+              //     }
 
-                  arrOne.push(placeName)
-                  arrOne = distinct(arrOne)
-                  that.Index = distinct(arrOne)
+              //     arrOne.push(placeName)
+              //     arrOne = distinct(arrOne)
+              //     that.Index = distinct(arrOne)
 
-                }
-              })
+              //   }
+              // })
             }
           }
-
         setTimeout(()=>{
           that._req()
         },10)
@@ -146,9 +151,11 @@ export default {
             disableOnInteraction: false,
           }
         },
+        moreAnswerLoadings:false,
+        moreAnswerLoadingAs:false,
         swiperSlides: [1, 2, 3, 4],
         items:[],
-        titleIndex:[],
+        titleIndex:[,,,,,,,,,,,,,,,,,,,],
         titleContent:[],
         Index:[],
         textData:[],
@@ -157,8 +164,6 @@ export default {
         imgIndex:[],
         backgroundImg:require('../common/image/swiper.jpg'),
         loading:true,
-        moreAnswerLoading:true,
-        moreAnswerLoadingA:true,
         own:false,
         noneText:false
     }
@@ -174,13 +179,18 @@ export default {
     },
     // 进入详情页
     toDetail(id,title){ 
-      if(this.moreAnswerLoading == false){
+      console.log(id,title)
+      if(this.moreAnswerLoadings == false){
         this.$router.push({path:"/detail",query:{id:id,title:title}})
       }
     },
     _req(){
-      var that = this
-      var arr =[]
+      var localPath = 'http://www.health-vi.com';
+      function decode(text){
+          return text.replace(/<[^>]+>/g,"").replace(/&nbsp;/g,"");
+      };
+      var that = this;
+      var arr =[];
       var nav=document.querySelector('#nav');
       var lis=nav.querySelectorAll('li');
       var lisId = lis[0].id;
@@ -189,28 +199,73 @@ export default {
 
       for(let i=0;i<lis.length;i++){
         this.num=lis[i];
-        lis[i].ontouchend=function(){
+        lis[i].onclick=function(){
           if(!this.classList.contains('active')){
             for(let j=0;j<lis.length;j++){
               lis[j].classList.remove('active');
               this.classList.add('active');
             }
 //            arr.push(this.id)
-            that.Index = this.id
-            var f = document.querySelector('[name=text]');
+            var titleArr=[];
+            that.titleIndex=[,,,,,,,,,,,,,,,,,,,];
+            that.imgIndex=[];
+            that.titleContent=[];
+            that.Index = this.id;
+            that.moreAnswerLoadings = true;
+            that.moreAnswerLoadingAs = true;
+            CustomerHttp.httpPost(`${root}qx`, {
+                "kind_id": that.Index, "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+                "page_num": 0, "url": "qx"
+              }).then(function (val) {
+                  if(val.data.rows.length>0){
+                      for (var z = 0; z < val.data.rows.length; z++) {
+                          var text = val.data.rows[z][0];
+                          var placeName = val.data.rows[z][1];
+                        if(text!=''){
+                          CustomerHttp.httpPost(`${root}qx`,{"cmd":"faqspc.r","ver":1,"faq_id":text}).then((val)=>{
+                            titleArr.push(val.data.ask);
+                            that.titleIndex=titleArr;
+                            if(val.status == 200){
+                              that.moreAnswerLoadings = false;
+                              that.moreAnswerLoadingAs = false;
+                            }
+                            if(val.data.att.match(/\/.+g/)){
+                              that.imgIndex.push(localPath + val.data.att.match(/\/.+g/)[0])
+                            }else{
+                              that.imgIndex.push('none')
+                            }
+                            if(val.data){
+                              var text1=val.data.ans.replace(/\\x/g,'');
+                              text1=decode(text1);
+                              that.titleContent.push(text1)
+                            }
+                          })
+                        }
+                      }
+                    that.noneText = false;
+                      // localStorage.setItem(`${that.Index}+b`,that.imgIndex);
+                  }else{
+                    that.titleIndex=[];
+                    that.noneText = true;
+                    that.moreAnswerLoadings = false;
+                    that.moreAnswerLoadingAs = false;
+                  }
+            })
+            // console.log(localStorage.getItem(`${that.Index}+b`))
+            // var f = document.querySelector('[name=text]');
 //            对有无数据进行判断，此处可以做交互
-            if(!(localStorage.getItem(this.id))){
-              //移除所有节点
-              that.noneText = true
-              f.style.display = 'none'
-            }else{
-              that.noneText = false
-              that.titleIndex = localStorage.getItem(this.id).split(',')
-              that.titleContent  = localStorage.getItem(this.id+'a').split('end')
-              that.imgIndex = localStorage.getItem(this.id+'b').split(',')
-              that.moreAnswerLoadingA = false
-              f.style.display = 'block'
-            }
+            // if(!(localStorage.getItem(this.id))){
+            //   //移除所有节点
+            //   that.noneText = true
+            //   f.style.display = 'none'
+            // }else{
+            //   that.noneText = false
+            //   that.titleIndex = localStorage.getItem(this.id).split(',')
+            //   that.titleContent  = localStorage.getItem(this.id+'a').split('end,')
+            //   that.imgIndex = localStorage.getItem(this.id+'b').split(',')
+            //   that.moreAnswerLoadingA = false
+            //   f.style.display = 'block'
+            // }
           }else{
           }
         }
@@ -224,7 +279,46 @@ export default {
          that.moreAnswerLoadingA = false
          num++
        }else if(!(localStorage.getItem(lis[0].id))){
-         that.noneText = true
+          CustomerHttp.httpPost(`${root}qx`, {
+              "kind_id": lis[0].id, "cmd": "faq.q", "ver": 1, "page_cnt": "20",
+              "page_num": 0, "url": "qx"
+            }).then(function (val) {
+                var titleArr=[];
+                if(val.data.rows.length>0){
+                    for (var z = 0; z < val.data.rows.length; z++) {
+                        var text = val.data.rows[z][0];
+                        var placeName = val.data.rows[z][1];
+                      if(text!=''){
+                        CustomerHttp.httpPost(`${root}qx`,{"cmd":"faqspc.r","ver":1,"faq_id":text}).then((val)=>{
+                          titleArr.push(val.data.ask);
+                          that.titleIndex=titleArr;
+                          if(val.status == 200){
+                            setTimeout(()=>{
+                              that.moreAnswerLoadings = false;
+                              that.moreAnswerLoadingAs = false;
+                            },200)
+                          }
+                          if(val.data.att.match(/\/.+g/)){
+                            that.imgIndex.push(localPath + val.data.att.match(/\/.+g/)[0])
+                          }else{
+                            that.imgIndex.push('none')
+                          }
+                          if(val.data){
+                            var text1=val.data.ans.replace(/\\x/g,'');
+                            text1=decode(text1);
+                            that.titleContent.push(text1)
+                          }
+                        })
+                      }
+                    }
+                  that.noneText = false;
+                }else{
+                  that.titleIndex=[];
+                  that.noneText = true;
+                  that.moreAnswerLoadings = false;
+                  that.moreAnswerLoadingAs = false;
+                }
+          })
        }
     }
   },
@@ -255,18 +349,21 @@ a{
 .clearfix:after{
   content:'';clear:both;display:block;
 }
-
-#swiper{ height: 30vh;position:relative;
-  width:100%;}
-
-  .fd_slide{    height: 30vh;
+#swiper{ 
+    overflow: hidden;
+    height: 100vh;
+    position:relative;
+    width:100%;
+  }
+  .fd_slide{    
+    height: 35vh;
     width: 100%;
     }
 
 
   .fd_slide img{
     width:100%;
-    height:30vh;
+    height:35vh;
   }
 
 .swiper-pagination{
@@ -283,7 +380,7 @@ a{
   display:inline-block;
   width:22%;float:left;
   background:#F4F4F4;
-  height:70vh;
+  height:65vh;
   overflow-y:auto;
 }
 .middle #nav li{
@@ -303,20 +400,22 @@ a{
   width:78%;
   height:70vh;
   overflow-y:auto;
+  padding-bottom:1.2rem;
 }
 
 .middle .brief .box{
   width:100%;padding:0.2rem;
   padding-right:0;
-  height: 2.8rem;
+  height: 2.2rem;
   overflow: hidden;
 }
 .middle .brief .box img{
-  width:2.5rem;
+  width:1.8rem;
   float:left;
 }
 .middle .brief .box .inbox{
-  width:4.5rem;font-size: 0.42rem;float:left;
+  width:5rem;font-size: 0.42rem;float:left;
+  height:1.8rem;
   margin-left:0.2rem;
   letter-spacing: 0;
   position: relative;
@@ -335,9 +434,10 @@ a{
   word-break: break-all;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
-  -webkit-line-clamp: 3; /** 显示的行数 **/
+  -webkit-line-clamp: 2; /** 显示的行数 **/
   overflow: hidden;  /** 隐藏超出的内容 **/
   /* height: 11.5vh; */
+  white-space:nowrap;
 }
 .active{
   background:#fff !important;
@@ -353,6 +453,7 @@ a{
   position: absolute;
     /* right: 50%; */
   top: 50%;
+  border:0;
 }
 .loadingImgA img{
   width:20px !important;
@@ -360,12 +461,16 @@ a{
   top: 50%;
   margin-top: 36%;
   margin-left: 36%;
+  border:0;
 }
 .loadingImg{
   width:100%;
 }
 .loadingImgA{
-  width: 2.5rem;
+  position:absolute;
+  left:0;
+  /* display: block !important; */
+  width: 1.85rem;
   float: left;
 }
 .noneText{
@@ -375,7 +480,7 @@ a{
   transform: translate(-50%,-50%);
   width:100%;
   font-size: 16px;
-
+  color:#a09696;
 }
 </style>
 
