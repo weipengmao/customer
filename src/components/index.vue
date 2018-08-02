@@ -19,10 +19,10 @@
       <div class="box">
 
             <p class="button" v-for="(item,key) in items" v-if="(key+1)<=6" @click="toSwiper(item,titleIndex[key])" :id="titleIndex[key]">
-              {{item}}
+              <span style="width:1rem;font-weight:bold;">{{item}}</span>
             </p>
             <p class="button" v-for="(item,key) in items" v-if="(key+1)>6 && hide == false" @click="toSwiper(item,titleIndex[key])" :id="titleIndex[key]">
-              {{item}}
+              <span style="width:1rem;font-weight:bold;">{{item}}</span>
             </p>
 
       </div>
@@ -46,9 +46,21 @@
 import {CustomerHttp} from '../common/js/http'
 import jsonp from '../common/js/jsonp'
 import Vue from 'vue'
-var root = process.env.API_HOST
+var root
+var reg = /http:\/\/47.104.111.7\//;
+if(!reg.test(location.href)){
+  root = location.href.match(/.+com\//)[0]
+}else{
+  root = "http://47.104.111.7/"
+}
 export default {
+  // `${root}qx`
   mounted(){
+    var openID = sessionStorage.getItem("openid");
+    this.$message({
+        type: 'success',
+        message: `你的openID为${openID}(我显示出来了，麻烦看清楚)`
+    });
     // const appid = 'wx7e88240ec21db9f6'
     // const code = CustomerHttp.getUrlParam('code')
     // const local = window.location.href
@@ -123,7 +135,9 @@ export default {
         }
       }
     ,1000);
-    this._req()
+    setTimeout(()=>{
+      that._req()
+    },500)
   },
   data(){
     return{
@@ -194,7 +208,8 @@ export default {
   width:8rem;
   height:49vh;
   margin:0 auto;margin-bottom:0;
-  padding-top:2rem;
+  margin-top: 0.48rem;
+  padding-top: 2.0rem;
   background:url(../common/image/timg.png) center no-repeat;
   background-size:100%;
   position:relative;
@@ -212,19 +227,19 @@ export default {
 }
 
 .nav{
-  top:62%;
+  top:65%;
   width:10rem;
   position:absolute;
   transition:all 1s;
   }
   .nav .box{
-    width:100%;margin:0 auto;margin-left:0.5rem;
+    width:100%;margin:0 auto;margin-left:0.88rem;
   }
 .button{
-  width:2.255rem;
-  height: 5.6vh;
+  width:2rem;
+  height: 5vh;
   text-align: center;
-  line-height: 0.6rem;
+  line-height: 0.56rem;
   color:white;
   font-size:0.42rem;border:2px solid #fff;
   display:inline-block;float:left;margin:0.1rem 0;
@@ -247,6 +262,6 @@ export default {
   width:100%;height:1rem;position:fixed;bottom:0;
 }
 .bottom img{
-  width:9.5rem;height:1rem;
+  width:0.6rem;
 }
 </style>

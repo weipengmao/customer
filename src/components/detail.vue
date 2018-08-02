@@ -1,6 +1,6 @@
 <template>
 <div id="swiper">
-  <div style="position:absolute;right:0;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" class="closeImg">
+  <div style="position:absolute;right:0;top:-2%;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" class="closeImg">
   </div>
   <!-- 轮播图 -->
     <swiper  :options="swiperOption" ref="mySwiper">
@@ -40,7 +40,13 @@
   import {CustomerHttp} from '../common/js/http'
   import 'swiper/dist/css/swiper.css'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  var root = process.env.API_HOST
+  var root
+  var reg = /http:\/\/47.104.111.7\//;
+  if(!reg.test(location.href)){
+    root = location.href.match(/.+com\//)[0]
+  }else{
+    root = "http://47.104.111.7/"
+  }
 export default {
 
   mounted(){
@@ -150,6 +156,7 @@ a{
   width:100%;
   height:13rem;
   overflow-y: auto;
+  padding-bottom: 1.7rem;
 }
 
 #swiper{
@@ -159,13 +166,13 @@ a{
   overflow-y: hidden;
 }
 
-  .fd_slide{    height: 30vh;
+  .fd_slide{    height: 35vh;
     width: 100%;
     }
 
 
   .fd_slide img{
-    width:100%;height:30vh;
+    width:100%;height:35vh;
   }
 
 .swiper-pagination{
@@ -231,6 +238,8 @@ a{
 }
 .bottom p span{
     float:left;
+    word-break: break-all;
+    text-overflow: ellipsis;
 }
 .bottom p img{
     width:0.5rem;
