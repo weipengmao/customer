@@ -1,7 +1,7 @@
 <template>
 <div id="swiper">
   <div id="box"  v-show='!loading'>
-  <div style="position:absolute;right:0;top:-2%;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" >
+  <div style="position:absolute;right:0;top:-3%;z-index:2;" @click="toIndex"><img src="../common/image/close.png" alt="" >
   </div>
   <!-- 轮播图 -->
     <swiper  :options="swiperOption" ref="mySwiper">
@@ -357,14 +357,14 @@ a{
     width:100%;
   }
   .fd_slide{    
-    height: 35vh;
+    height: 33.3333vw;
     width: 100%;
     }
 
 
   .fd_slide img{
     width:100%;
-    height:35vh;
+    height:33.3333vw;
   }
 
 .swiper-pagination{
@@ -435,7 +435,7 @@ a{
   word-break: break-all;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
-  -webkit-line-clamp: 2; /** 显示的行数 **/
+  -webkit-line-clamp: 3; /** 显示的行数 **/
   overflow: hidden;  /** 隐藏超出的内容 **/
   /* height: 11.5vh; */
   white-space:nowrap;
