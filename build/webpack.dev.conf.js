@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
+
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
@@ -19,7 +20,18 @@ var app = express();
 var fs = require('fs')
 
 app.get('/',function(req,res){
-    fs.readFile('E:/Customer service/Customer/src/mock/text.json','utf8',function(err,data){
+    fs.readFile('E:/Customer service/git专用/gitClone/customer/src/mock/text.json','utf8',function(err,data){
+    if(err){
+      console.log(err)
+    }else{
+      console.log(data)
+    }
+    res.send(data);
+  })
+})
+
+app.get('/communicate',function(req,res){
+  fs.readFile('E:/Customer service/git专用/gitClone/customer/src/mock/communicate.json','utf8',function(err,data){
     if(err){
       console.log(err)
     }else{

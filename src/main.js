@@ -7,11 +7,23 @@ import ElementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './common/stylus/index.styl'
 import './common/stylus/ele-ui.styl'
+import './common/stylus/swiper.styl'
 import axios from 'axios'
+import vueLoading from 'vue-loading-template'
+import lazyLoad from 'vue-lazyload'
+
 
 Vue.config.productionTip = false
+Vue.prototype.index = []
+Vue.prototype.num = 0
 Vue.use(ElementUi)
-Vue.prototype.$axios = axios
+Vue.use(vueLoading)
+Vue.use(lazyLoad,{
+    loading:require('./common/image/timg.gif')
+})
+
+
+
 
 /* eslint-disable no-new */
 new Vue({
