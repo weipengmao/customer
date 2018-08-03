@@ -161,13 +161,15 @@ export default{
 </script>
 
 <style scoped lang="stylus">
-span
+span{
   font-size:10px;
   display:inline-block;
   width:40px;
-el-input
-  padding-left:10px;
-.test
-  color:red;
-  font-size:10px;
+}
+
+el-input{padding-left:10px;}
+  
+.test{  color:red;
+  font-size:10px;}
+
 </style>

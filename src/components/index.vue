@@ -78,17 +78,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
-  .container
-    position:relative;
+  .container{    position:relative;
     height:500px;
     width:100%;
-    margin-top:100px;
-    .children
+    margin-top:100px;}
+
+    .children{
       text-align: center;
-      .word
-        opacity:0;
-        transition:all 0.5s;
-    .content
+    }
+
+      .word{        opacity:0;
+        transition:all 0.5s;}
+
+    .content{
       top:135px;
       transition:all 0.5s;
       position:absolute;
@@ -98,10 +100,12 @@ export default {
       -webkit-transform: translate(-50%);
       -o-transform: translate(-50%);
       -moz-transform: translate(-50%);
-      .text
-        display: inline-block;
+    }
+
+      .text{        display: inline-block;
         background:red;
         width:50px;
         height:25px;
-        margin:10px 10px;
+        margin:10px 10px;}
+
 </style>

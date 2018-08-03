@@ -12,9 +12,11 @@ export default {
 
 <style scoped lang="stylus">
   @import './common/stylus/variable.styl';
-#app
+#app{
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+
 </style>
