@@ -1,9 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import index from '@/components/index'
-// import account from '@/components/account'
-// import swiper from '@/components/swiper'
-// import detail from '@/components/detail'
 
 Vue.use(Router)
 

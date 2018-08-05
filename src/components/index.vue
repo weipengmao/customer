@@ -43,29 +43,34 @@
 </template>
 
 <script>
-import {CustomerHttp} from '../common/js/http'
-import jsonp from '../common/js/jsonp'
-import Vue from 'vue'
-var root
+import { CustomerHttp } from "../common/js/http";
+import jsonp from "../common/js/jsonp";
+import Vue from "vue";
+var root;
 var reg = /http:\/\/47.104.111.7\//;
-if(!reg.test(location.href)){
+if (!reg.test(location.href)) {
   // root = location.href.match(/.+com\//)[0]
-}else{
-  root = "http://47.104.111.7/"
+} else {
+  root = "http://47.104.111.7/";
 }
 export default {
   // `${root}qx`
-  mounted(){
-    var openID = sessionStorage.getItem("openid");
-    this.$message({
-        type: 'success',
-        message: `你的openID为${openID}(我显示出来了，麻烦看清楚)`
-    });
+  mounted() {
+    // var openID = sessionStorage.getItem("openid");
+    // this.$message({
+    //     type: 'success',
+    //     message: `你的openID为${openID}(我显示出来了，麻烦看清楚)`
+    // });
     // const appid = 'wx7e88240ec21db9f6'
     // const code = CustomerHttp.getUrlParam('code')
     // const local = window.location.href
     // location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7e88240ec21db9f6&redirect_uri=http://robot.health-vi.com/customer/auth.html?redirect_uri=http://robot.health-vi.com/customer&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect"
-    CustomerHttp.httpPost(`api/qx`,{"usr":"13600000001","pwd":"cfcd208495d565ef66e7dff9f98764da","cmd":"sys.login","ver":1})
+    CustomerHttp.httpPost(`${root}qx`, {
+      usr: "13600000001",
+      pwd: "cfcd208495d565ef66e7dff9f98764da",
+      cmd: "sys.login",
+      ver: 1
+    });
     // if(code == null || code == ''){
     //     location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&
     //     redirect_uri=${encodeURIComponent(local)}&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect`
@@ -78,190 +83,216 @@ export default {
     // }
     //随机函数
     var num = 10;
-    var randomNum = parseInt(Math.random()*num)
-    this.words = this.randomWord[randomNum]
+    var randomNum = parseInt(Math.random() * num);
+    this.words = this.randomWord[randomNum];
 
     //一行一行淡出
     var that = this;
-    var words=document.querySelectorAll('.word');
-    var text = document.querySelectorAll('.bottom')[0];
-    var nav = document.querySelector('.nav')
-    text.addEventListener('touchstart', function (e) {
-      this.pointY = e.targetTouches[0].pageY
-    })
-    text.addEventListener('touchmove', function (e) {
-      this.point = e.targetTouches[0].pageY - this.pointY
-    })
-    text.addEventListener('touchend', function (e) {
-
+    var words = document.querySelectorAll(".word");
+    var text = document.querySelectorAll(".bottom")[0];
+    var nav = document.querySelector(".nav");
+    text.addEventListener("touchstart", function(e) {
+      this.pointY = e.targetTouches[0].pageY;
+    });
+    text.addEventListener("touchmove", function(e) {
+      this.point = e.targetTouches[0].pageY - this.pointY;
+    });
+    text.addEventListener("touchend", function(e) {
       if (this.point < 0) {
-        nav.style.top = 18 + '%'
-        that.flag = true
-        that.hide = false
-        that.bottomTxt = false
+        nav.style.top = 18 + "%";
+        that.flag = true;
+        that.hide = false;
+        that.bottomTxt = false;
       } else {
-        document.querySelector('.nav').removeAttribute('style')
-        that.flag = false
-        that.hide = true
-        that.bottomTxt = true
+        document.querySelector(".nav").removeAttribute("style");
+        that.flag = false;
+        that.hide = true;
+        that.bottomTxt = true;
       }
-    })
+    });
 
-    nav.addEventListener('touchstart', function (e) {
-      this.pointY = e.targetTouches[0].pageY
-    })
-    nav.addEventListener('touchmove', function (e) {
-      this.point = e.targetTouches[0].pageY - this.pointY
-    })
-    nav.addEventListener('touchend', function (e) {
+    nav.addEventListener("touchstart", function(e) {
+      this.pointY = e.targetTouches[0].pageY;
+    });
+    nav.addEventListener("touchmove", function(e) {
+      this.point = e.targetTouches[0].pageY - this.pointY;
+    });
+    nav.addEventListener("touchend", function(e) {
       if (this.point < 0) {
-        nav.style.top = 18 + '%'
-        that.flag = true
-        that.hide = false
-        that.bottomTxt = false
-      } else if(this.point > 100){
-        document.querySelector('.nav').removeAttribute('style')
-        that.flag = false
-        that.hide = true
-        that.bottomTxt = true
+        nav.style.top = 18 + "%";
+        that.flag = true;
+        that.hide = false;
+        that.bottomTxt = false;
+      } else if (this.point > 50) {
+        document.querySelector(".nav").removeAttribute("style");
+        that.flag = false;
+        that.hide = true;
+        that.bottomTxt = true;
       }
-    })
-    var timer=setInterval(
-      ()=>{
-        words[this.num].style.opacity=1;
-        this.num++;
-        if(this.num===5){
-          clearInterval(timer)
-        }
+    });
+    var timer = setInterval(() => {
+      words[this.num].style.opacity = 1;
+      this.num++;
+      if (this.num === 5) {
+        clearInterval(timer);
       }
-    ,1000);
-    setTimeout(()=>{
-      that._req()
-    },500)
+    }, 1000);
+    setTimeout(() => {
+      that._req();
+    }, 500);
   },
-  data(){
-    return{
-      words:['我是机器人康康，','来自健康世界，','很高兴在这里遇见您，','希望能成为您的朋友，','愿健康成为您一生的伴侣。'],
+  data() {
+    return {
+      words: [
+        "我是机器人康康，",
+        "来自健康世界，",
+        "很高兴在这里遇见您，",
+        "希望能成为您的朋友，",
+        "愿健康成为您一生的伴侣。"
+      ],
       //随机配置
-      randomWord:CustomerHttp.common.indexArr,
-      items:[],
-      hideWords:true,
-      num:0,
+      randomWord: CustomerHttp.common.indexArr,
+      items: [],
+      hideWords: true,
+      num: 0,
       flag: false,
       hide: true,
-      bottomTxt:true,
-      loading:true,
-      titleIndex:[]
-    }
+      bottomTxt: true,
+      loading: true,
+      titleIndex: []
+    };
   },
-  methods:{
-    _req(){
-      var arr =[];
-      var that=this;
-      CustomerHttp.httpPost(`api/qx`,{"url":"qx","cmd":"kind.q","pid":"","ver":1}).then(
-        function(val){
-          var Data = val.data.rows
-          if(Data){
-            for(var i =0;i<Data.length;i++){
-              if(Data[i][2] == '' && i!=0){
-                that.titleIndex.push(Data[i][0])
-                arr.push(Data[i][1])
+  methods: {
+    _req() {
+      var arr = [];
+      var that = this;
+      CustomerHttp.httpPost(`${root}qx`, {
+        url: "qx",
+        cmd: "kind.q",
+        pid: "",
+        ver: 1
+      }).then(
+        function(val) {
+          var Data = val.data.rows;
+          if (Data) {
+            for (var i = 0; i < Data.length; i++) {
+              if (Data[i][2] == "" && i != 0) {
+                that.titleIndex.push(Data[i][0]);
+                arr.push(Data[i][1]);
               }
             }
-            setTimeout(()=>{
-              that.items = arr
-            },30)
+            setTimeout(() => {
+              that.items = arr;
+            }, 30);
           }
-            that.loading=false;
-        },function(err){
-          console.log(err)
+          that.loading = false;
+        },
+        function(err) {
+          console.log(err);
         }
-      )
+      );
     },
-    toSwiper(text,titleIndex){
-      this.$router.push({path:'/swiper',query:{id:text,titleIndex:titleIndex}})
+    toSwiper(text, titleIndex) {
+      this.$router.push({
+        path: "/swiper",
+        query: { id: text, titleIndex: titleIndex }
+      });
     }
-  },
-}
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-#box{
-  width:100%;
-  height:100vh;
+#box {
+  width: 100%;
+  height: 100vh;
   box-sizing: border-box;
-  background:url(../common/image/bgimg.png) center center no-repeat;
-  background-size:100% 100vh;
-  position:relative;
-  overflow-y:auto;
+  background: url(../common/image/bgimg.png) center center no-repeat;
+  background-size: 100% 100vh;
+  position: relative;
+  overflow-y: auto;
 }
-.pop{
-  position:fixed;
-  height:100%;
-  width:100%;
+.pop {
+  position: fixed;
+  height: 100%;
+  width: 100%;
   background: black;
-  opacity:0.4;
+  opacity: 0.4;
 }
-.top{
-  width:8rem;
-  height:49vh;
-  margin:0 auto;margin-bottom:0;
+.top {
+  width: 8rem;
+  height: 49vh;
+  margin: 0 auto;
+  margin-bottom: 0;
   margin-top: 0.48rem;
-  padding-top: 2.0rem;
-  background:url(../common/image/timg.png) center no-repeat;
-  background-size:100%;
-  position:relative;
+  padding-top: 2rem;
+  background: url(../common/image/timg.png) center no-repeat;
+  background-size: 100%;
+  position: relative;
 }
-.top .word{
-  font-size:0.5rem;color:white;padding:0.25rem 0;
+.top .word {
+  font-size: 0.5rem;
+  color: white;
+  padding: 0.25rem 0;
   padding-left: 0.5rem;
   font-weight: bold;
   letter-spacing: 0.025rem;
-  transition:all 0.5s;
-  opacity:0;
+  transition: all 0.5s;
+  opacity: 0;
 }
-.toAccount{
-  width:4rem;height:1.4rem;position:absolute;bottom:1.2rem;left:2.3rem;
+.toAccount {
+  width: 4rem;
+  height: 1.4rem;
+  position: absolute;
+  bottom: 1.2rem;
+  left: 2.3rem;
 }
 
-.nav{
-  top:65%;
-  width:10rem;
-  position:absolute;
-  transition:all 1s;
-  }
-  .nav .box{
-    width:100%;margin:0 auto;margin-left:0.88rem;
-  }
-.button{
-  width:2rem;
+.nav {
+  top: 65%;
+  width: 10rem;
+  position: absolute;
+  transition: all 1s;
+}
+.nav .box {
+  width: 100%;
+  margin: 0 auto;
+  margin-left: 0.88rem;
+}
+.button {
+  width: 2rem;
   height: 5vh;
   text-align: center;
   line-height: 0.56rem;
-  color:white;
-  font-size:0.42rem;border:2px solid #fff;
-  display:inline-block;float:left;margin:0.1rem 0;
-  margin-right:0.21rem;
-  margin-top:0.15rem;
+  color: white;
+  font-size: 0.42rem;
+  border: 2px solid #fff;
+  display: inline-block;
+  float: left;
+  margin: 0.1rem 0;
+  margin-right: 0.21rem;
+  margin-top: 0.15rem;
   border-radius: 10%;
-  padding:0.45rem 0.25rem;font-weight: bold;
+  padding: 0.45rem 0.25rem;
+  font-weight: bold;
   letter-spacing: 0.035rem;
-  background: url('../assets/button.png') center no-repeat;
-  text-overflow:ellipsis;
-  -o-text-overflow:ellipsis;
-  -webkit-text-overflow:ellipsis;
-  -moz-text-overflow:ellipsis;
-  overflow:hidden;
+  background: url("../assets/button.png") center no-repeat;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -webkit-text-overflow: ellipsis;
+  -moz-text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-
-.bottom{
-  transition:all 0.5s;
-  width:100%;height:1rem;position:fixed;bottom:0;
+.bottom {
+  transition: all 0.5s;
+  width: 100%;
+  height: 1rem;
+  position: fixed;
+  bottom: 0;
 }
-.bottom img{
-  width:0.6rem;
+.bottom img {
+  width: 0.6rem;
 }
 </style>
