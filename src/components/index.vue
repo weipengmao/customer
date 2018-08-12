@@ -47,14 +47,14 @@ import { CustomerHttp } from "../common/js/http";
 import jsonp from "../common/js/jsonp";
 import Vue from "vue";
 var root;
-var reg = /http:\/\/47.104.111.7\//;
-if (!reg.test(location.href)) {
-  // root = location.href.match(/.+com\//)[0]
-} else {
-  root = "http://47.104.111.7/";
-}
+// var reg = /http:\/\/47.104.111.7\//;
+// if (!reg.test(location.href)) {
+//   root = location.href.match(/.+com\//)[0]
+// } else {
+//   root = "http://47.104.111.7/";
+// }
 export default {
-  // `${root}qx`
+  // `api/qx`
   mounted() {
     // var openID = sessionStorage.getItem("openid");
     // this.$message({
@@ -65,7 +65,7 @@ export default {
     // const code = CustomerHttp.getUrlParam('code')
     // const local = window.location.href
     // location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7e88240ec21db9f6&redirect_uri=http://robot.health-vi.com/customer/auth.html?redirect_uri=http://robot.health-vi.com/customer&response_type=code&scope=snsapi_base&state=47c7be842c4e790f&component_appid=wxb98cc920f74c1f5f#wechat_redirect"
-    CustomerHttp.httpPost(`${root}qx`, {
+    CustomerHttp.httpPost(`api/qx`, {
       usr: "13600000001",
       pwd: "cfcd208495d565ef66e7dff9f98764da",
       cmd: "sys.login",
@@ -166,7 +166,7 @@ export default {
     _req() {
       var arr = [];
       var that = this;
-      CustomerHttp.httpPost(`${root}qx`, {
+      CustomerHttp.httpPost(`api/qx`, {
         url: "qx",
         cmd: "kind.q",
         pid: "",

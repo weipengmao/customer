@@ -5,7 +5,7 @@
       </div>
       <!-- <div class="header">
         <span class="headerText">聊天</span>
-        <img class="headerImg" src="../common/image/close.png" @touchend="toIndex">
+        <img class="headerImg" src="../common/image/close.png" @click="toIndex">
       </div> -->
       <div class="center">
             <!--历史问题 -->
@@ -34,7 +34,7 @@
                   </p>
                   <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
                 </div>
-                <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @touchend="serviceDetail"><span
+                <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" @click="serviceDetail"><span
                 style="font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
                 float:left;line-height:1.10rem" >转人工客服</span>
                 <p style="float:right;font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
@@ -71,9 +71,9 @@
                   <p align="left" :id="id" ref="testIndex">
                   </p>
                   <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-                  <img :src="heart" alt="" style="float:left" @touchend="changeStyle(item)" ref="changeSty">
+                  <img :src="heart" alt="" style="float:left" @click="changeStyle(item)" ref="changeSty">
                   <p style="float:right;font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
-                line-height:0.5rem;" @touchend="moreAnswer(item)" >更多</p>
+                line-height:0.5rem;" @click="moreAnswer(item)" >更多</p>
                 </div>
               </div>
 
@@ -110,7 +110,7 @@
                   <img src="../common/image/service_ears.png" alt="" style="float:left;margin-top:0.05rem;" ><span
                   style="font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
                 float:left;line-height:1.10rem">人工客服</span>
-                  <!--<img :src="heartBeat" alt="" style="float:left" @touchend="changeBeat(item-1)" ref="changeBeat">-->
+                  <!--<img :src="heartBeat" alt="" style="float:left" @click="changeBeat(item-1)" ref="changeBeat">-->
                 </div>
               </div>
             </div>
@@ -130,7 +130,7 @@
                   <p align="left" ref="testIndexTwo">
                   </p>
                   <hr style="width:93%;border:0.5px solid rgba(131,205,93,1);margin:0 auto;">
-                  <img :src="heart" alt="" style="float:left" @touchend="changeStyle">
+                  <img :src="heart" alt="" style="float:left" @click="changeStyle">
                   <p style="float:right;font-size:0.4rem;font-family:SourceHanSansCN-Normal;color:rgba(77,77,77,1);
                 line-height:0.5rem;" @click="moreAnswerTwo(item)" >更多</p>
                 </div>
@@ -152,13 +152,13 @@
             </div>
       </div>
       <div class="bottom">
-        <div class="bottomLeftTwo" v-show="model" ref="model" @touchend="modelChangeTwo"><p>{{textSearchTwo}}</p></div>
-        <div class="bottomLeft" @touchend="modelChange"><p>{{textSearch}}</p></div>
+        <div class="bottomLeftTwo" v-show="model" ref="model" @click="modelChangeTwo"><p>{{textSearchTwo}}</p></div>
+        <div class="bottomLeft" @click="modelChange"><p>{{textSearch}}</p></div>
           <div class="model">
-            <ul class="text" v-show="inputContent"><li v-if="key" v-show="keyText" v-for="key in text" class="textLi" @touchend="searchLi(key)">{{key}}</li></ul>
+            <ul class="text" v-show="inputContent"><li v-if="key" v-show="keyText" v-for="key in text" class="textLi" @click="searchLi(key)">{{key}}</li></ul>
             <el-input class="input" clearable placeholder="请输入您的问题" v-model="questDetail" @input="search()"></el-input>
           </div>
-        <div class="bottomRight" @touchend="setQuest"><p>发送</p></div>
+        <div class="bottomRight" @click="setQuest"><p>发送</p></div>
         </div>
       </div>
 </div>
@@ -168,18 +168,18 @@
 import { CustomerHttp } from "../common/js/http";
 import { distinct } from "../common/js/distinct";
 import Vue from "vue";
-var root;
-var reg = /http:\/\/47.104.111.7\//;
-if (!reg.test(location.href)) {
-  // root = location.href.match(/.+com\//)[0]
-} else {
-  root = "http://47.104.111.7/";
-}
+// var root;
+// var reg = /http:\/\/47.104.111.7\//;
+// if (!reg.test(location.href)) {
+//   root = location.href.match(/.+com\//)[0];
+// } else {
+//   root = "http://47.104.111.7/";
+// }
 export default {
   name: "account",
   mounted() {
     var _that = this;
-    CustomerHttp.httpPost(`${root}qx`, {
+    CustomerHttp.httpPost(`api/qx`, {
       corp_id: CustomerHttp.common.corp_id,
       cmd: "corp.pars",
       ver: 1
@@ -292,9 +292,11 @@ export default {
           this.randomAnswer[a].push(this.answerArr[this.num[a] - 5 + i]);
         }
       }
-      setTimeout(()=>{
-        document.querySelector(".center").scrollTop=document.querySelector(".center").scrollHeight;
-      },200)
+      setTimeout(() => {
+        document.querySelector(".center").scrollTop = document.querySelector(
+          ".center"
+        ).scrollHeight;
+      }, 200);
     },
     moreAnswer(a) {
       if (this.numId != a) {
@@ -314,9 +316,11 @@ export default {
         }
         this.$refs.item[a].style.display = "block";
         this.$refs.itemContent[a].style.display = "block";
-        setTimeout(()=>{
-          document.querySelector(".center").scrollTop=document.querySelector(".center").scrollHeight;
-        },200)
+        setTimeout(() => {
+          document.querySelector(".center").scrollTop = document.querySelector(
+            ".center"
+          ).scrollHeight;
+        }, 200);
       }
     },
     moreAnswerTwo(a) {
@@ -337,9 +341,11 @@ export default {
         }
         this.$refs.itemTwo[a].style.display = "block";
         this.$refs.itemTwoContent[a].style.display = "block";
-        setTimeout(()=>{
-        document.querySelector(".center").scrollTop=document.querySelector(".center").scrollHeight;
-      },200)
+        setTimeout(() => {
+          document.querySelector(".center").scrollTop = document.querySelector(
+            ".center"
+          ).scrollHeight;
+        }, 200);
       }
     },
     setQuest() {
@@ -349,7 +355,7 @@ export default {
       if (this.service == false) {
         this.firstQuestTxt.push(this.questDetail);
         this.firstQuest = true;
-        CustomerHttp.httpPost(`${root}qx`, {
+        CustomerHttp.httpPost(`api/qx`, {
           corp_id: CustomerHttp.common.corp_id,
           cmd: "robot.smart.answer",
           ask: this.questDetail,
@@ -433,7 +439,7 @@ export default {
         this.quest = true;
         this.answerTxt = true;
 
-        CustomerHttp.httpPost(`${root}qx`, {
+        CustomerHttp.httpPost(`api/qx`, {
           corp_id: CustomerHttp.common.corp_id,
           cmd: "robot.smart.answer",
           ask: this.questDetail,
@@ -441,6 +447,11 @@ export default {
           ver: 1
         }).then(
           function(val) {
+            setTimeout(() => {
+              document.querySelector(
+                ".center"
+              ).scrollTop = document.querySelector(".center").scrollHeight;
+            }, 200);
             var textC = "moreAnswerLoadingC" + _that.serviceNum;
             _that.serviceNum++;
             setTimeout(() => {
@@ -487,9 +498,6 @@ export default {
                     val.data.msg;
                 }
                 _that.idNumTwo++;
-                document.querySelector(
-                  ".center"
-                ).scrollTop = document.querySelector(".center").scrollHeight;
               });
             }
             _that.$nextTick(() => {
@@ -540,9 +548,11 @@ export default {
               type: "success",
               message: "已转到人工客服!"
             });
-            setTimeout(()=>{
-              document.querySelector(".center").scrollTop=document.querySelector(".center").scrollHeight;
-            },200)
+            setTimeout(() => {
+              document.querySelector(
+                ".center"
+              ).scrollTop = document.querySelector(".center").scrollHeight;
+            }, 200);
           } else {
             this.$message({
               type: "info",
@@ -572,7 +582,7 @@ export default {
       var _that = this;
       this.firstQuestTxt.push(a);
       this.firstQuest = true;
-      CustomerHttp.httpPost(`${root}qx`, {
+      CustomerHttp.httpPost(`api/qx`, {
         corp_id: CustomerHttp.common.corp_id,
         cmd: "robot.smart.answer",
         ask: a,
@@ -603,7 +613,9 @@ export default {
               _that.robotAnswer
             }`;
             _that.idNum++;
-            document.querySelector(".center").scrollTop=document.querySelector(".center").scrollHeight;
+            document.querySelector(
+              ".center"
+            ).scrollTop = document.querySelector(".center").scrollHeight;
           });
         },
         function(err) {
@@ -616,7 +628,7 @@ export default {
       var _that = this;
       this.questTxt.push(a);
       this.quest = true;
-      CustomerHttp.httpPost(`${root}qx`, {
+      CustomerHttp.httpPost(`api/qx`, {
         corp_id: CustomerHttp.common.corp_id,
         cmd: "robot.smart.answer",
         ask: a,
@@ -646,7 +658,9 @@ export default {
             _that.$refs.testIndexTwo[_that.idNumTwo].innerHTML = `${
               _that.robotAnswer
             }`;
-            document.querySelector(".center").scrollTop=document.querySelector(".center").scrollHeight;
+            document.querySelector(
+              ".center"
+            ).scrollTop = document.querySelector(".center").scrollHeight;
             _that.idNumTwo++;
           });
         },
@@ -664,7 +678,7 @@ export default {
       var arr = [];
       var newArr = [];
 
-      CustomerHttp.httpPost(`${root}qx`, {
+      CustomerHttp.httpPost(`api/qx`, {
         corp_id: CustomerHttp.common.corp_id,
         cmd: "robot.smart.answer",
         ask: _that.questDetail,

@@ -27,18 +27,16 @@
             </div>
             <div class='inbox clearfix'>
               <p class="title">{{item}}</p>
-              <p class="content" :style="titleIndex[key]?(titleIndex[key].length>12?'-webkit-line-clamp: 1':'-webkit-line-clamp: 2'):''" > {{titleContent[key]}}
+              <p class="content" :style="titleIndex[key]?(titleIndex[key].length>12?'-webkit-line-clamp: 1;-webkit-box-orient: vertical;'
+                :'-webkit-line-clamp: 2;-webkit-box-orient: vertical;'):''" > {{titleContent[key]}}
                 <div v-show="moreAnswerLoadingAs" class="loadingImg"><img src="../../static/loading.gif" width="20px" height="20px" ></div>
               </p>
-
             </div>
           </div>
         </div>
-
     </div>
-
-</div>
   </div>
+</div>
 
 <!-- 图片加载中 -->
   <vue-loading type="spin" color="#5AC1DD" :size="{ width: '2rem', height: '2rem' }" style="position:fixed;left:50%;bottom:7rem;margin-left:-1rem;" v-show="loading"></vue-loading>
@@ -52,13 +50,13 @@ import { distinct } from "../common/js/distinct";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import Vue from "vue";
-var root;
-var reg = /http:\/\/47.104.111.7\//;
-if (!reg.test(location.href)) {
-  // root = location.href.match(/.+com\//)[0]
-} else {
-  root = "http://47.104.111.7/";
-}
+// var root;
+// var reg = /http:\/\/47.104.111.7\//;
+// if (!reg.test(location.href)) {
+//   root = location.href.match(/.+com\//)[0]
+// } else {
+//   root = "http://47.104.111.7/";
+// }
 export default {
   created() {
     const localPath = "http://www.health-vi.com";
@@ -68,7 +66,7 @@ export default {
     function decode(text) {
       return text.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "");
     }
-    CustomerHttp.httpPost(`${root}qx`, {
+    CustomerHttp.httpPost(`api/qx`, {
       url: "qx",
       cmd: "kind.q",
       pid: "",
@@ -79,56 +77,6 @@ export default {
         for (var i = 0; i < Data.length; i++) {
           if (that.$route.query.titleIndex == Data[i][2]) {
             that.items.push(Data[i]);
-            // console.log(that.items[0])
-            // CustomerHttp.httpPost(`${root}qx`, {
-            //   "kind_id": Data[i][0], "cmd": "faq.q", "ver": 1, "page_cnt": "20",
-            //   "page_num": 0, "url": "qx"
-            // }).then(function (val) {
-            //   var placeData = []
-            //   var arrTwo =[]
-            //   var imgIndex =[]
-            //   for (var z = 0; z < val.data.rows.length; z++) {
-            //     var text = val.data.rows[z][0]
-            //     var placeName = val.data.rows[z][1]
-            //     var placeNameA = placeName+'a'
-            //     var placeNameB = placeName+'b'
-            //     if(text!=''){
-            //       CustomerHttp.httpPost(`${root}qx`,{"cmd":"faqspc.r","ver":1,"faq_id":text}).then((val)=>{
-            //         if(val.status == 200){
-            //           that.moreAnswerLoading = false
-            //         }
-            //         if(val.data.att.match(/\/.+g/)){
-            //           imgIndex.push(localPath + val.data.att.match(/\/.+g/)[0])
-            //         }else{
-            //           imgIndex.push('none')
-            //         }
-            //         localStorage.setItem(placeNameB,imgIndex)
-            //         if(val.data){
-            //           text1=val.data.ans.replace(/\\x/g,'')+'end'
-            //           text1=decode(text1)
-            //           // console.log(text1)
-            //           that.textData.push(text1)
-            //           that.textPlace.push(val.data.ans)
-            //           arrTwo.push(text1)
-            //           localStorage.setItem(placeNameA,arrTwo)
-
-            //           placeData.push(val.data.ask)
-            //           if(placeName){
-            //             localStorage.setItem(placeName,placeData)
-            //           }
-            //         }
-
-            //       })
-            //     }else{
-            //       that.own=true
-            //     }
-
-            //     arrOne.push(placeName)
-            //     arrOne = distinct(arrOne)
-            //     that.Index = distinct(arrOne)
-
-            //   }
-            // })
           }
         }
         setTimeout(() => {
@@ -139,6 +87,21 @@ export default {
         console.log(err);
       }
     );
+
+    var s =
+      "_" +
+      Math.random()
+        .toString(36)
+        .slice(2);
+    console.log(s, window.slotbydup);
+    this.advert = s;
+    $("#swiper").append('<div id="' + s + '"></div>');
+    (window.slotbydup = window.slotbydup || []).push({
+      id: "5874769",
+      container: "baiDu",
+      size: "20,3",
+      display: "float"
+    });
   },
 
   data() {
@@ -171,7 +134,8 @@ export default {
       backgroundImg: require("../common/image/swiper.jpg"),
       loading: true,
       own: false,
-      noneText: false
+      noneText: false,
+      advert: ""
     };
   },
   components: {
@@ -218,7 +182,7 @@ export default {
             that.Index = this.id;
             that.moreAnswerLoadings = true;
             that.moreAnswerLoadingAs = true;
-            CustomerHttp.httpPost(`${root}qx`, {
+            CustomerHttp.httpPost(`api/qx`, {
               kind_id: that.Index,
               cmd: "faq.q",
               ver: 1,
@@ -231,7 +195,7 @@ export default {
                   var text = val.data.rows[z][0];
                   var placeName = val.data.rows[z][1];
                   if (text != "") {
-                    CustomerHttp.httpPost(`${root}qx`, {
+                    CustomerHttp.httpPost(`api/qx`, {
                       cmd: "faqspc.r",
                       ver: 1,
                       faq_id: text
@@ -266,21 +230,6 @@ export default {
                 that.moreAnswerLoadingAs = false;
               }
             });
-            // console.log(localStorage.getItem(`${that.Index}+b`))
-            // var f = document.querySelector('[name=text]');
-            //            对有无数据进行判断，此处可以做交互
-            // if(!(localStorage.getItem(this.id))){
-            //   //移除所有节点
-            //   that.noneText = true
-            //   f.style.display = 'none'
-            // }else{
-            //   that.noneText = false
-            //   that.titleIndex = localStorage.getItem(this.id).split(',')
-            //   that.titleContent  = localStorage.getItem(this.id+'a').split('end,')
-            //   that.imgIndex = localStorage.getItem(this.id+'b').split(',')
-            //   that.moreAnswerLoadingA = false
-            //   f.style.display = 'block'
-            // }
           } else {
           }
         };
@@ -294,7 +243,7 @@ export default {
         that.moreAnswerLoadingA = false;
         num++;
       } else if (!localStorage.getItem(lis[0].id)) {
-        CustomerHttp.httpPost(`${root}qx`, {
+        CustomerHttp.httpPost(`api/qx`, {
           kind_id: lis[0].id,
           cmd: "faq.q",
           ver: 1,
@@ -302,13 +251,17 @@ export default {
           page_num: 0,
           url: "qx"
         }).then(function(val) {
+          console.log("ok");
           var titleArr = [];
+          that.moreAnswerLoadings = true;
+          that.moreAnswerLoadingAs = true;
           if (val.data.rows.length > 0) {
+            that.titleIndex = [, , , , , , , , , , , , , , , , , , ,];
             for (var z = 0; z < val.data.rows.length; z++) {
               var text = val.data.rows[z][0];
               var placeName = val.data.rows[z][1];
               if (text != "") {
-                CustomerHttp.httpPost(`${root}qx`, {
+                CustomerHttp.httpPost(`api/qx`, {
                   cmd: "faqspc.r",
                   ver: 1,
                   faq_id: text
@@ -466,7 +419,7 @@ a {
 }
 .inbox .content {
   width: 100%;
-  line-height: 0.5rem;
+  line-height: 0.6rem;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

@@ -40,17 +40,17 @@
 import { CustomerHttp } from "../common/js/http";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
-var root;
-var reg = /http:\/\/47.104.111.7\//;
-if (!reg.test(location.href)) {
-  // root = location.href.match(/.+com\//)[0]
-} else {
-  root = "http://47.104.111.7/";
-}
+// var root;
+// var reg = /http:\/\/47.104.111.7\//;
+// if (!reg.test(location.href)) {
+//   root = location.href.match(/.+com\//)[0]
+// } else {
+//   root = "http://47.104.111.7/";
+// }
 export default {
   mounted() {
     // 附件接口
-    //   CustomerHttp.httpPost(`${root}qx`,{
+    //   CustomerHttp.httpPost(`api/qx`,{
     //   "cmd":"faqspc.r","faq_id":id,"ver":1}).then(
     //   function(res){
     //     var content=res.data.ans
@@ -106,7 +106,7 @@ export default {
     // 收藏功能接口
     like(val) {
       var id = this.$route.query.id;
-      CustomerHttp.httpPost(`${root}qx`, {
+      CustomerHttp.httpPost(`api/qx`, {
         // "url":"qx",
         cmd: "qas.support.w",
         id: id,
